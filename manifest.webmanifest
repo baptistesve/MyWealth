@@ -8,8 +8,8 @@
   "display": "standalone",
   "orientation": "portrait",
   "dir": "ltr",
-  "background_color": "#0b1020",
-  "theme_color": "#0b1020",
+  "background_color": "#F6F2EA",
+  "theme_color": "#F6F2EA",
   "categories": [
     "finance",
     "productivity"
@@ -32,6 +32,18 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
