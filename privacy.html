@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyWealth — Confidentialité / Privacy</title>
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<style>
+  :root{--bg:#0b1020;--card:#151d38;--line:#26315a;--txt:#e8ecf8;--mut:#8e9ac0;--acc:#9bb0ff}
+  @media (prefers-color-scheme:light){:root{--bg:#f3f5fb;--card:#fff;--line:#dfe4f2;--txt:#141a33;--mut:#5b6690;--acc:#3f5fe0}}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+  header{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  header .b{display:flex;align-items:center;gap:10px} header img{width:40px;height:40px;border-radius:10px}
+  h1{font-size:1.4rem;margin:0} h2{font-size:1.05rem;margin:1.6em 0 .4em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 18px 14px;margin-top:16px}
+  a{color:var(--acc)} .mut{color:var(--mut);font-size:.9rem} code{font-size:.88em}
+  table{border-collapse:collapse;width:100%;font-size:.92rem} td,th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+  .seg button{background:transparent;color:var(--txt);border:1px solid var(--line);padding:6px 12px;cursor:pointer;font:inherit}
+  .seg button:first-child{border-radius:8px 0 0 8px} .seg button:last-child{border-radius:0 8px 8px 0;border-left:0}
+  .seg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+  [data-l]{display:none} html[lang=fr] [data-l=fr], html[lang=en] [data-l=en]{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="b"><img src="icon-192.png" alt="MW"><h1>MyWealth</h1></div>
+  <div class="seg"><button data-set="fr">Français</button><button data-set="en">English</button></div>
+</header>
+
+<!-- ======================= FRANÇAIS ======================= -->
+<div data-l="fr">
+<div class="card">
+<h2>Politique de confidentialité</h2>
+<p><b>En bref : MyWealth ne collecte aucune donnée.</b> Il n'y a pas de serveur MyWealth, pas de compte MyWealth, pas de statistiques, pas de publicité, pas de cookies de suivi.</p>
+
+<h2>Où sont mes données ?</h2>
+<ul>
+  <li><b>Sur votre appareil</b> : comptes, soldes, titres et instantanés sont enregistrés dans le stockage local du navigateur (<code>localStorage</code>) de votre téléphone ou ordinateur.</li>
+  <li><b>Dans votre propre cloud, si vous le connectez</b> : un fichier <code>mywealth-donnees.json</code> (et une copie par mois) est écrit dans le dossier réservé à l'application de <b>votre</b> Dropbox (<i>Applications › …</i>) ou de <b>votre</b> OneDrive. L'application n'a accès qu'à ce dossier, pas au reste de votre cloud. Les jetons de connexion restent sur votre appareil.</li>
+  <li>Personne d'autre — ni l'auteur de l'application, ni la personne qui vous l'a partagée — ne peut voir vos données.</li>
+</ul>
+
+<h2>Services tiers contactés</h2>
+<p>Votre appareil contacte directement ces services (votre adresse IP leur est donc visible, comme pour tout site web). Aucun montant ni aucune donnée personnelle ne leur est envoyé :</p>
+<table>
+<tr><th>Service</th><th>Pourquoi</th><th>Ce qui est envoyé</th></tr>
+<tr><td>TradingView (<code>scanner.tradingview.com</code>)</td><td>Cours des titres (différés)</td><td>Le symbole du titre (ex. AAPL)</td></tr>
+<tr><td>Frankfurter (<code>api.frankfurter.dev</code>, taux BCE)</td><td>Taux de change</td><td>Les codes de devises (ex. EUR, USD)</td></tr>
+<tr><td>ExchangeRate-API (<code>open.er-api.com</code>)</td><td>Taux de change, en secours</td><td>Rien d'autre que la requête</td></tr>
+<tr><td>Dropbox (<code>dropbox.com</code>, <code>dropboxapi.com</code>)</td><td>Synchronisation, si vous la choisissez</td><td>Votre fichier de données, vers votre propre compte</td></tr>
+<tr><td>Microsoft (<code>login.microsoftonline.com</code>, <code>graph.microsoft.com</code>)</td><td>Synchronisation OneDrive, si activée</td><td>Votre fichier de données, vers votre propre compte</td></tr>
+<tr><td>GitHub Pages (<code>github.io</code>)</td><td>Hébergement des fichiers de l'application</td><td>Requêtes de chargement de la page (journaux techniques de GitHub)</td></tr>
+</table>
+<p class="mut">Ces services ont leurs propres politiques de confidentialité.</p>
+
+<h2>Supprimer vos données / révoquer l'accès</h2>
+<ul>
+  <li>Sur l'appareil : Réglages › <i>Réinitialiser</i>, ou effacez les données du site dans votre navigateur.</li>
+  <li>Dropbox : supprimez le dossier <i>Applications › …</i> et retirez l'accès dans <a href="https://www.dropbox.com/account/connected_apps" rel="noopener">Paramètres › Applications connectées</a>.</li>
+  <li>Microsoft : <a href="https://account.live.com/consent/Manage" rel="noopener">account.live.com/consent/Manage</a>.</li>
+</ul>
+<p class="mut">Dernière mise à jour : octobre 2026.</p>
+</div>
+</div>
+
+<!-- ======================= ENGLISH ======================= -->
+<div data-l="en">
+<div class="card">
+<h2>Privacy policy</h2>
+<p><b>In short: MyWealth collects no data.</b> There is no MyWealth server, no MyWealth account, no analytics, no ads and no tracking cookies.</p>
+
+<h2>Where is my data?</h2>
+<ul>
+  <li><b>On your device</b>: accounts, balances, holdings and snapshots are stored in the browser's local storage (<code>localStorage</code>) of your phone or computer.</li>
+  <li><b>In your own cloud, if you connect it</b>: a file <code>mywealth-donnees.json</code> (plus one copy per month) is written to the app's dedicated folder in <b>your</b> Dropbox (<i>Apps › …</i>) or <b>your</b> OneDrive. The app can only access that folder, not the rest of your cloud. Sign-in tokens stay on your device.</li>
+  <li>Nobody else — neither the app's author nor the person who shared it with you — can see your data.</li>
+</ul>
+
+<h2>Third-party services contacted</h2>
+<p>Your device contacts these services directly (so they can see your IP address, as with any website). No amounts and no personal data are sent to them:</p>
+<table>
+<tr><th>Service</th><th>Why</th><th>What is sent</th></tr>
+<tr><td>TradingView (<code>scanner.tradingview.com</code>)</td><td>Security prices (delayed)</td><td>The ticker symbol (e.g. AAPL)</td></tr>
+<tr><td>Frankfurter (<code>api.frankfurter.dev</code>, ECB rates)</td><td>Exchange rates</td><td>Currency codes (e.g. EUR, USD)</td></tr>
+<tr><td>ExchangeRate-API (<code>open.er-api.com</code>)</td><td>Exchange rates, fallback</td><td>Nothing but the request</td></tr>
+<tr><td>Dropbox (<code>dropbox.com</code>, <code>dropboxapi.com</code>)</td><td>Sync, if you choose it</td><td>Your data file, to your own account</td></tr>
+<tr><td>Microsoft (<code>login.microsoftonline.com</code>, <code>graph.microsoft.com</code>)</td><td>OneDrive sync, if enabled</td><td>Your data file, to your own account</td></tr>
+<tr><td>GitHub Pages (<code>github.io</code>)</td><td>Hosting the app files</td><td>Page-load requests (GitHub's technical logs)</td></tr>
+</table>
+<p class="mut">These services have their own privacy policies.</p>
+
+<h2>Deleting your data / revoking access</h2>
+<ul>
+  <li>On the device: Settings › <i>Reset</i>, or clear this site's data in your browser.</li>
+  <li>Dropbox: delete the <i>Apps › …</i> folder and remove access under <a href="https://www.dropbox.com/account/connected_apps" rel="noopener">Settings › Connected apps</a>.</li>
+  <li>Microsoft: <a href="https://account.live.com/consent/Manage" rel="noopener">account.live.com/consent/Manage</a>.</li>
+</ul>
+<p class="mut">Last updated: October 2026.</p>
+</div>
+</div>
+
+<p style="margin-top:20px"><a href="./" id="back">← MyWealth</a></p>
+</div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search).get("lang"), l=null;
+  try{ l=localStorage.getItem("mywealth.lang"); }catch(e){}
+  if(q==="fr"||q==="en") l=q;
+  if(l!=="fr"&&l!=="en") l=/^fr/i.test(navigator.language||"")?"fr":"en";
+  function set(x){ document.documentElement.lang=x; document.querySelectorAll("[data-set]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-set")===x); }); }
+  set(l);
+  document.querySelectorAll("[data-set]").forEach(function(b){ b.onclick=function(){ var x=b.getAttribute("data-set"); set(x); try{ localStorage.setItem("mywealth.lang",x); }catch(e){} }; });
+})();
+</script>
+</body>
+</html>

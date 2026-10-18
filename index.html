@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MyWealth</title>
-<meta name="description" content="MyWealth — suivi personnel de patrimoine">
+<meta name="description" content="MyWealth — suivi personnel de patrimoine / personal net-worth tracker">
 <meta name="theme-color" content="#0b1020">
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="no-referrer">
@@ -15,7 +15,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MyWealth">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<script src="config.js"></script>
 <script src="chart.umd.min.js"></script>
 <style>
 :root{
@@ -167,6 +166,19 @@ dialog.modal h3{margin:0 0 8px;font-size:17px}
   section{scroll-margin-top:10px}
 }
 @media print{nav.tabs,.tools,.btn{display:none!important}}
+/* --- v3 : accueil vide, modèles, langue --- */
+.welcome{background:linear-gradient(135deg,rgba(108,140,255,.2),rgba(47,208,138,.12)),var(--card);margin-bottom:16px}
+.welcome h2{font-size:19px}
+.welcome p{margin:6px 0 12px;color:var(--mut)}
+.tpls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.tpl{border:1px dashed var(--acc);background:transparent;color:var(--txt);padding:8px 12px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:14px}
+.tpl:hover{background:rgba(108,140,255,.12)}
+.steps{margin:0 0 12px;padding-left:20px;color:var(--mut);font-size:14px}
+.steps li{margin:3px 0}
+.empty .row{justify-content:center;margin-top:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--mut);padding:7px 12px;font-family:inherit;font-size:14px;cursor:pointer}
+.seg button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:600}
 </style>
 </head>
 <body>
@@ -174,33 +186,34 @@ dialog.modal h3{margin:0 0 8px;font-size:17px}
   <header class="top">
     <div class="brand">
       <img class="logo" src="icon-192.png" alt="MW" style="padding:0">
-      <div><h1>MyWealth</h1><button class="fspill" id="fsStatus" title="État de la sauvegarde"><span class="d"></span><span id="fsStatusTxt">Chargement…</span></button></div>
+      <div><h1>MyWealth</h1><button class="fspill" id="fsStatus" data-i18n-title="statusTitle"><span class="d"></span><span id="fsStatusTxt">…</span></button></div>
     </div>
     <div class="tools">
-      <label class="small muted" for="baseSel">Devise de référence</label>
+      <label class="small muted" for="baseSel" data-i18n="baseCurrency"></label>
       <select id="baseSel"><option>CHF</option><option>EUR</option><option>USD</option></select>
-      <button class="btn" id="refreshBtn" title="Actualiser cours et taux de change">⟳ <span class="lbl">Actualiser</span></button>
-      <button class="btn" id="themeBtn" title="Thème clair / sombre">◐ <span class="lbl">Thème</span></button>
-      <button class="btn" id="exportBtn" title="Exporter une sauvegarde JSON">⤓ <span class="lbl">Exporter</span></button>
-      <button class="btn" id="importBtn" title="Importer une sauvegarde JSON">⤒ <span class="lbl">Importer</span></button>
+      <button class="btn" id="langBtn" title="Langue / Language">🌐 <span id="langBtnTxt">FR</span></button>
+      <button class="btn" id="refreshBtn" data-i18n-title="refreshTitle">⟳ <span class="lbl" data-i18n="refresh"></span></button>
+      <button class="btn" id="themeBtn" data-i18n-title="themeTitle">◐ <span class="lbl" data-i18n="theme"></span></button>
+      <button class="btn" id="exportBtn" data-i18n-title="exportTitle">⤓ <span class="lbl" data-i18n="export"></span></button>
+      <button class="btn" id="importBtn" data-i18n-title="importTitle">⤒ <span class="lbl" data-i18n="import"></span></button>
       <input type="file" id="importFile" accept="application/json,.json" hidden>
     </div>
   </header>
   <div id="banners"></div>
 
   <nav class="tabs">
-    <a href="#vue"><i>◎</i><span>Aperçu</span></a><a href="#comptes"><i>🏦</i><span>Comptes</span></a><a href="#titres"><i>📈</i><span>Titres</span></a><a href="#historique"><i>🕓</i><span>Historique</span></a><a href="#reglages"><i>⚙︎</i><span>Réglages</span></a>
+    <a href="#vue"><i>◎</i><span data-i18n="navOverview"></span></a><a href="#comptes"><i>🏦</i><span data-i18n="navAccounts"></span></a><a href="#titres"><i>📈</i><span data-i18n="navPositions"></span></a><a href="#historique"><i>🕓</i><span data-i18n="navHistory"></span></a><a href="#reglages"><i>⚙︎</i><span data-i18n="navSettings"></span></a>
   </nav>
 
-  <!-- VUE D'ENSEMBLE -->
   <section id="vue">
+    <div id="welcome"></div>
     <div class="hero">
       <div class="card networth">
-        <div class="lbl">Patrimoine net</div>
+        <div class="lbl" data-i18n="netWorth"></div>
         <div class="big" id="nwTotal">—</div>
-        <div class="sub" id="nwDelta">Aucun instantané enregistré pour l'instant</div>
+        <div class="sub" id="nwDelta"></div>
         <div class="row" style="margin-top:14px">
-          <button class="btn primary" id="snapBtn">📸 Enregistrer un instantané</button>
+          <button class="btn primary" id="snapBtn">📸 <span data-i18n="takeSnapshot"></span></button>
         </div>
         <div class="status" style="margin-top:12px" id="statusBar"></div>
         <div class="small" style="margin-top:8px;color:var(--warn)" id="todoNote"></div>
@@ -208,147 +221,314 @@ dialog.modal h3{margin:0 0 8px;font-size:17px}
       <div class="kpis" id="kpis"></div>
     </div>
 
-    <div class="section-title">Répartition</div>
+    <div class="section-title" data-i18n="breakdown"></div>
     <div class="grid charts3">
-      <div class="card"><h2><span class="t">Par compte</span></h2><div class="chartbox"><canvas id="chAcc"></canvas></div><div class="legend" id="lgAcc"></div></div>
-      <div class="card"><h2><span class="t">Par catégorie</span></h2><div class="chartbox"><canvas id="chCat"></canvas></div><div class="legend" id="lgCat"></div></div>
-      <div class="card"><h2><span class="t">Par devise</span></h2><div class="chartbox"><canvas id="chCur"></canvas></div><div class="legend" id="lgCur"></div></div>
+      <div class="card"><h2><span class="t" data-i18n="byAccount"></span></h2><div class="chartbox"><canvas id="chAcc"></canvas></div><div class="legend" id="lgAcc"></div></div>
+      <div class="card"><h2><span class="t" data-i18n="byCategory"></span></h2><div class="chartbox"><canvas id="chCat"></canvas></div><div class="legend" id="lgCat"></div></div>
+      <div class="card"><h2><span class="t" data-i18n="byCurrency"></span></h2><div class="chartbox"><canvas id="chCur"></canvas></div><div class="legend" id="lgCur"></div></div>
     </div>
 
-    <div class="section-title">Évolution</div>
+    <div class="section-title" data-i18n="evolution"></div>
     <div class="grid charts2">
-      <div class="card"><h2><span class="t">Historique du patrimoine net</span><span class="small muted" id="histInfo"></span></h2><div class="chartbox tall"><canvas id="chHist"></canvas></div></div>
-      <div class="card"><h2><span class="t">Évolution mensuelle</span></h2><div class="chartbox tall"><canvas id="chMonth"></canvas></div></div>
+      <div class="card"><h2><span class="t" data-i18n="historyChart"></span><span class="small muted" id="histInfo"></span></h2><div class="chartbox tall"><canvas id="chHist"></canvas></div></div>
+      <div class="card"><h2><span class="t" data-i18n="monthlyChart"></span></h2><div class="chartbox tall"><canvas id="chMonth"></canvas></div></div>
     </div>
   </section>
 
-  <!-- COMPTES -->
   <section id="comptes">
-    <div class="section-title">Comptes</div>
+    <div class="section-title" data-i18n="accounts"></div>
     <div class="row" style="margin-bottom:12px;justify-content:space-between">
-      <span class="small muted">Cliquez sur un montant pour le modifier. Formats acceptés : 12'345.67 · 12345,67. Les titres Swissquote se gèrent dans « Titres » (saisissez ici uniquement les espèces).</span>
-      <button class="btn primary" id="addAccBtn">＋ Ajouter un compte</button>
+      <span class="small muted" data-i18n="accountsHint"></span>
+      <button class="btn primary" id="addAccBtn">＋ <span data-i18n="addAccount"></span></button>
     </div>
     <div class="grid accounts" id="accList"></div>
   </section>
 
-  <!-- TITRES -->
   <section id="titres">
-    <div class="section-title">Titres &amp; positions</div>
+    <div class="section-title" data-i18n="positionsTitle"></div>
     <div class="row" style="margin-bottom:12px;justify-content:space-between">
-      <span class="small muted" id="priceInfo">Cours récupérés automatiquement (différé ~15 min) lorsque c'est possible ; sinon saisissez le cours manuellement.</span>
+      <span class="small muted" data-i18n="positionsHint"></span>
       <div class="row">
-        <button class="btn" id="refreshPricesBtn">⟳ Actualiser les cours</button>
-        <button class="btn primary" id="addPosBtn">＋ Ajouter une position</button>
+        <button class="btn" id="refreshPricesBtn">⟳ <span data-i18n="refreshPrices"></span></button>
+        <button class="btn primary" id="addPosBtn">＋ <span data-i18n="addPosition"></span></button>
       </div>
     </div>
     <div class="grid positions" id="posList"></div>
   </section>
 
-  <!-- HISTORIQUE -->
   <section id="historique">
-    <div class="section-title">Instantanés</div>
+    <div class="section-title" data-i18n="snapshots"></div>
     <div class="card">
-      <h2><span class="t">Historique des instantanés</span>
+      <h2><span class="t" data-i18n="snapHistory"></span>
         <span class="row">
-          <label class="small muted" for="snapDate">Date</label><input type="date" id="snapDate">
-          <button class="btn sm primary" id="snapBtn2">📸 Enregistrer</button>
+          <label class="small muted" for="snapDate" data-i18n="date"></label><input type="date" id="snapDate">
+          <button class="btn sm primary" id="snapBtn2">📸 <span data-i18n="save"></span></button>
         </span>
       </h2>
-      <p class="small muted" style="margin-top:0">Un instantané fige la valeur de chaque compte et position à une date. Enregistrez-en un par mois (par ex. en fin de mois) pour suivre votre évolution. Un instantané existant à la même date est remplacé.</p>
+      <p class="small muted" style="margin-top:0" data-i18n="snapHelp"></p>
       <div class="tablewrap"><table id="snapTable"></table></div>
     </div>
     <div class="card" style="margin-top:16px">
-      <h2><span class="t">Synthèse mensuelle</span></h2>
+      <h2><span class="t" data-i18n="monthlySummary"></span></h2>
       <div class="tablewrap"><table id="monthTable"></table></div>
     </div>
   </section>
 
-  <!-- REGLAGES -->
   <section id="reglages">
-    <div class="section-title">Taux de change &amp; réglages</div>
+    <div class="section-title" data-i18n="settingsTitle"></div>
     <div class="grid charts2">
       <div class="card">
-        <h2><span class="t">Taux de change</span><span class="small muted" id="fxInfo"></span></h2>
-        <p class="small muted" style="margin-top:0">Valeur de 1 unité de devise en CHF. Actualisés automatiquement (BCE via Frankfurter, puis ExchangeRate-API en secours). Cochez « taux manuels » pour imposer vos propres taux.</p>
+        <h2><span class="t" data-i18n="language"></span></h2>
+        <div class="seg" id="langSeg"><button data-lang="fr">Français</button><button data-lang="en">English</button></div>
+        <h2 style="margin-top:20px"><span class="t" data-i18n="fxTitle"></span><span class="small muted" id="fxInfo"></span></h2>
+        <p class="small muted" style="margin-top:0" data-i18n="fxHelp"></p>
         <div class="fxgrid" id="fxGrid"></div>
         <div class="row" style="margin-top:12px">
-          <label class="row small"><input type="checkbox" id="fxManual"> Taux manuels (ne pas actualiser)</label>
-          <button class="btn sm" id="addCurBtn">＋ Devise</button>
-          <button class="btn sm" id="refreshFxBtn">⟳ Actualiser les taux</button>
+          <label class="row small"><input type="checkbox" id="fxManual"> <span data-i18n="fxManual"></span></label>
+          <button class="btn sm" id="addCurBtn">＋ <span data-i18n="currency"></span></button>
+          <button class="btn sm" id="refreshFxBtn">⟳ <span data-i18n="refreshFx"></span></button>
         </div>
       </div>
       <div class="card">
-        <h2 id="sauvegarde"><span class="t">Sauvegarde &amp; données</span></h2>
+        <h2 id="sauvegarde"><span class="t" data-i18n="backupTitle"></span></h2>
         <div id="fsPanel"></div>
         <div class="fsbox">
-          <div class="ttl">Export / import manuel</div>
-          <p class="small muted" style="margin:0 0 8px">Copie ponctuelle de vos données (utile pour un autre appareil ou en complément). <b id="lastExportTxt"></b></p>
-        <div class="row">
-          <button class="btn" id="exportBtn2">⤓ Exporter (JSON)</button>
-          <button class="btn" id="importBtn2">⤒ Importer (JSON)</button>
-          <button class="btn danger" id="resetBtn">⟲ Réinitialiser</button>
-        </div>
+          <div class="ttl" data-i18n="manualExport"></div>
+          <p class="small muted" style="margin:0 0 8px"><span data-i18n="manualExportHelp"></span> <b id="lastExportTxt"></b></p>
+          <div class="row">
+            <button class="btn" id="exportBtn2">⤓ <span data-i18n="exportJson"></span></button>
+            <button class="btn" id="importBtn2">⤒ <span data-i18n="importJson"></span></button>
+            <button class="btn danger" id="resetBtn">⟲ <span data-i18n="reset"></span></button>
+          </div>
         </div>
         <p class="small muted" id="storageInfo"></p>
+        <p class="small"><a href="privacy.html" id="privacyLink" data-i18n="privacyLink"></a></p>
       </div>
     </div>
   </section>
 
   <dialog class="modal" id="conflictDlg">
-    <h3>Deux versions différentes</h3>
-    <p class="small muted" style="margin:0">Vos données ont été modifiées sur cet appareil <b>et</b> dans le cloud (par exemple sur un autre appareil). Laquelle voulez-vous garder ? L'autre sera remplacée.</p>
+    <h3 data-i18n="cfTitle"></h3>
+    <p class="small muted" style="margin:0" data-i18n-html="cfText"></p>
     <div class="cfgrid"><div id="cfRemote"></div><div id="cfLocal"></div></div>
-    <div class="cfbtns"><button class="btn primary" id="cfKeepRemote">Garder la version du cloud</button><button class="btn" id="cfKeepLocal">Garder cet appareil</button></div>
-    <p class="small muted" style="margin:10px 0 0">Astuce : exportez d'abord si vous hésitez (la copie mensuelle du cloud est aussi conservée).</p>
+    <div class="cfbtns"><button class="btn primary" id="cfKeepRemote"></button><button class="btn" id="cfKeepLocal" data-i18n="cfKeepLocal"></button></div>
+    <p class="small muted" style="margin:10px 0 0" data-i18n="cfTip"></p>
   </dialog>
-  <footer>MyWealth · tableau de bord personnel · gratuit · hors-ligne · aucune statistique, aucun pistage : vos données restent sur l'appareil et dans votre propre cloud (seuls les cours et taux publics sont téléchargés).</footer>
+  <footer data-i18n="footer"></footer>
 </div>
 <div class="toast" id="toast"></div>
-
+<script>
+/* ================= Textes FR / EN ================= */
+const I18N = {
+fr:{
+  statusTitle:"État de la sauvegarde", baseCurrency:"Devise de référence", refresh:"Actualiser", refreshTitle:"Actualiser cours et taux de change",
+  theme:"Thème", themeTitle:"Thème clair / sombre", export:"Exporter", exportTitle:"Exporter une sauvegarde JSON", import:"Importer", importTitle:"Importer une sauvegarde JSON",
+  navOverview:"Aperçu", navAccounts:"Comptes", navPositions:"Titres", navHistory:"Historique", navSettings:"Réglages",
+  netWorth:"Patrimoine net", takeSnapshot:"Enregistrer un instantané", breakdown:"Répartition", byAccount:"Par compte", byCategory:"Par catégorie", byCurrency:"Par devise",
+  evolution:"Évolution", historyChart:"Historique du patrimoine net", monthlyChart:"Évolution mensuelle",
+  accounts:"Comptes", accountsHint:"Cliquez sur un montant pour le modifier. Formats acceptés : 12'345.67 · 12345,67. Les actions et ETF se gèrent dans « Titres » (saisissez ici uniquement les espèces).",
+  addAccount:"Ajouter un compte", positionsTitle:"Titres & positions", positionsHint:"Cours récupérés automatiquement (différé ~15 min) lorsque c'est possible ; sinon saisissez le cours manuellement.",
+  refreshPrices:"Actualiser les cours", addPosition:"Ajouter une position", snapshots:"Instantanés", snapHistory:"Historique des instantanés", date:"Date", save:"Enregistrer",
+  snapHelp:"Un instantané fige la valeur de chaque compte et position à une date. Enregistrez-en un par mois (par ex. en fin de mois) pour suivre votre évolution. Un instantané existant à la même date est remplacé.",
+  monthlySummary:"Synthèse mensuelle", settingsTitle:"Réglages", language:"Langue", fxTitle:"Taux de change",
+  fxHelp:"Valeur de 1 unité de devise en CHF. Actualisés automatiquement (BCE via Frankfurter, puis ExchangeRate-API en secours). Cochez « taux manuels » pour imposer vos propres taux.",
+  fxManual:"Taux manuels (ne pas actualiser)", currency:"Devise", refreshFx:"Actualiser les taux", backupTitle:"Sauvegarde & données", manualExport:"Export / import manuel",
+  manualExportHelp:"Copie ponctuelle de vos données (utile pour un autre appareil ou en complément).", exportJson:"Exporter (JSON)", importJson:"Importer (JSON)", reset:"Réinitialiser",
+  privacyLink:"🔒 Confidentialité — quelles données, où ?",
+  cfTitle:"Deux versions différentes", cfText:"Vos données ont été modifiées sur cet appareil <b>et</b> dans le cloud (par exemple sur un autre appareil). Laquelle voulez-vous garder ? L'autre sera remplacée.",
+  cfKeepLocal:"Garder cet appareil", cfKeepRemote:"Garder la version {p}", cfTip:"Astuce : exportez d'abord si vous hésitez (la copie mensuelle du cloud est aussi conservée).",
+  modifiedOn:"modifié le", thisDevice:"Cet appareil",
+  footer:"MyWealth · tableau de bord personnel · gratuit · hors-ligne · aucune statistique, aucun pistage : vos données restent sur l'appareil et dans votre propre cloud (seuls les cours et taux publics sont téléchargés).",
+  cat_courant:"Compte courant", cat_epargne:"Épargne", cat_investissement:"Investissement", cat_prevoyance:"Prévoyance", cat_titres:"Titres",
+  srcManual:"manuel", srcTV:"TradingView (différé)", srcECB:"BCE (Frankfurter)",
+  never:"jamais", today:"aujourd'hui", yesterday:"hier", daysAgo:"il y a {n} jours",
+  tplCurrent:"Compte courant", tplSavings:"Compte épargne", tplBroker:"Courtier (espèces)", tpl3a:"3e pilier A", tplMulti:"Carte multi-devises",
+  toastAdded:"« {name} » ajouté — saisissez le solde dans Comptes",
+  welcomeTitle:"Bienvenue dans MyWealth", welcomeText:"Votre tableau de bord est vide. Ajoutez vos comptes et vos titres : tout reste sur cet appareil (et dans votre propre cloud si vous le connectez).",
+  welcomeStep1:"Ajoutez vos comptes (un clic sur un modèle ci-dessous) puis saisissez les soldes.", welcomeStep2:"Ajoutez vos actions / ETF : symbole, quantité et prix moyen — le cours est récupéré automatiquement.",
+  welcomeStep3:"Enregistrez un instantané chaque mois pour suivre l'évolution.", suggestions:"Modèles de comptes (modifiables ensuite) :", importBackup:"Importer une sauvegarde",
+  noAccounts:"Aucun compte pour l'instant. Ajoutez-en un ou choisissez un modèle :", noPositions:"Aucune position pour l'instant (actions, ETF…).",
+  color:"Couleur", accountName:"Nom du compte", deleteAccount:"Supprimer le compte", category:"Catégorie", balance:"Solde", toFill:"à compléter", removeCurrency:"Retirer cette devise",
+  notePh:"Note (facultatif)", total:"Total", name:"Nom", deletePosition:"Supprimer la position", symbol:"Symbole", symbolPh:"ex. AAPL ou SIX:NESN", quantity:"Quantité", avgPrice:"Prix moyen",
+  currentPrice:"Cours actuel", pricePh:"à compléter", custody:"Dépositaire", custodyPh:"Banque / courtier", updatedOn:"maj {d}", auto:"auto", manual:"manuel",
+  priceMissing:"Cours non disponible : saisissez-le ou cliquez « Actualiser les cours ».", priceEnteredOn:"Cours saisi le {d}", priceFetchedOn:"Cours du {d} · {src}",
+  costBasis:"Prix de revient", currentValue:"Valeur actuelle", plIn:"Plus/moins-value ({c})", performance:"Performance", perfNote:"hors effet de change (devise du titre)",
+  ofTotal:"{p} du total", kpiCash:"Liquidités", kpiInvest:"Investissements", kpiPension:"Prévoyance", kpiPL:"Plus/moins-value latente", onCost:"{p} sur le prix de revient", pricesToFill:"cours à compléter",
+  nAccounts:"{n} solde(s)", nPrices:"{n} cours", and:" et ", toFillSuffix:"à compléter", sinceSnap:"depuis l'instantané du {d}", noSnapYet:"Aucun instantané enregistré pour l'instant",
+  fxManualBadge:"Taux manuels", fxBadge:"Taux {src} · {d}", fxApprox:"Taux approximatifs (non actualisés)", pricesAuto:"Cours auto · {d}", pricesPartial:"Cours en partie manuels", pricesManual:"Cours manuels",
+  fxUnit:"1 {c} en CHF", manualPl:"manuels", notRefreshed:"non actualisés",
+  noData:"Aucune donnée", chartsOffline:"Graphique indisponible (bibliothèque non chargée)", fillToSee:"Saisissez des montants pour voir la répartition",
+  nSnaps:"{n} instantané(s)", change:"Variation", delete:"Supprimer", noSnapsTable:"Aucun instantané. Cliquez « Enregistrer un instantané ».", month:"Mois",
+  noMonthly:"La synthèse apparaîtra après votre premier instantané.", histOffline:"Graphique indisponible hors ligne", monthOffline:"Graphique indisponible hors ligne",
+  histEmpty:"Enregistrez des instantanés pour voir l'historique", monthEmpty:"Disponible dès le premier instantané", firstMonth:"Premier mois",
+  toastFxManual:"Taux manuels activés : actualisation désactivée", toastFxFail:"Taux de change indisponibles (hors ligne ?) — derniers taux conservés",
+  toastPricesPartial:"{ok} cours actualisé(s), {ko} introuvable(s) — saisissez-les manuellement", toastPricesOk:"{n} cours actualisé(s)",
+  toastNothingToSnap:"Ajoutez d'abord un compte ou une position", confirmReplaceSnap:"Un instantané existe déjà le {d}. Le remplacer ?", toastSnap:"Instantané du {d} enregistré : {v}",
+  toastExported:"Sauvegarde exportée", futureMsg:"Le fichier « {name} » a été créé par une version plus récente de MyWealth (format v{v}, cette version gère jusqu'à v{max}).\n\nMettez l'application à jour. Rien n'a été modifié.",
+  confirmImport:"Remplacer toutes les données actuelles par celles de « {name} » ?", importCloudNote:"La copie dans {p} sera aussi mise à jour.", toastImported:"Données importées", invalidFile:"Fichier invalide : ce n'est pas une sauvegarde MyWealth.",
+  cantLoad:"Impossible de charger {f}", errReauth:"reconnexion nécessaire", errSession:"session expirée", errNotConnected:"non connecté", errDbxRefused:"connexion Dropbox refusée", errDbxRevoked:"autorisation Dropbox expirée ou révoquée",
+  toastDbxCancelled:"Connexion Dropbox annulée", whereOneDrive:"OneDrive › Applications › MyWealth", whereDropbox:"Dropbox › Applications › (nom de l'app Dropbox)",
+  confirmEmptyCloud:"Votre fichier {p} contient des données, mais cette application est vide.\n\nOK = vider aussi le fichier {p}\nAnnuler = recharger les données depuis {p} (recommandé)",
+  errUnreadable:"le fichier « {name} » du cloud est illisible — il n'a pas été modifié", errFuture:"fichier créé par une version plus récente de MyWealth",
+  toastLegacy:"Fichier « {name} » repris depuis {p}", toastLoaded:"Données chargées depuis {p}", loginFailed:"Connexion impossible : {e}",
+  confirmLogout:"Se déconnecter de {p} ? Les données restent sur cet appareil et dans {p}.",
+  loginDropbox:"Se connecter à Dropbox", loginMicrosoft:"Se connecter avec Microsoft", loginMicrosoftLong:"Se connecter avec Microsoft (OneDrive)",
+  stSynced:"Synchronisé avec {p}", atTime:"à {t}", stPending:"Modifications en attente…", stSyncing:"Synchronisation avec {p}…", stOffline:"Hors ligne — données gardées sur l'appareil", stToSync:"(à synchroniser)",
+  stReauth:"Reconnexion à {p} nécessaire", stError:"Erreur de synchronisation", stLocalOnly:"Données sur cet appareil uniquement · dernier export : {ago}", stNotConnected:"Non connecté au cloud", stStorageBlocked:"stockage local bloqué",
+  bnReauth:"<b>Reconnectez-vous à {p}</b> pour reprendre la synchronisation. Vos modifications sont gardées sur l'appareil en attendant.", reconnect:"Se reconnecter",
+  bnError:"Synchronisation impossible : {e}. Les données restent sur cet appareil.", unknownError:"erreur inconnue", retry:"Réessayer",
+  bnConnect:"Connectez-vous pour <b>synchroniser MyWealth</b> entre votre téléphone et votre ordinateur (fichier privé dans votre propre cloud).", lastExport:"Dernier export : {ago}", later:"Plus tard",
+  bnExport:"Vos données ne sont enregistrées que sur cet appareil. <b>Dernier export : {ago}</b>", bnExportFirst:" — faites une première sauvegarde !", bnExportOld:" — plus de 30 jours, il est temps d'exporter.", exportNow:"Exporter maintenant",
+  cloudSync:"Synchronisation cloud", cloudNotConfigured:"Pas encore configurée : renseignez <code>DROPBOX_APP_KEY</code> ou <code>ONEDRIVE_CLIENT_ID</code> dans <code>config.js</code> (voir GUIDE.md). En attendant, les données restent sur cet appareil : utilisez Exporter / Importer.",
+  connectedTo:"Connecté à <b>{p}</b>", fileLbl:"Fichier :", plusMonthly:"+ une copie par mois (<code>mywealth-donnees-AAAA-MM.json</code>).", lastSync:"Dernière synchronisation :", syncNow:"Synchroniser maintenant", logout:"Se déconnecter",
+  cloudPitch:"Connectez-vous pour enregistrer automatiquement vos données dans un dossier privé de votre propre cloud et les retrouver sur tous vos appareils. Rien n'est stocké ailleurs.",
+  legacyHelp:"Reprendre un fichier existant (<code>mywealth-donnees.json</code> ou <code>patrimoine-donnees.json</code>) : bouton « Importer », ou déposez-le dans le dossier de l'app de votre cloud (<i>Applications › …</i>) avant la première connexion.",
+  storageInfo:"Format des données : v{v} · {kb} Ko · {n} instantané(s) · cache sur l'appareil : {st}", active:"actif", unavailable:"indisponible",
+  defaultAccountName:"Nouveau compte", toastBadAmount:"Montant invalide", confirmDelAccount:"Supprimer le compte « {name} » ? (les instantanés passés sont conservés)",
+  toastBadNumber:"Nombre invalide", toastPriceFound:"Cours trouvé : {tk} {v}", confirmDelPosition:"Supprimer la position « {name} » ?", toastBadRate:"Taux invalide",
+  toastManualRate:"Taux manuel enregistré (actualisation auto désactivée)", promptCurrency:"Code de la devise (ex. GBP, JPY, SEK) :", toastFxOk:"Taux actualisés",
+  confirmDelSnap:"Supprimer l'instantané du {d} ?", confirmReset:"Effacer toutes les données et repartir d'une application vide ?", confirmResetCloud:"ATTENTION : la copie dans {p} sera elle aussi vidée.", confirmResetExport:"Exportez d'abord une sauvegarde si besoin."
+},
+en:{
+  statusTitle:"Backup status", baseCurrency:"Base currency", refresh:"Refresh", refreshTitle:"Refresh prices and exchange rates",
+  theme:"Theme", themeTitle:"Light / dark theme", export:"Export", exportTitle:"Export a JSON backup", import:"Import", importTitle:"Import a JSON backup",
+  navOverview:"Overview", navAccounts:"Accounts", navPositions:"Holdings", navHistory:"History", navSettings:"Settings",
+  netWorth:"Net worth", takeSnapshot:"Take a snapshot", breakdown:"Breakdown", byAccount:"By account", byCategory:"By category", byCurrency:"By currency",
+  evolution:"Trend", historyChart:"Net worth history", monthlyChart:"Monthly change",
+  accounts:"Accounts", accountsHint:"Click an amount to edit it. Accepted formats: 12'345.67 · 12345,67. Stocks and ETFs go in “Holdings” (enter only cash here).",
+  addAccount:"Add an account", positionsTitle:"Holdings & positions", positionsHint:"Prices are fetched automatically (delayed ~15 min) when possible; otherwise enter the price manually.",
+  refreshPrices:"Refresh prices", addPosition:"Add a position", snapshots:"Snapshots", snapHistory:"Snapshot history", date:"Date", save:"Save",
+  snapHelp:"A snapshot freezes the value of every account and position on a given date. Save one per month (e.g. at month end) to track your progress. An existing snapshot on the same date is replaced.",
+  monthlySummary:"Monthly summary", settingsTitle:"Settings", language:"Language", fxTitle:"Exchange rates",
+  fxHelp:"Value of 1 unit of currency in CHF. Refreshed automatically (ECB via Frankfurter, with ExchangeRate-API as fallback). Tick “manual rates” to use your own rates.",
+  fxManual:"Manual rates (don't refresh)", currency:"Currency", refreshFx:"Refresh rates", backupTitle:"Backup & data", manualExport:"Manual export / import",
+  manualExportHelp:"One-off copy of your data (useful for another device or as an extra backup).", exportJson:"Export (JSON)", importJson:"Import (JSON)", reset:"Reset",
+  privacyLink:"🔒 Privacy — what data, where?",
+  cfTitle:"Two different versions", cfText:"Your data was changed on this device <b>and</b> in the cloud (for example on another device). Which one do you want to keep? The other will be replaced.",
+  cfKeepLocal:"Keep this device", cfKeepRemote:"Keep the {p} version", cfTip:"Tip: export first if unsure (the monthly cloud copy is kept too).",
+  modifiedOn:"modified", thisDevice:"This device",
+  footer:"MyWealth · personal dashboard · free · works offline · no analytics, no tracking: your data stays on your device and in your own cloud (only public prices and exchange rates are downloaded).",
+  cat_courant:"Current account", cat_epargne:"Savings", cat_investissement:"Investments", cat_prevoyance:"Pension", cat_titres:"Holdings",
+  srcManual:"manual", srcTV:"TradingView (delayed)", srcECB:"ECB (Frankfurter)",
+  never:"never", today:"today", yesterday:"yesterday", daysAgo:"{n} days ago",
+  tplCurrent:"Current account", tplSavings:"Savings account", tplBroker:"Broker (cash)", tpl3a:"Pillar 3a", tplMulti:"Multi-currency card",
+  toastAdded:"“{name}” added — enter the balance in Accounts",
+  welcomeTitle:"Welcome to MyWealth", welcomeText:"Your dashboard is empty. Add your accounts and holdings: everything stays on this device (and in your own cloud if you connect it).",
+  welcomeStep1:"Add your accounts (one click on a template below), then enter the balances.", welcomeStep2:"Add your stocks / ETFs: symbol, quantity and average price — the price is fetched automatically.",
+  welcomeStep3:"Take a snapshot every month to track your progress.", suggestions:"Account templates (you can edit them later):", importBackup:"Import a backup",
+  noAccounts:"No accounts yet. Add one or pick a template:", noPositions:"No positions yet (stocks, ETFs…).",
+  color:"Colour", accountName:"Account name", deleteAccount:"Delete account", category:"Category", balance:"Balance", toFill:"to fill in", removeCurrency:"Remove this currency",
+  notePh:"Note (optional)", total:"Total", name:"Name", deletePosition:"Delete position", symbol:"Symbol", symbolPh:"e.g. AAPL or SIX:NESN", quantity:"Quantity", avgPrice:"Average price",
+  currentPrice:"Current price", pricePh:"to fill in", custody:"Custodian", custodyPh:"Bank / broker", updatedOn:"updated {d}", auto:"auto", manual:"manual",
+  priceMissing:"Price not available: enter it or click “Refresh prices”.", priceEnteredOn:"Price entered {d}", priceFetchedOn:"Price as of {d} · {src}",
+  costBasis:"Cost basis", currentValue:"Current value", plIn:"Gain/loss ({c})", performance:"Performance", perfNote:"excluding FX effect (security currency)",
+  ofTotal:"{p} of total", kpiCash:"Cash", kpiInvest:"Investments", kpiPension:"Pension", kpiPL:"Unrealised gain/loss", onCost:"{p} on cost basis", pricesToFill:"prices to fill in",
+  nAccounts:"{n} balance(s)", nPrices:"{n} price(s)", and:" and ", toFillSuffix:"to fill in", sinceSnap:"since the snapshot of {d}", noSnapYet:"No snapshot saved yet",
+  fxManualBadge:"Manual rates", fxBadge:"Rates {src} · {d}", fxApprox:"Approximate rates (not refreshed)", pricesAuto:"Auto prices · {d}", pricesPartial:"Prices partly manual", pricesManual:"Manual prices",
+  fxUnit:"1 {c} in CHF", manualPl:"manual", notRefreshed:"not refreshed",
+  noData:"No data", chartsOffline:"Chart unavailable (library not loaded)", fillToSee:"Enter amounts to see the breakdown",
+  nSnaps:"{n} snapshot(s)", change:"Change", delete:"Delete", noSnapsTable:"No snapshots. Click “Take a snapshot”.", month:"Month",
+  noMonthly:"The summary will appear after your first snapshot.", histOffline:"Chart unavailable offline", monthOffline:"Chart unavailable offline",
+  histEmpty:"Save snapshots to see the history", monthEmpty:"Available from the first snapshot", firstMonth:"First month",
+  toastFxManual:"Manual rates enabled: refresh disabled", toastFxFail:"Exchange rates unavailable (offline?) — last rates kept",
+  toastPricesPartial:"{ok} price(s) refreshed, {ko} not found — enter them manually", toastPricesOk:"{n} price(s) refreshed",
+  toastNothingToSnap:"Add an account or a position first", confirmReplaceSnap:"A snapshot already exists on {d}. Replace it?", toastSnap:"Snapshot of {d} saved: {v}",
+  toastExported:"Backup exported", futureMsg:"The file “{name}” was created by a newer version of MyWealth (format v{v}; this version supports up to v{max}).\n\nPlease update the app. Nothing was changed.",
+  confirmImport:"Replace all current data with “{name}”?", importCloudNote:"The copy in {p} will be updated too.", toastImported:"Data imported", invalidFile:"Invalid file: this is not a MyWealth backup.",
+  cantLoad:"Could not load {f}", errReauth:"sign-in required", errSession:"session expired", errNotConnected:"not connected", errDbxRefused:"Dropbox sign-in refused", errDbxRevoked:"Dropbox authorisation expired or revoked",
+  toastDbxCancelled:"Dropbox sign-in cancelled", whereOneDrive:"OneDrive › Apps › MyWealth", whereDropbox:"Dropbox › Apps › (Dropbox app name)",
+  confirmEmptyCloud:"Your {p} file contains data, but this app is empty.\n\nOK = empty the {p} file too\nCancel = reload the data from {p} (recommended)",
+  errUnreadable:"the cloud file “{name}” is unreadable — it was not modified", errFuture:"file created by a newer version of MyWealth",
+  toastLegacy:"File “{name}” imported from {p}", toastLoaded:"Data loaded from {p}", loginFailed:"Sign-in failed: {e}",
+  confirmLogout:"Sign out of {p}? Your data stays on this device and in {p}.",
+  loginDropbox:"Connect Dropbox", loginMicrosoft:"Sign in with Microsoft", loginMicrosoftLong:"Sign in with Microsoft (OneDrive)",
+  stSynced:"Synced with {p}", atTime:"at {t}", stPending:"Changes pending…", stSyncing:"Syncing with {p}…", stOffline:"Offline — data kept on this device", stToSync:"(to sync)",
+  stReauth:"Please sign in to {p} again", stError:"Sync error", stLocalOnly:"Data on this device only · last export: {ago}", stNotConnected:"Not connected to the cloud", stStorageBlocked:"local storage blocked",
+  bnReauth:"<b>Sign in to {p} again</b> to resume syncing. Your changes are kept on this device meanwhile.", reconnect:"Sign in again",
+  bnError:"Sync failed: {e}. Your data stays on this device.", unknownError:"unknown error", retry:"Retry",
+  bnConnect:"Connect to <b>sync MyWealth</b> between your phone and your computer (private file in your own cloud).", lastExport:"Last export: {ago}", later:"Later",
+  bnExport:"Your data is only stored on this device. <b>Last export: {ago}</b>", bnExportFirst:" — make a first backup!", bnExportOld:" — over 30 days, time to export.", exportNow:"Export now",
+  cloudSync:"Cloud sync", cloudNotConfigured:"Not configured yet: set <code>DROPBOX_APP_KEY</code> or <code>ONEDRIVE_CLIENT_ID</code> in <code>config.js</code> (see GUIDE.md). Meanwhile your data stays on this device: use Export / Import.",
+  connectedTo:"Connected to <b>{p}</b>", fileLbl:"File:", plusMonthly:"+ one copy per month (<code>mywealth-donnees-YYYY-MM.json</code>).", lastSync:"Last sync:", syncNow:"Sync now", logout:"Sign out",
+  cloudPitch:"Connect to save your data automatically in a private folder of your own cloud and find it on all your devices. Nothing is stored anywhere else.",
+  legacyHelp:"To reuse an existing file (<code>mywealth-donnees.json</code> or <code>patrimoine-donnees.json</code>): use “Import”, or put it in the app folder of your cloud (<i>Apps › …</i>) before connecting for the first time.",
+  storageInfo:"Data format: v{v} · {kb} KB · {n} snapshot(s) · on-device cache: {st}", active:"active", unavailable:"unavailable",
+  defaultAccountName:"New account", toastBadAmount:"Invalid amount", confirmDelAccount:"Delete the account “{name}”? (past snapshots are kept)",
+  toastBadNumber:"Invalid number", toastPriceFound:"Price found: {tk} {v}", confirmDelPosition:"Delete the position “{name}”?", toastBadRate:"Invalid rate",
+  toastManualRate:"Manual rate saved (auto refresh disabled)", promptCurrency:"Currency code (e.g. GBP, JPY, SEK):", toastFxOk:"Rates refreshed",
+  confirmDelSnap:"Delete the snapshot of {d}?", confirmReset:"Erase all data and start again with an empty app?", confirmResetCloud:"WARNING: the copy in {p} will be emptied too.", confirmResetExport:"Export a backup first if needed."
+}};
+</script>
 <script>
 "use strict";
-/* ================= Configuration ================= */
-const STORE_KEY = "patrimoine.v1";          // cache localStorage (nom conservé pour compatibilité)
-const DIRTY_KEY = "patrimoine.nonSynchronise"; // "1" = modifications faites alors que le fichier n'était pas connecté
-const SNOOZE_KEY = "patrimoine.rappelReporte";
-/* ---- Format de données versionné ----
-   schemaVersion est écrit dans chaque fichier. Si une future version de la page change le format,
-   incrémentez SCHEMA_VERSION et ajoutez une fonction dans MIGRATIONS[ancienneVersion]. */
+/* =====================================================================
+   MyWealth v3 — suivi de patrimoine personnel (FR / EN)
+   Données : appareil (localStorage) + fichier privé dans le cloud de l'utilisateur.
+   ===================================================================== */
+function cfg(){ return window.MYWEALTH_CONFIG || {}; }
+
+/* ================= Langue ================= */
+const LANG_KEY = "mywealth.lang";
+function detectLang(){
+  try{ const l=localStorage.getItem(LANG_KEY); if(l==="fr"||l==="en") return l; }catch(e){}
+  const n=(navigator.languages&&navigator.languages[0])||navigator.language||"en";
+  return /^fr/i.test(n)? "fr" : "en";
+}
+let LANG = detectLang();
+window.__i18nMissing = [];
+function t(key, vars){
+  let s = (I18N[LANG] && I18N[LANG][key]);
+  if(s==null){ window.__i18nMissing.push(LANG+":"+key); s = (I18N.fr[key]!=null? I18N.fr[key] : key); }
+  if(vars) s = s.replace(/\{(\w+)\}/g, (m,k)=> vars[k]!=null? vars[k] : m);
+  return s;
+}
+function applyI18n(){
+  document.documentElement.lang = LANG==="fr"? "fr-CH" : "en";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{ el.innerHTML=t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{ el.title=t(el.dataset.i18nTitle); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder=t(el.dataset.i18nPh); });
+  $("langBtnTxt").textContent = LANG.toUpperCase();
+  document.querySelectorAll("#langSeg button").forEach(b=>b.classList.toggle("on", b.dataset.lang===LANG));
+  $("privacyLink").href = "privacy.html?lang="+LANG;
+}
+function setLang(l){
+  if(l!=="fr" && l!=="en") return;
+  LANG=l; try{ localStorage.setItem(LANG_KEY,l); }catch(e){}
+  applyI18n(); applyTheme(); fullRender(); renderSyncUI();
+}
+
+/* ================= Configuration & format des données ================= */
+const STORE_KEY = "patrimoine.v1";          // cache local (nom conservé pour compatibilité avec les versions précédentes)
+/* schemaVersion est écrit dans chaque fichier ; ajouter une migration dans MIGRATIONS si le format change. */
 const SCHEMA_VERSION = 2;
 const MIGRATIONS = {
-  // v1 (première version de la page, champ "version":1) -> v2 : schemaVersion, savedAt, meta
   1: s => { delete s.version; s.meta = Object.assign({lastExport:null}, s.meta||{}); return s; }
-  // 2: s => { /* transformation v2 -> v3 */ return s; },
 };
-const CATS = {courant:"Compte courant", epargne:"Épargne", investissement:"Investissement", prevoyance:"Prévoyance", titres:"Titres"};
+const CAT_KEYS = ["courant","epargne","investissement","prevoyance"];   // clés stockées (ne pas traduire)
 const CAT_COLORS = {courant:"#6c8cff", epargne:"#2fd08a", investissement:"#9b6cff", prevoyance:"#ffb547", titres:"#ff6cb5"};
 const PALETTE = ["#6c8cff","#2fd08a","#9b6cff","#ffb547","#ff6cb5","#3ccfe0","#ff7f50","#a3e635","#f472b6","#60a5fa","#facc15","#34d399"];
 const CUR_COLORS = {CHF:"#ff5c7a",EUR:"#6c8cff",USD:"#2fd08a",GBP:"#ffb547"};
+// valeurs techniques enregistrées dans les données (gardées telles quelles pour compatibilité ; traduites à l'affichage)
+const SRC_MANUAL = "manuel", SRC_TV = "TradingView (différé)", SRC_ECB = "BCE (Frankfurter)", SRC_ERAPI = "ExchangeRate-API";
+function catLabel(k){ return t("cat_"+k); }
+function srcLabel(s){ return s===SRC_MANUAL? t("srcManual") : s===SRC_TV? t("srcTV") : s===SRC_ECB? t("srcECB") : (s||t("srcManual")); }
 
 function uid(){ return Math.random().toString(36).slice(2,10); }
 function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 
+/* État initial : VIDE (aucun compte, aucune position). Utilisé seulement s'il n'existe aucune donnée. */
 function defaultState(){
   return {
     app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:null,
     base:"CHF", theme:"dark",
     meta:{ lastExport:null, created:new Date().toISOString() },
     fx:{ rates:{CHF:1, EUR:0, USD:0}, date:null, source:null, fetchedAt:null, manual:false },
-    accounts:[
-      {id:uid(), name:"BNP Paribas", category:"courant", color:PALETTE[0], balances:[{cur:"EUR", amount:0}], updated:null, note:""},
-      {id:uid(), name:"PostFinance", category:"courant", color:PALETTE[3], balances:[{cur:"CHF", amount:0}], updated:null, note:""},
-      {id:uid(), name:"Revolut", category:"courant", color:PALETTE[5], balances:[{cur:"CHF", amount:0}], updated:null, note:"Multi-devise : ajoutez une ligne par devise"},
-      {id:uid(), name:"Swissquote (espèces)", category:"investissement", color:PALETTE[2], balances:[{cur:"CHF", amount:0}], updated:null, note:"Liquidités uniquement ; les titres sont dans « Titres »"},
-      {id:uid(), name:"3e pilier A", category:"prevoyance", color:PALETTE[1], balances:[{cur:"CHF", amount:0}], updated:null, note:""}
-    ],
-    positions:[
-      {id:uid(), ticker:"TSLA", name:"Tesla, Inc.", qty:210, avg:369, currency:"USD", price:null, priceDate:null, priceSource:null, exchange:"NASDAQ", custody:"Swissquote"}
-    ],
+    accounts:[],
+    positions:[],
     snapshots:[]
   };
 }
-/* FX fallback used ONLY if no rate has ever been fetched/entered (approx. Oct 2026) – shown as "approx." */
 const FX_FALLBACK = {CHF:1, EUR:0.927, USD:0.824, GBP:1.099};
 
 let S = load();
@@ -356,14 +536,14 @@ function load(){
   try{
     const raw = localStorage.getItem(STORE_KEY);
     if(raw){ return migrate(JSON.parse(raw)); }
-  }catch(e){ console.warn("Lecture localStorage impossible", e); }
+  }catch(e){ console.warn("local data unreadable", e); }
   return defaultState();
 }
 function schemaOf(s){ return +(s && (s.schemaVersion || s.version)) || 1; }
 function isPatrimoineData(j){ return !!j && typeof j==="object" && Array.isArray(j.accounts) && Array.isArray(j.positions); }
 function migrate(s){
   let v = schemaOf(s);
-  if(v > SCHEMA_VERSION){ const e=new Error("Format plus récent ("+v+")"); e.future=v; throw e; }
+  if(v > SCHEMA_VERSION){ const e=new Error("future "+v); e.future=v; throw e; }
   s = JSON.parse(JSON.stringify(s));
   while(v < SCHEMA_VERSION){ s = (MIGRATIONS[v] || (x=>x))(s); v++; }
   const d = defaultState();
@@ -379,13 +559,14 @@ function migrate(s){
   s.app = "patrimoine"; s.schemaVersion = SCHEMA_VERSION;
   return s;
 }
+// contenu « réel » : au moins un compte, une position ou un instantané
+function hasContent(s){ return !!s && ((s.accounts||[]).length>0 || (s.positions||[]).length>0 || (s.snapshots||[]).length>0); }
+function hasUserData(s){ return s.accounts.some(a=>a.updated) || s.snapshots.length>0 || s.positions.some(p=>p.priceSource===SRC_MANUAL) || hasContent(s); }
+
 let saveOk = true, lastKey = null;
-function dataKey(o){ const c=Object.assign({},o); delete c.savedAt; return JSON.stringify(c); }
-function writeLocal(){
-  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); saveOk=true; }catch(e){ saveOk=false; }
-}
-/* save() : appelé après chaque modification. Ne fait rien si les données n'ont pas changé.
-   auto=true pour les mises à jour automatiques (cours, taux) qui ne sont pas des saisies de l'utilisateur. */
+// clé de comparaison : ignore savedAt et le commentaire _info du fichier (évite un envoi inutile à chaque ouverture)
+function dataKey(o){ const c=Object.assign({},o); delete c.savedAt; delete c._info; return JSON.stringify(c); }
+function writeLocal(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); saveOk=true; }catch(e){ saveOk=false; } }
 function save(auto){
   const k=dataKey(S);
   if(k===lastKey) return;
@@ -395,7 +576,7 @@ function save(auto){
   renderSyncUI();
 }
 
-/* ================= Formatage suisse ================= */
+/* ================= Formats (suisses en FR, apostrophe aussi en EN) ================= */
 function fmtNum(n, dec=2){
   if(n==null || !isFinite(n)) return "—";
   const neg = n<0; n=Math.abs(n);
@@ -405,7 +586,8 @@ function fmtNum(n, dec=2){
 }
 function fmtMoney(n, cur, dec=2){ return n==null||!isFinite(n) ? "—" : cur+" "+fmtNum(n,dec); }
 function fmtSigned(n, cur, dec=2){ if(n==null||!isFinite(n)) return "—"; return (n>0?"+":"")+ (cur?cur+" ":"") + fmtNum(n,dec); }
-function fmtPct(n){ if(n==null||!isFinite(n)) return "—"; return (n>0?"+":"")+fmtNum(n*100,2)+" %"; }
+function fmtPct(n){ if(n==null||!isFinite(n)) return "—"; return (n>0?"+":"")+fmtNum(n*100,2)+(LANG==="fr"?" %":"%"); }
+function fmtPct1(x){ return fmtNum(x,1)+(LANG==="fr"?" %":"%"); }
 function parseNum(str){
   if(typeof str==="number") return str;
   if(str==null) return NaN;
@@ -415,21 +597,26 @@ function parseNum(str){
   if(s==="") return NaN;
   return Number(s);
 }
-function fmtDate(iso){ if(!iso) return "—"; const d=new Date(iso.length===10?iso+"T12:00:00":iso); if(isNaN(d)) return iso; return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear(); }
-function fmtDT(d){ d=new Date(d); if(isNaN(d)) return "—"; return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
-const MONTHS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
-function fmtMonth(ym){ const [y,m]=ym.split("-"); return MONTHS[+m-1]+" "+y; }
+const MONTHS = {
+  fr:["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],
+  en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+};
+function toDate(iso){ if(iso instanceof Date) return iso; return new Date(typeof iso==="string" && iso.length===10? iso+"T12:00:00" : iso); }
+function fmtDate(iso){
+  if(!iso) return "—"; const d=toDate(iso); if(isNaN(d)) return String(iso);
+  if(LANG==="en") return d.getDate()+" "+MONTHS.en[d.getMonth()]+" "+d.getFullYear();
+  return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear();
+}
+function hm(d){ d=toDate(d); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function fmtDT(d){ d=toDate(d); if(isNaN(d)) return "—"; return fmtDate(d)+" "+hm(d); }
+function fmtMonth(ym){ const [y,m]=ym.split("-"); return MONTHS[LANG][+m-1]+" "+y; }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function daysSince(iso){ return iso? Math.floor((Date.now()-new Date(iso))/864e5) : null; }
+function agoTxt(iso){ const d=daysSince(iso); if(d==null) return t("never"); if(d===0) return t("today"); if(d===1) return t("yesterday"); return t("daysAgo",{n:d}); }
 
 /* ================= Calculs ================= */
-function rate(cur){ // CHF par unité
-  const r = S.fx.rates[cur];
-  if(r && r>0) return r;
-  return FX_FALLBACK[cur] || NaN;
-}
-function usingFallbackFx(){ return Object.keys(currenciesInUse()).some(c=>!(S.fx.rates[c]>0)); }
+function rate(cur){ const r = S.fx.rates[cur]; if(r && r>0) return r; return FX_FALLBACK[cur] || NaN; }
 function toCHF(a,cur){ return a*rate(cur); }
-function toBase(a,cur){ return toCHF(a,cur)/rate(S.base); }
 function chfToBase(x){ return x/rate(S.base); }
 function currenciesInUse(){
   const set={CHF:1,EUR:1,USD:1}; Object.keys(S.fx.rates).forEach(c=>set[c]=1);
@@ -446,7 +633,6 @@ function posCalc(p){
   return {qty,avg,price,cost,value,pl,pct,
     costCHF:toCHF(cost,p.currency), valueCHF: value==null?null:toCHF(value,p.currency), plCHF: pl==null?null:toCHF(pl,p.currency)};
 }
-// valeur prise en compte dans le total : si pas de cours, on utilise le coût d'achat
 function posValueCHF(p){ const c=posCalc(p); return c.valueCHF!=null? c.valueCHF : c.costCHF; }
 function totals(){
   const byAcc=[], byCat={}, byCur={};
@@ -470,144 +656,165 @@ function totals(){
 
 /* ================= Rendu ================= */
 const $ = id=>document.getElementById(id);
-function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+function toast(msg){ const el=$("toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove("show"),2600); }
+function curOptions(sel){ return Object.keys(currenciesInUse()).sort().map(c=>`<option ${c===sel?"selected":""}>${c}</option>`).join(""); }
+function catOptions(sel){ return CAT_KEYS.map(k=>`<option value="${k}" ${k===sel?"selected":""}>${esc(catLabel(k))}</option>`).join(""); }
 
-function curOptions(sel){
-  return Object.keys(currenciesInUse()).sort().map(c=>`<option ${c===sel?"selected":""}>${c}</option>`).join("");
+/* Modèles de comptes génériques (noms dans la langue courante, modifiables ensuite) */
+const TEMPLATES = [
+  {key:"tplCurrent", category:"courant"},
+  {key:"tplSavings", category:"epargne"},
+  {key:"tplBroker", category:"investissement"},
+  {key:"tpl3a", category:"prevoyance", cur:"CHF"},
+  {key:"tplMulti", category:"courant", multi:true}
+];
+function tplButtons(){ return TEMPLATES.map((x,i)=>`<button class="tpl" data-tpl="${i}">＋ ${esc(t(x.key))}</button>`).join(""); }
+function addAccount(name, category, balances){
+  S.accounts.push({id:uid(), name, category, color:PALETTE[S.accounts.length%PALETTE.length], balances, updated:null, note:""});
+  save(); renderAccounts(); updateComputed();
 }
-function catOptions(sel){
-  return Object.entries(CATS).filter(([k])=>k!=="titres").map(([k,v])=>`<option value="${k}" ${k===sel?"selected":""}>${v}</option>`).join("");
+function addFromTemplate(i){
+  const x=TEMPLATES[i]; if(!x) return;
+  const bal = x.multi? [{cur:S.base,amount:0},{cur:S.base==="EUR"?"USD":"EUR",amount:0}] : [{cur:x.cur||S.base,amount:0}];
+  addAccount(t(x.key), x.category, bal);
+  toast(t("toastAdded",{name:t(x.key)}));
 }
-
+function renderWelcome(){
+  const el=$("welcome");
+  if(S.accounts.length || S.positions.length){ el.innerHTML=""; return; }
+  el.innerHTML=`<div class="card welcome">
+    <h2>👋 ${esc(t("welcomeTitle"))}</h2>
+    <p>${esc(t("welcomeText"))}</p>
+    <ol class="steps"><li>${esc(t("welcomeStep1"))}</li><li>${esc(t("welcomeStep2"))}</li><li>${esc(t("welcomeStep3"))}</li></ol>
+    <div class="small muted">${esc(t("suggestions"))}</div>
+    <div class="tpls">${tplButtons()}</div>
+    <div class="row">
+      <button class="btn primary" data-act2="addAcc">＋ ${esc(t("addAccount"))}</button>
+      <button class="btn" data-act2="addPos">＋ ${esc(t("addPosition"))}</button>
+      <button class="btn" data-act2="import">⤒ ${esc(t("importBackup"))}</button>
+    </div></div>`;
+}
 function renderAccounts(){
   const el=$("accList");
-  if(!S.accounts.length){ el.innerHTML=`<div class="empty">Aucun compte. Cliquez sur « Ajouter un compte ».</div>`; return; }
+  if(!S.accounts.length){ el.innerHTML=`<div class="empty">${esc(t("noAccounts"))}<div class="tpls" style="justify-content:center">${tplButtons()}</div></div>`; return; }
   el.innerHTML = S.accounts.map(a=>`
     <div class="card acc" style="--c:${a.color}" data-acc="${a.id}">
       <div class="head">
-        <input type="color" value="${a.color}" data-f="color" title="Couleur" style="width:34px;height:30px;padding:2px">
-        <input class="name" value="${esc(a.name)}" data-f="name" aria-label="Nom du compte">
-        <button class="btn icon sm danger" data-act="delAcc" title="Supprimer ce compte">🗑</button>
+        <input type="color" value="${a.color}" data-f="color" title="${esc(t("color"))}" style="width:34px;height:30px;padding:2px">
+        <input class="name" value="${esc(a.name)}" data-f="name" aria-label="${esc(t("accountName"))}">
+        <button class="btn icon sm danger" data-act="delAcc" title="${esc(t("deleteAccount"))}">🗑</button>
       </div>
       <div class="meta">
-        <select data-f="category" aria-label="Catégorie">${catOptions(a.category)}</select>
-        <span class="badge ${a.updated?"ok":"todo"}" data-badge>${a.updated?"Mis à jour le "+fmtDate(a.updated):"à compléter"}</span>
+        <select data-f="category" aria-label="${esc(t("category"))}">${catOptions(a.category)}</select>
+        <span class="badge ${a.updated?"ok":"todo"}" data-badge></span>
       </div>
       ${a.balances.map((b,i)=>`
         <div class="bal">
-          <select data-f="cur" data-i="${i}" aria-label="Devise">${curOptions(b.cur)}</select>
-          <input class="num" inputmode="decimal" data-f="amount" data-i="${i}" value="${fmtNum(+b.amount||0)}" aria-label="Solde" ${a.updated?"":'placeholder="à compléter"'}>
-          ${a.balances.length>1?`<button class="btn icon sm danger" data-act="delBal" data-i="${i}" title="Retirer cette devise">✕</button>`:`<span></span>`}
+          <select data-f="cur" data-i="${i}" aria-label="${esc(t("currency"))}">${curOptions(b.cur)}</select>
+          <input class="num" inputmode="decimal" data-f="amount" data-i="${i}" value="${fmtNum(+b.amount||0)}" aria-label="${esc(t("balance"))}" ${a.updated?"":`placeholder="${esc(t("toFill"))}"`}>
+          ${a.balances.length>1?`<button class="btn icon sm danger" data-act="delBal" data-i="${i}" title="${esc(t("removeCurrency"))}">✕</button>`:`<span></span>`}
         </div>`).join("")}
-      <div class="row"><button class="btn sm" data-act="addBal">＋ Devise</button></div>
-      <textarea data-f="note" rows="1" placeholder="Note (IBAN partiel, taux, etc.)">${esc(a.note||"")}</textarea>
-      <div class="tot"><span class="muted small">Total</span><b data-acctot></b></div>
+      <div class="row"><button class="btn sm" data-act="addBal">＋ ${esc(t("currency"))}</button></div>
+      <textarea data-f="note" rows="1" placeholder="${esc(t("notePh"))}">${esc(a.note||"")}</textarea>
+      <div class="tot"><span class="muted small">${esc(t("total"))}</span><b data-acctot></b></div>
     </div>`).join("");
 }
-
 function renderPositions(){
   const el=$("posList");
-  if(!S.positions.length){ el.innerHTML=`<div class="empty">Aucune position. Cliquez sur « Ajouter une position ».</div>`; return; }
+  if(!S.positions.length){ el.innerHTML=`<div class="empty">${esc(t("noPositions"))}<div class="row"><button class="btn primary" data-act2="addPos">＋ ${esc(t("addPosition"))}</button></div></div>`; return; }
   el.innerHTML = S.positions.map(p=>`
     <div class="card poscard" data-pos="${p.id}">
       <div class="ph">
         <span class="tick">${esc(p.ticker||"?")}</span>
-        <div style="flex:1;min-width:0"><input value="${esc(p.name||"")}" data-f="name" placeholder="Nom" style="width:100%;font-weight:600"></div>
-        <button class="btn icon sm danger" data-act="delPos" title="Supprimer la position">🗑</button>
+        <div style="flex:1;min-width:0"><input value="${esc(p.name||"")}" data-f="name" placeholder="${esc(t("name"))}" style="width:100%;font-weight:600"></div>
+        <button class="btn icon sm danger" data-act="delPos" title="${esc(t("deletePosition"))}">🗑</button>
       </div>
       <div class="fields">
-        <div class="fld"><label>Symbole</label><input data-f="ticker" value="${esc(p.ticker||"")}" placeholder="ex. TSLA, SIX:NESN"></div>
-        <div class="fld"><label>Devise</label><select data-f="currency">${curOptions(p.currency)}</select></div>
-        <div class="fld"><label>Quantité</label><input class="num" inputmode="decimal" data-f="qty" value="${fmtNum(+p.qty||0, (+p.qty%1)?4:0)}"></div>
-        <div class="fld"><label>Prix d'achat moyen</label><input class="num" inputmode="decimal" data-f="avg" value="${fmtNum(+p.avg||0)}"></div>
-        <div class="fld"><label>Cours actuel <span data-srcbadge></span></label><input class="num" inputmode="decimal" data-f="price" value="${p.price!=null?fmtNum(p.price):""}" placeholder="saisir le cours"></div>
-        <div class="fld"><label>Dépositaire</label><input data-f="custody" value="${esc(p.custody||"")}" placeholder="ex. Swissquote"></div>
+        <div class="fld"><label>${esc(t("symbol"))}</label><input data-f="ticker" value="${esc(p.ticker||"")}" placeholder="${esc(t("symbolPh"))}"></div>
+        <div class="fld"><label>${esc(t("currency"))}</label><select data-f="currency">${curOptions(p.currency)}</select></div>
+        <div class="fld"><label>${esc(t("quantity"))}</label><input class="num" inputmode="decimal" data-f="qty" value="${fmtNum(+p.qty||0, (+p.qty%1)?4:0)}"></div>
+        <div class="fld"><label>${esc(t("avgPrice"))}</label><input class="num" inputmode="decimal" data-f="avg" value="${fmtNum(+p.avg||0)}"></div>
+        <div class="fld"><label>${esc(t("currentPrice"))} <span data-srcbadge></span></label><input class="num" inputmode="decimal" data-f="price" value="${p.price!=null?fmtNum(p.price):""}" placeholder="${esc(t("pricePh"))}"></div>
+        <div class="fld"><label>${esc(t("custody"))}</label><input data-f="custody" value="${esc(p.custody||"")}" placeholder="${esc(t("custodyPh"))}"></div>
       </div>
       <div class="small muted" style="margin-top:6px" data-pdate></div>
       <div class="stats" data-stats></div>
     </div>`).join("");
 }
-
 function updateComputed(){
-  // comptes
   document.querySelectorAll("[data-acc]").forEach(card=>{
     const a=S.accounts.find(x=>x.id===card.dataset.acc); if(!a) return;
     const tCHF=accTotalCHF(a);
     const single = a.balances.length===1 && a.balances[0].cur===S.base;
     card.querySelector("[data-acctot]").innerHTML = fmtMoney(chfToBase(tCHF),S.base) + (a.balances.length===1 && !single? ` <span class="small muted">(${fmtMoney(+a.balances[0].amount||0,a.balances[0].cur)})</span>`:"");
-    const bd=card.querySelector("[data-badge]"); bd.className="badge "+(a.updated?"ok":"todo"); bd.textContent=a.updated?"Mis à jour le "+fmtDate(a.updated):"à compléter";
+    const bd=card.querySelector("[data-badge]"); bd.className="badge "+(a.updated?"ok":"todo"); bd.textContent=a.updated? t("updatedOn",{d:fmtDate(a.updated)}) : t("toFill");
   });
-  // positions
   document.querySelectorAll("[data-pos]").forEach(card=>{
     const p=S.positions.find(x=>x.id===card.dataset.pos); if(!p) return;
-    const c=posCalc(p), cur=p.currency;
+    const c=posCalc(p), cur=p.currency||"USD";
     card.querySelector(".tick").textContent=p.ticker||"?";
     const sb=card.querySelector("[data-srcbadge]");
-    sb.innerHTML = p.price==null? `<span class="badge todo">à compléter</span>` : (p.priceSource && p.priceSource!=="manuel" ? `<span class="badge live">auto</span>` : `<span class="badge man">manuel</span>`);
-    card.querySelector("[data-pdate]").textContent = p.price==null ? "Cours indisponible : saisissez-le manuellement (la valeur est estimée au prix d'achat en attendant)." :
-      (p.priceSource==="manuel"?"Cours saisi le ":"Cours récupéré le ")+fmtDT(p.priceDate)+" · source : "+(p.priceSource||"manuel");
+    sb.innerHTML = p.price==null? `<span class="badge todo">${esc(t("toFill"))}</span>` : (p.priceSource && p.priceSource!==SRC_MANUAL ? `<span class="badge live">${esc(t("auto"))}</span>` : `<span class="badge man">${esc(t("manual"))}</span>`);
+    card.querySelector("[data-pdate]").textContent = p.price==null ? t("priceMissing") :
+      t(p.priceSource===SRC_MANUAL?"priceEnteredOn":"priceFetchedOn",{d:fmtDT(p.priceDate), src:srcLabel(p.priceSource)});
     const cls = v=> v==null?"":(v>=0?"pos":"neg");
     const showChf = cur!=="CHF";
     card.querySelector("[data-stats]").innerHTML = `
-      <div class="stat"><div class="l">Prix de revient</div><div class="v">${fmtMoney(c.cost,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.costCHF,"CHF")}</div>`:""}</div>
-      <div class="stat"><div class="l">Valeur actuelle</div><div class="v">${fmtMoney(c.value,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.valueCHF,"CHF")}</div>`:""}</div>
-      <div class="stat"><div class="l">Plus/moins-value (${cur})</div><div class="v ${cls(c.pl)}">${fmtSigned(c.pl,cur)}</div></div>
-      <div class="stat"><div class="l">Plus/moins-value (CHF)</div><div class="v ${cls(c.plCHF)}">${fmtSigned(c.plCHF,"CHF")}</div></div>
-      <div class="stat wide"><div><div class="l">Performance</div><div class="s">Taux de change actuel appliqué au coût et à la valeur</div></div><div class="v ${cls(c.pct)}">${fmtPct(c.pct)}</div></div>`;
+      <div class="stat"><div class="l">${esc(t("costBasis"))}</div><div class="v">${fmtMoney(c.cost,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.costCHF,"CHF")}</div>`:""}</div>
+      <div class="stat"><div class="l">${esc(t("currentValue"))}</div><div class="v">${fmtMoney(c.value,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.valueCHF,"CHF")}</div>`:""}</div>
+      <div class="stat"><div class="l">${esc(t("plIn",{c:cur}))}</div><div class="v ${cls(c.pl)}">${fmtSigned(c.pl,cur)}</div></div>
+      <div class="stat"><div class="l">${esc(t("plIn",{c:"CHF"}))}</div><div class="v ${cls(c.plCHF)}">${fmtSigned(c.plCHF,"CHF")}</div></div>
+      <div class="stat wide"><div><div class="l">${esc(t("performance"))}</div><div class="s">${esc(t("perfNote"))}</div></div><div class="v ${cls(c.pct)}">${fmtPct(c.pct)}</div></div>`;
   });
-
-  // total / KPI
   const T=totals(), B=S.base;
   $("nwTotal").textContent = fmtMoney(chfToBase(T.total),B);
   const liq=(T.byCat.courant||0)+(T.byCat.epargne||0), inv=(T.byCat.investissement||0)+(T.byCat.titres||0), prev=T.byCat.prevoyance||0;
-  const pct = x=> T.total>0? fmtNum(x/T.total*100,1)+" % du total" : "";
+  const pct = x=> T.total>0? t("ofTotal",{p:fmtPct1(x/T.total*100)}) : "";
   $("kpis").innerHTML = `
-    <div class="kpi"><div class="l">Liquidités</div><div class="v">${fmtMoney(chfToBase(liq),B,0)}</div><div class="s">${pct(liq)}</div></div>
-    <div class="kpi"><div class="l">Investissements</div><div class="v">${fmtMoney(chfToBase(inv),B,0)}</div><div class="s">${pct(inv)}</div></div>
-    <div class="kpi"><div class="l">Prévoyance (3a)</div><div class="v">${fmtMoney(chfToBase(prev),B,0)}</div><div class="s">${pct(prev)}</div></div>
-    <div class="kpi"><div class="l">+/- latente titres</div><div class="v ${T.anyPrice?(T.pl>=0?"pos":"neg"):""}">${T.anyPrice?fmtSigned(chfToBase(T.pl),B,0):"—"}</div><div class="s">${T.anyPrice&&T.cost?fmtPct(T.pl/T.cost)+" sur le coût":"cours à compléter"}</div></div>`;
+    <div class="kpi"><div class="l">${esc(t("kpiCash"))}</div><div class="v">${fmtMoney(chfToBase(liq),B,0)}</div><div class="s">${pct(liq)}</div></div>
+    <div class="kpi"><div class="l">${esc(t("kpiInvest"))}</div><div class="v">${fmtMoney(chfToBase(inv),B,0)}</div><div class="s">${pct(inv)}</div></div>
+    <div class="kpi"><div class="l">${esc(t("kpiPension"))}</div><div class="v">${fmtMoney(chfToBase(prev),B,0)}</div><div class="s">${pct(prev)}</div></div>
+    <div class="kpi"><div class="l">${esc(t("kpiPL"))}</div><div class="v ${T.anyPrice?(T.pl>=0?"pos":"neg"):""}">${T.anyPrice?fmtSigned(chfToBase(T.pl),B,0):"—"}</div><div class="s">${T.anyPrice&&T.cost?esc(t("onCost",{p:fmtPct(T.pl/T.cost)})):(S.positions.length?esc(t("pricesToFill")):"")}</div></div>`;
   const todo=S.accounts.filter(a=>!a.updated).length, todoP=S.positions.filter(p=>p.price==null).length;
-  $("todoNote").textContent = (todo||todoP)? `⚠ ${todo?todo+" compte(s)":""}${todo&&todoP?" et ":""}${todoP?todoP+" cours":""} à compléter` : "";
-  // delta vs dernier instantané
+  $("todoNote").textContent = (todo||todoP)? "⚠ "+[todo?t("nAccounts",{n:todo}):"", todoP?t("nPrices",{n:todoP}):""].filter(Boolean).join(t("and"))+" "+t("toFillSuffix") : "";
   const snaps=sortedSnaps();
   if(snaps.length){
-    // référence : dernier instantané antérieur à aujourd'hui (sinon le dernier)
     const before=snaps.filter(s=>s.date<today()); const last=before.length? before[before.length-1] : snaps[snaps.length-1];
     const lastB=snapInBase(last), d=chfToBase(T.total)-lastB;
-    $("nwDelta").innerHTML = `<span class="${d>=0?"pos":"neg"}">${fmtSigned(d,B)}</span> depuis l'instantané du ${fmtDate(last.date)}`+(lastB? ` (${fmtPct(d/lastB)})`:"");
-  } else $("nwDelta").textContent="Aucun instantané enregistré pour l'instant";
+    $("nwDelta").innerHTML = `<span class="${d>=0?"pos":"neg"}">${fmtSigned(d,B)}</span> ${esc(t("sinceSnap",{d:fmtDate(last.date)}))}`+(lastB? ` (${fmtPct(d/lastB)})`:"");
+  } else $("nwDelta").textContent=t("noSnapYet");
+  renderWelcome();
   renderStatus();
   renderFxGrid(false);
   renderCharts(T);
 }
-
 function renderStatus(){
   const fx=S.fx, pos=S.positions;
-  const live=pos.filter(p=>p.priceSource&&p.priceSource!=="manuel"&&p.price!=null);
+  const live=pos.filter(p=>p.priceSource&&p.priceSource!==SRC_MANUAL&&p.price!=null);
   let h="";
-  h += fx.manual ? `<span class="badge man">Taux manuels</span>` : (fx.source? `<span class="badge live">Taux ${esc(fx.source)} · ${fmtDate(fx.date)}</span>` : `<span class="badge man">Taux approximatifs (hors ligne)</span>`);
+  h += fx.manual ? `<span class="badge man">${esc(t("fxManualBadge"))}</span>` : (fx.source? `<span class="badge live">${esc(t("fxBadge",{src:srcLabel(fx.source),d:fmtDate(fx.date)}))}</span>` : `<span class="badge man">${esc(t("fxApprox"))}</span>`);
   if(pos.length){
-    h += live.length===pos.length ? `<span class="badge live">Cours auto · ${fmtDT(live[0].priceDate)}</span>` :
-         live.length? `<span class="badge man">Cours partiellement manuels</span>` : `<span class="badge man">Cours manuels</span>`;
+    h += live.length===pos.length ? `<span class="badge live">${esc(t("pricesAuto",{d:fmtDT(live[0].priceDate)}))}</span>` :
+         live.length? `<span class="badge man">${esc(t("pricesPartial"))}</span>` : `<span class="badge man">${esc(t("pricesManual"))}</span>`;
   }
   $("statusBar").innerHTML=h;
 }
-
 function renderFxGrid(force){
   const g=$("fxGrid");
   const curs=Object.keys(currenciesInUse()).filter(c=>c!=="CHF").sort();
-  if(!force && g.dataset.k===curs.join()+"|"+S.fx.fetchedAt+"|"+S.fx.manual && document.activeElement && g.contains(document.activeElement)) return;
-  g.dataset.k=curs.join()+"|"+S.fx.fetchedAt+"|"+S.fx.manual;
-  g.innerHTML = curs.map(c=>`<div class="fld"><label>1 ${c} = ? CHF</label><input class="num" inputmode="decimal" data-fx="${c}" value="${S.fx.rates[c]>0?fmtNum(S.fx.rates[c],4):""}" placeholder="≈ ${fmtNum(FX_FALLBACK[c]||0,4)}"></div>`).join("");
+  const k=curs.join()+"|"+S.fx.fetchedAt+"|"+S.fx.manual+"|"+LANG;
+  if(!force && g.dataset.k===k && document.activeElement && g.contains(document.activeElement)) return;
+  g.dataset.k=k;
+  g.innerHTML = curs.map(c=>`<div class="fld"><label>${esc(t("fxUnit",{c}))}</label><input class="num" inputmode="decimal" data-fx="${c}" value="${S.fx.rates[c]>0?fmtNum(S.fx.rates[c],4):""}" placeholder="≈ ${fmtNum(FX_FALLBACK[c]||0,4)}"></div>`).join("");
   $("fxManual").checked=!!S.fx.manual;
-  $("fxInfo").textContent = S.fx.manual? "manuels" : (S.fx.source? `${S.fx.source} · ${fmtDate(S.fx.date)}` : "non actualisés");
+  $("fxInfo").textContent = S.fx.manual? t("manualPl") : (S.fx.source? srcLabel(S.fx.source)+" · "+fmtDate(S.fx.date) : t("notRefreshed"));
 }
 
 /* ================= Graphiques ================= */
 const charts={};
 function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function legendHTML(items,total){
-  return items.map(it=>`<div><div class="row" style="gap:8px"><span class="dot" style="background:${it.color}"></span><span class="nm">${esc(it.name)}</span><span class="am">${fmtMoney(chfToBase(it.v),S.base,0)}</span><span class="pc">${total>0?fmtNum(it.v/total*100,1)+"%":"—"}</span></div><div class="bar"><i style="width:${total>0?Math.max(0,it.v/total*100):0}%;background:${it.color}"></i></div></div>`).join("") || `<div class="muted small">Aucune donnée</div>`;
+  return items.map(it=>`<div><div class="row" style="gap:8px"><span class="dot" style="background:${it.color}"></span><span class="nm">${esc(it.name)}</span><span class="am">${fmtMoney(chfToBase(it.v),S.base,0)}</span><span class="pc">${total>0?fmtNum(it.v/total*100,1)+"%":"—"}</span></div><div class="bar"><i style="width:${total>0?Math.max(0,it.v/total*100):0}%;background:${it.color}"></i></div></div>`).join("") || `<div class="muted small">${esc(t("noData"))}</div>`;
 }
 function noChart(canvas,msg){
   const box=canvas.parentElement;
@@ -615,110 +822,99 @@ function noChart(canvas,msg){
   box.querySelector(".nochart").textContent=msg;
 }
 function clearNoChart(canvas){ const n=canvas.parentElement.querySelector(".nochart"); if(n) n.remove(); canvas.style.display=""; }
-function donut(key, canvasId, items, total){
+function donut(key, canvasId, items){
   const cv=$(canvasId);
   const data=items.filter(i=>i.v>0);
-  if(typeof Chart==="undefined"){ noChart(cv,"Graphiques indisponibles hors ligne (Chart.js non chargé). La légende ci-dessous reste exacte."); return; }
-  if(!data.length){ if(charts[key]){charts[key].destroy();delete charts[key];} noChart(cv,"Renseignez vos soldes pour voir la répartition"); return; }
+  if(typeof Chart==="undefined"){ noChart(cv,t("chartsOffline")); return; }
+  if(!data.length){ if(charts[key]){charts[key].destroy();delete charts[key];} noChart(cv,t("fillToSee")); return; }
   clearNoChart(cv);
-  const cfg={labels:data.map(d=>d.name), datasets:[{data:data.map(d=>chfToBase(d.v)), backgroundColor:data.map(d=>d.color), borderColor:cssVar("--card"), borderWidth:3, hoverOffset:8}]};
-  if(charts[key]){ charts[key].data=cfg; charts[key].update(); return; }
-  charts[key]=new Chart(cv,{type:"doughnut",data:cfg,options:{responsive:true,maintainAspectRatio:false,cutout:"68%",
+  const cfgD={labels:data.map(d=>d.name), datasets:[{data:data.map(d=>chfToBase(d.v)), backgroundColor:data.map(d=>d.color), borderColor:cssVar("--card"), borderWidth:3, hoverOffset:8}]};
+  if(charts[key]){ charts[key].data=cfgD; charts[key].update(); return; }
+  charts[key]=new Chart(cv,{type:"doughnut",data:cfgD,options:{responsive:true,maintainAspectRatio:false,cutout:"68%",
     plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+c.label+" : "+fmtMoney(c.parsed,S.base)}}}}});
 }
 function renderCharts(T){
   const total=T.total;
   const accItems=T.byAcc.slice().sort((a,b)=>b.v-a.v);
-  const catItems=Object.entries(T.byCat).map(([k,v])=>({name:CATS[k]||k,v,color:CAT_COLORS[k]||"#888"})).sort((a,b)=>b.v-a.v);
+  const catItems=Object.entries(T.byCat).map(([k,v])=>({name:catLabel(k),v,color:CAT_COLORS[k]||"#888"})).sort((a,b)=>b.v-a.v);
   const curItems=Object.entries(T.byCur).map(([k,v],i)=>({name:k,v,color:CUR_COLORS[k]||PALETTE[(i+4)%PALETTE.length]})).sort((a,b)=>b.v-a.v);
   $("lgAcc").innerHTML=legendHTML(accItems,total);
   $("lgCat").innerHTML=legendHTML(catItems,total);
   $("lgCur").innerHTML=legendHTML(curItems,total);
-  donut("acc","chAcc",accItems,total);
-  donut("cat","chCat",catItems,total);
-  donut("cur","chCur",curItems,total);
+  donut("acc","chAcc",accItems); donut("cat","chCat",catItems); donut("cur","chCur",curItems);
   renderHistory();
 }
 function sortedSnaps(){ return S.snapshots.slice().sort((a,b)=>a.date.localeCompare(b.date)); }
-function snapInBase(s){ // valeur d'un instantané dans la devise de référence, au taux de l'époque
-  const r=(s.rates&&s.rates[S.base])||rate(S.base); return s.totalCHF/r;
-}
+function snapInBase(s){ const r=(s.rates&&s.rates[S.base])||rate(S.base); return s.totalCHF/r; }
 function monthly(){
   const m={}; sortedSnaps().forEach(s=>{ m[s.date.slice(0,7)]=s; });
   const keys=Object.keys(m).sort();
-  return keys.map((k,i)=>{ const v=snapInBase(m[k]); const prev=i?snapInBase(m[keys[i-1]]):null; return {ym:k, v, d: prev==null?null:v-prev, p: prev? (v-prev)/prev : null, snap:m[k]}; });
+  return keys.map((k,i)=>{ const v=snapInBase(m[k]); const prev=i?snapInBase(m[keys[i-1]]):null; return {ym:k, v, d: prev==null?null:v-prev, p: prev? (v-prev)/prev : null}; });
 }
 function renderHistory(){
   const snaps=sortedSnaps(), B=S.base;
-  $("histInfo").textContent = snaps.length? snaps.length+" instantané(s)" : "";
-  // tableau instantanés
-  $("snapTable").innerHTML = snaps.length? `<thead><tr><th>Date</th><th class="r">Total (${B})</th><th class="r">Variation</th>${S.accounts.map(a=>`<th class="r">${esc(a.name)}</th>`).join("")}<th class="r">Titres</th><th></th></tr></thead><tbody>`+
+  $("histInfo").textContent = snaps.length? t("nSnaps",{n:snaps.length}) : "";
+  $("snapTable").innerHTML = snaps.length? `<thead><tr><th>${esc(t("date"))}</th><th class="r">${esc(t("total"))} (${B})</th><th class="r">${esc(t("change"))}</th>${S.accounts.map(a=>`<th class="r">${esc(a.name)}</th>`).join("")}<th class="r">${esc(t("cat_titres"))}</th><th></th></tr></thead><tbody>`+
     snaps.slice().reverse().map((s,i,arr)=>{
       const prev=arr[i+1]; const v=snapInBase(s); const d=prev? v-snapInBase(prev):null;
       const r=(s.rates&&s.rates[B])||rate(B);
-      const posSum=Object.entries(s.perItem||{}).filter(([k])=>s.kinds&&s.kinds[k]==="pos").reduce((t,[,x])=>t+x,0);
+      const posSum=Object.entries(s.perItem||{}).filter(([k])=>s.kinds&&s.kinds[k]==="pos").reduce((tt,[,x])=>tt+x,0);
       return `<tr><td>${fmtDate(s.date)}</td><td class="r"><b>${fmtNum(v)}</b></td><td class="r ${d==null?"":(d>=0?"pos":"neg")}">${d==null?"—":fmtSigned(d,"")}</td>
         ${S.accounts.map(a=>`<td class="r">${s.perItem&&s.perItem[a.id]!=null?fmtNum(s.perItem[a.id]/r):"—"}</td>`).join("")}
         <td class="r">${fmtNum(posSum/r)}</td>
-        <td><button class="btn icon sm danger" data-delsnap="${esc(s.date)}" title="Supprimer">✕</button></td></tr>`;
-    }).join("")+"</tbody>" : `<tbody><tr><td class="muted">Aucun instantané. Cliquez sur « Enregistrer un instantané » après avoir mis vos soldes à jour.</td></tr></tbody>`;
+        <td><button class="btn icon sm danger" data-delsnap="${esc(s.date)}" title="${esc(t("delete"))}">✕</button></td></tr>`;
+    }).join("")+"</tbody>" : `<tbody><tr><td class="muted">${esc(t("noSnapsTable"))}</td></tr></tbody>`;
   const M=monthly();
-  $("monthTable").innerHTML = M.length? `<thead><tr><th>Mois</th><th class="r">Patrimoine (${B})</th><th class="r">Variation</th><th class="r">%</th></tr></thead><tbody>`+
+  $("monthTable").innerHTML = M.length? `<thead><tr><th>${esc(t("month"))}</th><th class="r">${esc(t("netWorth"))} (${B})</th><th class="r">${esc(t("change"))}</th><th class="r">%</th></tr></thead><tbody>`+
     M.slice().reverse().map(x=>`<tr><td>${fmtMonth(x.ym)}</td><td class="r"><b>${fmtNum(x.v)}</b></td><td class="r ${x.d==null?"":(x.d>=0?"pos":"neg")}">${x.d==null?"—":fmtSigned(x.d,"")}</td><td class="r ${x.p==null?"":(x.p>=0?"pos":"neg")}">${fmtPct(x.p)}</td></tr>`).join("")+"</tbody>"
-    : `<tbody><tr><td class="muted">La synthèse mensuelle apparaîtra après vos premiers instantanés.</td></tr></tbody>`;
-
+    : `<tbody><tr><td class="muted">${esc(t("noMonthly"))}</td></tr></tbody>`;
   const cvH=$("chHist"), cvM=$("chMonth");
-  if(typeof Chart==="undefined"){ noChart(cvH,"Graphique indisponible hors ligne — voir le tableau « Historique » ci-dessous."); noChart(cvM,"Graphique indisponible hors ligne — voir la « Synthèse mensuelle »."); return; }
+  if(typeof Chart==="undefined"){ noChart(cvH,t("histOffline")); noChart(cvM,t("monthOffline")); return; }
   const grid=cssVar("--line"), txt=cssVar("--mut"), acc=cssVar("--acc");
   const axes={x:{grid:{color:grid},ticks:{color:txt}},y:{grid:{color:grid},ticks:{color:txt,callback:v=>fmtNum(v,0)}}};
-  if(!snaps.length){ ["hist","month"].forEach(k=>{if(charts[k]){charts[k].destroy();delete charts[k];}}); noChart(cvH,"Enregistrez des instantanés pour tracer votre courbe de patrimoine"); noChart(cvM,"Évolution mois par mois après au moins un instantané"); return; }
+  if(!snaps.length){ ["hist","month"].forEach(k=>{if(charts[k]){charts[k].destroy();delete charts[k];}}); noChart(cvH,t("histEmpty")); noChart(cvM,t("monthEmpty")); return; }
   clearNoChart(cvH); clearNoChart(cvM);
-  const hData={labels:snaps.map(s=>fmtDate(s.date)),datasets:[{label:"Patrimoine net ("+B+")",data:snaps.map(snapInBase),borderColor:acc,backgroundColor:(ctx)=>{const c=ctx.chart.ctx;const g=c.createLinearGradient(0,0,0,ctx.chart.height||300);g.addColorStop(0,acc+"66");g.addColorStop(1,acc+"00");return g;},fill:true,tension:.3,pointRadius:4,pointBackgroundColor:acc}]};
+  const hData={labels:snaps.map(s=>fmtDate(s.date)),datasets:[{label:t("netWorth")+" ("+B+")",data:snaps.map(snapInBase),borderColor:acc,backgroundColor:(ctx)=>{const c=ctx.chart.ctx;const g=c.createLinearGradient(0,0,0,ctx.chart.height||300);g.addColorStop(0,acc+"66");g.addColorStop(1,acc+"00");return g;},fill:true,tension:.3,pointRadius:4,pointBackgroundColor:acc}]};
   if(charts.hist){charts.hist.data=hData;charts.hist.options.scales=axes;charts.hist.update();}
   else charts.hist=new Chart(cvH,{type:"line",data:hData,options:{responsive:true,maintainAspectRatio:false,scales:axes,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+fmtMoney(c.parsed.y,B)}}}}});
   const pos=cssVar("--pos"), neg=cssVar("--neg");
-  const mData={labels:M.map(x=>fmtMonth(x.ym)),datasets:[
-    {type:"bar",label:"Variation",data:M.map(x=>x.d==null?0:x.d),backgroundColor:M.map(x=>(x.d||0)>=0?pos+"cc":neg+"cc"),borderRadius:6,yAxisID:"y"}]};
-  const mAxes={x:axes.x,y:axes.y};
-  if(charts.month){charts.month.data=mData;charts.month.options.scales=mAxes;charts.month.update();}
-  else charts.month=new Chart(cvM,{type:"bar",data:mData,options:{responsive:true,maintainAspectRatio:false,scales:mAxes,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const x=M[c.dataIndex];return x.d==null?" Premier mois : "+fmtMoney(x.v,B):" "+fmtSigned(x.d,B)+" ("+fmtPct(x.p)+") → "+fmtMoney(x.v,B);}}}}}});
+  const mData={labels:M.map(x=>fmtMonth(x.ym)),datasets:[{type:"bar",label:t("change"),data:M.map(x=>x.d==null?0:x.d),backgroundColor:M.map(x=>(x.d||0)>=0?pos+"cc":neg+"cc"),borderRadius:6}]};
+  if(charts.month){charts.month.data=mData;charts.month.options.scales=axes;charts.month.update();}
+  else charts.month=new Chart(cvM,{type:"bar",data:mData,options:{responsive:true,maintainAspectRatio:false,scales:axes,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const x=M[c.dataIndex];return x.d==null?" "+t("firstMonth")+" : "+fmtMoney(x.v,B):" "+fmtSigned(x.d,B)+" ("+fmtPct(x.p)+") → "+fmtMoney(x.v,B);}}}}}});
 }
 
-/* ================= Données en direct ================= */
+/* ================= Données en direct (cours, taux) ================= */
 async function fetchJSON(url, ms=8000){
-  const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),ms);
+  const ctl=new AbortController(); const tm=setTimeout(()=>ctl.abort(),ms);
   try{ const r=await fetch(url,{signal:ctl.signal,cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
-  finally{ clearTimeout(t); }
+  finally{ clearTimeout(tm); }
 }
 async function refreshFx(silent){
-  if(S.fx.manual){ if(!silent) toast("Taux manuels activés : actualisation ignorée"); return false; }
+  if(S.fx.manual){ if(!silent) toast(t("toastFxManual")); return false; }
   const curs=Object.keys(currenciesInUse()).filter(c=>c!=="CHF");
-  // 1) Frankfurter (BCE)
   try{
     const j=await fetchJSON("https://api.frankfurter.dev/v1/latest?base=CHF&symbols="+curs.join(","));
     if(j&&j.rates){ curs.forEach(c=>{ if(j.rates[c]>0) S.fx.rates[c]=1/j.rates[c]; });
-      Object.assign(S.fx,{date:j.date,source:"BCE (Frankfurter)",fetchedAt:Date.now()}); save(true); return true; }
-  }catch(e){ console.warn("Frankfurter indisponible",e.message); }
-  // 2) ExchangeRate-API (open access)
+      Object.assign(S.fx,{date:j.date,source:SRC_ECB,fetchedAt:Date.now()}); save(true); return true; }
+  }catch(e){ console.warn("Frankfurter unavailable",e.message); }
   try{
     const j=await fetchJSON("https://open.er-api.com/v6/latest/CHF");
     if(j&&j.rates){ curs.forEach(c=>{ if(j.rates[c]>0) S.fx.rates[c]=1/j.rates[c]; });
-      Object.assign(S.fx,{date:new Date(j.time_last_update_unix*1000).toISOString().slice(0,10),source:"ExchangeRate-API",fetchedAt:Date.now()}); save(true); return true; }
-  }catch(e){ console.warn("ExchangeRate-API indisponible",e.message); }
-  if(!silent) toast("Taux de change indisponibles : derniers taux connus conservés");
+      Object.assign(S.fx,{date:new Date(j.time_last_update_unix*1000).toISOString().slice(0,10),source:SRC_ERAPI,fetchedAt:Date.now()}); save(true); return true; }
+  }catch(e){ console.warn("ExchangeRate-API unavailable",e.message); }
+  if(!silent) toast(t("toastFxFail"));
   return false;
 }
-// Cours via le scanner public TradingView (sans clé, CORS autorisé, différé ~15 min)
 async function fetchPrice(p){
-  const t=(p.ticker||"").trim().toUpperCase(); if(!t) return null;
-  const cands = t.includes(":")? [t] : [p.exchange?p.exchange+":"+t:null,"NASDAQ:"+t,"NYSE:"+t,"AMEX:"+t,"SIX:"+t,"XETR:"+t,"EURONEXT:"+t].filter(Boolean);
+  const tk=(p.ticker||"").trim().toUpperCase(); if(!tk) return null;
+  const cands = tk.includes(":")? [tk] : [p.exchange?p.exchange+":"+tk:null,"NASDAQ:"+tk,"NYSE:"+tk,"AMEX:"+tk,"SIX:"+tk,"XETR:"+tk,"EURONEXT:"+tk].filter(Boolean);
   const seen={};
   for(const sym of cands){
     if(seen[sym]) continue; seen[sym]=1;
     try{
       const j=await fetchJSON("https://scanner.tradingview.com/symbol?symbol="+encodeURIComponent(sym)+"&fields=close,currency,description",7000);
       if(j && typeof j.close==="number" && j.close>0){ return {price:j.close,currency:j.currency,name:j.description,exchange:sym.split(":")[0]}; }
-    }catch(e){ /* suivant */ }
+    }catch(e){}
   }
   return null;
 }
@@ -726,14 +922,14 @@ async function refreshPrices(silent){
   let ok=0, ko=0;
   for(const p of S.positions){
     const r=await fetchPrice(p);
-    if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource="TradingView (différé)"; p.exchange=r.exchange;
+    if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource=SRC_TV; p.exchange=r.exchange;
            if(!p.name && r.name) p.name=r.name;
-           if(r.currency && r.currency!==p.currency){ p.currency=r.currency; }
+           if(r.currency && r.currency!==p.currency) p.currency=r.currency;
            ok++; }
-    else ko++;
+    else if(p.ticker) ko++;
   }
   save(true);
-  if(!silent || ko) toast(ko? `Cours : ${ok} actualisé(s), ${ko} indisponible(s) — saisie manuelle possible` : `Cours actualisés (${ok})`);
+  if((!silent && S.positions.length) || ko) toast(ko? t("toastPricesPartial",{ok,ko}) : t("toastPricesOk",{n:ok}));
   return ok;
 }
 async function refreshAll(silent){
@@ -745,26 +941,33 @@ async function refreshAll(silent){
 /* ================= Instantanés ================= */
 function takeSnapshot(date){
   date = date || today();
+  if(!S.accounts.length && !S.positions.length){ toast(t("toastNothingToSnap")); return; }
   const exists=S.snapshots.find(s=>s.date===date);
-  if(exists && !confirm("Un instantané existe déjà le "+fmtDate(date)+". Le remplacer ?")) return;
+  if(exists && !confirm(t("confirmReplaceSnap",{d:fmtDate(date)}))) return;
   const T=totals(); const perItem={}, kinds={};
   T.byAcc.forEach(x=>{ perItem[x.id]=x.v; kinds[x.id]=x.pos?"pos":"acc"; });
   const names={}; S.accounts.forEach(a=>names[a.id]=a.name); S.positions.forEach(p=>names[p.id]=p.ticker);
   const snap={date,totalCHF:T.total,perItem,kinds,names,perCat:T.byCat,rates:Object.assign({},S.fx.rates,{CHF:1}),takenAt:new Date().toISOString()};
-  // garantir des taux pour la conversion future
   ["EUR","USD"].forEach(c=>{ if(!(snap.rates[c]>0)) snap.rates[c]=rate(c); });
   S.snapshots=S.snapshots.filter(s=>s.date!==date); S.snapshots.push(snap);
-  save(); updateComputed(); toast("Instantané du "+fmtDate(date)+" enregistré : "+fmtMoney(chfToBase(T.total),S.base));
+  save(); updateComputed(); toast(t("toastSnap",{d:fmtDate(date),v:fmtMoney(chfToBase(T.total),S.base)}));
 }
 
 /* ================= Import / export ================= */
+function fileText(){
+  const o={app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:S.savedAt||new Date().toISOString(),
+    _info:"Données MyWealth (patrimoine.html / app MyWealth) — fichier JSON lisible, ne pas renommer les champs."};
+  for(const k in S){ if(!(k in o)) o[k]=S[k]; }
+  return JSON.stringify(o,null,2);
+}
 function exportJSON(){
   S.meta.lastExport=new Date().toISOString(); save(true);
   const blob=new Blob([fileText()],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="mywealth-"+today()+".json";
   document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
-  toast("Sauvegarde exportée");
+  toast(t("toastExported"));
 }
+function futureMsg(name,v){ return t("futureMsg",{name,v,max:SCHEMA_VERSION}); }
 function importJSON(file){
   const fr=new FileReader();
   fr.onload=()=>{
@@ -772,53 +975,41 @@ function importJSON(file){
       const j=JSON.parse(fr.result);
       if(!isPatrimoineData(j)) throw new Error("format");
       if(schemaOf(j)>SCHEMA_VERSION){ alert(futureMsg(file.name, schemaOf(j))); return; }
-      if(!confirm("Remplacer toutes les données actuelles par celles du fichier « "+file.name+" » ?"+(cloudOn()?"\n\nLa copie dans "+Prov().label+" sera mise à jour.":""))) return;
-      S=migrate(j); save(); applyTheme(); fullRender(); toast("Données importées");
-    }catch(e){ alert("Fichier invalide : ce n'est pas une sauvegarde de ce tableau de bord."); }
+      if(!confirm(t("confirmImport",{name:file.name})+(cloudOn()?"\n\n"+t("importCloudNote",{p:Prov().label}):""))) return;
+      S=migrate(j); C.emptyOk=!hasContent(S); save(); applyTheme(); fullRender(); toast(t("toastImported"));
+    }catch(e){ alert(t("invalidFile")); }
   };
   fr.readAsText(file);
 }
 
-
 /* ================= Synchronisation cloud (OneDrive ou Dropbox) ================= */
-const CFG = window.MYWEALTH_CONFIG || {};
-const REMOTE_NAME = "mywealth-donnees.json";          // fichier principal dans le dossier de l'app
-const LEGACY_NAMES = ["patrimoine-donnees.json"];      // ancien nom (version ordinateur) : repris s'il est présent
+const REMOTE_NAME = "mywealth-donnees.json";          // fichier principal dans le dossier de l'app (nom conservé)
+const LEGACY_NAMES = ["patrimoine-donnees.json"];
 const CLOUD_KEY = "mywealth.cloud";
-const APP_BASE = new URL("./", location.href).href;     // ex. https://pseudo.github.io/mywealth/
+const APP_BASE = new URL("./", location.href).href;
 const SNOOZE_CLOUD = "mywealth.rappelCloud";
-function loadCloud(){ try{ return Object.assign({provider:null,etag:null,syncedKey:null,userDirty:false,lastSync:null,lastBackupMonth:null,lastBackupAt:0,account:null}, JSON.parse(localStorage.getItem(CLOUD_KEY)||"{}")); }catch(e){ return {provider:null}; } }
+function loadCloud(){ try{ return Object.assign({provider:null,etag:null,syncedKey:null,userDirty:false,lastSync:null,lastBackupMonth:null,lastBackupAt:0,account:null,remoteHasContent:false,emptyOk:false}, JSON.parse(localStorage.getItem(CLOUD_KEY)||"{}")); }catch(e){ return {provider:null}; } }
 let C = loadCloud();
 function saveCloud(){ try{ localStorage.setItem(CLOUD_KEY, JSON.stringify(C)); }catch(e){} }
 const SYNC = { state:"off", err:null, timer:null, busy:false, again:false, blocked:false };
-function futureMsg(name,v){ return "Le fichier « "+name+" » a été créé par une version plus récente de MyWealth (format v"+v+", cette version gère jusqu'à v"+SCHEMA_VERSION+").\n\nMettez l'application à jour (fichiers sur GitHub). Rien n'a été modifié."; }
-function fileText(){
-  const o={app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:S.savedAt||new Date().toISOString(),
-    _info:"Données MyWealth (patrimoine.html / app MyWealth) — fichier JSON lisible, ne pas renommer les champs."};
-  for(const k in S){ if(!(k in o)) o[k]=S[k]; }
-  return JSON.stringify(o,null,2);
-}
-function hasUserData(s){ return s.accounts.some(a=>a.updated) || s.snapshots.length>0 || s.positions.some(p=>p.priceSource==="manuel"); }
-function daysSince(iso){ return iso? Math.floor((Date.now()-new Date(iso))/864e5) : null; }
-function agoTxt(iso){ const d=daysSince(iso); if(d==null) return "jamais"; if(d===0) return "aujourd'hui"; if(d===1) return "hier"; return "il y a "+d+" jours"; }
-function hm(d){ d=new Date(d); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
 function httpErr(r,extra){ const e=new Error("HTTP "+r.status+(extra?" – "+extra:"")); e.status=r.status; return e; }
-function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=()=>rej(new Error("Impossible de charger "+src)); document.head.appendChild(s); }); }
+function reauthErr(key){ const x=new Error(t(key)); x.reauth=true; return x; }
+function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=()=>{ s.remove(); rej(new Error(t("cantLoad",{f:src}))); }; document.head.appendChild(s); }); }
 function b64url(bytes){ return btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
 function randStr(n){ const a=new Uint8Array(n); crypto.getRandomValues(a); return b64url(a); }
 
-/* ---------- Fournisseur OneDrive (Microsoft Graph, dossier de l'application) ---------- */
+/* ---------- OneDrive (Microsoft Graph, dossier de l'application) ---------- */
 const GRAPH = "https://graph.microsoft.com/v1.0";
 const MS_SCOPES = ["Files.ReadWrite.AppFolder"];
 const OneDrive = {
-  id:"onedrive", label:"OneDrive", where:"OneDrive › Applications (Apps) › MyWealth",
+  id:"onedrive", label:"OneDrive", whereKey:"whereOneDrive",
   pca:null, account:null, ready:false,
-  configured(){ return !!CFG.ONEDRIVE_CLIENT_ID; },
+  configured(){ return !!cfg().ONEDRIVE_CLIENT_ID; },
   async init(){
     if(!this.configured() || this.ready) return;
     if(typeof msal==="undefined") await loadScript("msal-browser.min.js");
     this.pca = new msal.PublicClientApplication({
-      auth:{ clientId:CFG.ONEDRIVE_CLIENT_ID, authority:"https://login.microsoftonline.com/consumers",
+      auth:{ clientId:cfg().ONEDRIVE_CLIENT_ID, authority:"https://login.microsoftonline.com/consumers",
              redirectUri:new URL("redirect.html", APP_BASE).href, postLogoutRedirectUri:APP_BASE },
       cache:{ cacheLocation:"localStorage" }
     });
@@ -838,41 +1029,41 @@ const OneDrive = {
     try{ return (await this.pca.acquireTokenSilent({scopes:MS_SCOPES, account:this.account})).accessToken; }
     catch(e){
       const code=(e && (e.errorCode||e.name))||"";
-      if(/interaction_required|login_required|consent_required|no_tokens_found|InteractionRequired/i.test(code)){ const x=new Error("reconnexion nécessaire"); x.reauth=true; throw x; }
+      if(/interaction_required|login_required|consent_required|no_tokens_found|InteractionRequired/i.test(code)) throw reauthErr("errReauth");
       throw e;
     }
   },
   async read(name){
-    const t=await this.token();
-    const r=await fetch(GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name),{headers:{Authorization:"Bearer "+t}});
+    const tk=await this.token();
+    const r=await fetch(GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name),{headers:{Authorization:"Bearer "+tk}});
     if(r.status===404) return null;
-    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     const meta=await r.json();
     const d=await fetch(meta["@microsoft.graph.downloadUrl"]);
     if(!d.ok) throw httpErr(d);
     return {text:await d.text(), etag:meta.eTag, modified:meta.lastModifiedDateTime};
   },
-  // etag : chaîne = n'écrit que si le fichier n'a pas changé ; null = création seulement ; "*" = écrase
+  // etag : chaîne = n'écrit que si inchangé ; null = création seulement ; "*" = écrase
   async write(name,text,etag){
-    const t=await this.token();
+    const tk=await this.token();
     let url=GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name)+":/content";
-    const h={Authorization:"Bearer "+t,"Content-Type":"application/json"};
+    const h={Authorization:"Bearer "+tk,"Content-Type":"application/json"};
     if(etag===null) url+="?@microsoft.graph.conflictBehavior=fail"; else if(etag!=="*") h["If-Match"]=etag;
     const r=await fetch(url,{method:"PUT",headers:h,body:text});
     if(r.status===412 || r.status===409) return {conflict:true};
-    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     const j=await r.json(); return {etag:j.eTag};
   }
 };
 
-/* ---------- Fournisseur Dropbox (OAuth PKCE, dossier « Applications/MyWealth ») ---------- */
+/* ---------- Dropbox (OAuth PKCE, dossier « Applications/<app> ») ---------- */
 const DBX_KEY="mywealth.dropbox", DBX_PKCE="mywealth.dropbox.pkce";
 const DropboxP = {
-  id:"dropbox", label:"Dropbox", where:"Dropbox › Applications › (nom de votre app Dropbox)",
+  id:"dropbox", label:"Dropbox", whereKey:"whereDropbox",
   tok:null, ready:false,
-  configured(){ return !!CFG.DROPBOX_APP_KEY; },
+  configured(){ return !!cfg().DROPBOX_APP_KEY; },
   load(){ try{ this.tok=JSON.parse(localStorage.getItem(DBX_KEY)||"null"); }catch(e){ this.tok=null; } },
   store(){ try{ this.tok? localStorage.setItem(DBX_KEY,JSON.stringify(this.tok)) : localStorage.removeItem(DBX_KEY); }catch(e){} },
   async init(){
@@ -885,15 +1076,15 @@ const DropboxP = {
       if(p && p.state===q.get("state")){
         localStorage.removeItem(DBX_PKCE);
         const r=await fetch("https://api.dropboxapi.com/oauth2/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
-          body:new URLSearchParams({code:q.get("code"),grant_type:"authorization_code",client_id:CFG.DROPBOX_APP_KEY,redirect_uri:APP_BASE,code_verifier:p.verifier})});
-        if(!r.ok) throw httpErr(r,"connexion Dropbox refusée");
+          body:new URLSearchParams({code:q.get("code"),grant_type:"authorization_code",client_id:cfg().DROPBOX_APP_KEY,redirect_uri:APP_BASE,code_verifier:p.verifier})});
+        if(!r.ok) throw httpErr(r,t("errDbxRefused"));
         const j=await r.json();
         this.tok={refresh:j.refresh_token, access:j.access_token, exp:Date.now()+(j.expires_in||14400)*1000, account:null};
         this.store(); C.provider="dropbox"; C.etag=null; C.syncedKey=null; saveCloud();
         try{ const a=await this.api("users/get_current_account"); this.tok.account=a.email||(a.name&&a.name.display_name)||""; this.store(); }catch(e){}
       }
     } else if(q.get("error") && localStorage.getItem(DBX_PKCE)){
-      localStorage.removeItem(DBX_PKCE); history.replaceState(null,"",APP_BASE); toast("Connexion Dropbox annulée");
+      localStorage.removeItem(DBX_PKCE); history.replaceState(null,"",APP_BASE); toast(t("toastDbxCancelled"));
     }
     this.ready=true;
   },
@@ -904,7 +1095,7 @@ const DropboxP = {
     const challenge=b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
     localStorage.setItem(DBX_PKCE, JSON.stringify({verifier,state}));
     C.provider="dropbox"; saveCloud();
-    location.href="https://www.dropbox.com/oauth2/authorize?"+new URLSearchParams({client_id:CFG.DROPBOX_APP_KEY,response_type:"code",
+    location.href="https://www.dropbox.com/oauth2/authorize?"+new URLSearchParams({client_id:cfg().DROPBOX_APP_KEY,response_type:"code",
       code_challenge:challenge,code_challenge_method:"S256",token_access_type:"offline",redirect_uri:APP_BASE,state});
   },
   async reauth(){ return this.login(); },
@@ -913,11 +1104,11 @@ const DropboxP = {
     this.tok=null; this.store();
   },
   async token(){
-    if(!this.signedIn()){ const x=new Error("non connecté"); x.reauth=true; throw x; }
+    if(!this.signedIn()) throw reauthErr("errNotConnected");
     if(this.tok.access && Date.now() < this.tok.exp-60000) return this.tok.access;
     const r=await fetch("https://api.dropboxapi.com/oauth2/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
-      body:new URLSearchParams({grant_type:"refresh_token",refresh_token:this.tok.refresh,client_id:CFG.DROPBOX_APP_KEY})});
-    if(r.status===400||r.status===401){ const x=new Error("autorisation Dropbox expirée ou révoquée"); x.reauth=true; throw x; }
+      body:new URLSearchParams({grant_type:"refresh_token",refresh_token:this.tok.refresh,client_id:cfg().DROPBOX_APP_KEY})});
+    if(r.status===400||r.status===401) throw reauthErr("errDbxRevoked");
     if(!r.ok) throw httpErr(r);
     const j=await r.json(); this.tok.access=j.access_token; this.tok.exp=Date.now()+(j.expires_in||14400)*1000; this.store();
     return this.tok.access;
@@ -925,8 +1116,8 @@ const DropboxP = {
   async api(path){ const r=await fetch("https://api.dropboxapi.com/2/"+path,{method:"POST",headers:{Authorization:"Bearer "+await this.token()}}); if(!r.ok) throw httpErr(r); return r.json(); },
   async read(name){
     const r=await fetch("https://content.dropboxapi.com/2/files/download",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),"Dropbox-API-Arg":JSON.stringify({path:"/"+name})}});
-    if(r.status===409){ const t=await r.text(); if(/not_found/.test(t)) return null; throw httpErr(r,t.slice(0,120)); }
-    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(r.status===409){ const tx=await r.text(); if(/not_found/.test(tx)) return null; throw httpErr(r,tx.slice(0,120)); }
+    if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     let meta={}; try{ meta=JSON.parse(r.headers.get("Dropbox-API-Result")||"{}"); }catch(e){}
     return {text:await r.text(), etag:meta.rev||null, modified:meta.server_modified};
@@ -935,8 +1126,8 @@ const DropboxP = {
     const mode = etag===null? "add" : etag==="*"? "overwrite" : {".tag":"update", update:etag};
     const r=await fetch("https://content.dropboxapi.com/2/files/upload",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),
       "Content-Type":"application/octet-stream","Dropbox-API-Arg":JSON.stringify({path:"/"+name,mode,autorename:false,mute:true})},body:new Blob([text])});
-    if(r.status===409){ const t=await r.text(); if(/conflict/.test(t)) return {conflict:true}; throw httpErr(r,t.slice(0,120)); }
-    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(r.status===409){ const tx=await r.text(); if(/conflict/.test(tx)) return {conflict:true}; throw httpErr(r,tx.slice(0,120)); }
+    if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     const j=await r.json(); return {etag:j.rev};
   }
@@ -945,14 +1136,14 @@ const PROVIDERS={onedrive:OneDrive, dropbox:DropboxP};
 function Prov(){ const p=PROVIDERS[C.provider]; return p && p.configured()? p : null; }
 function cloudOn(){ const p=Prov(); return !!(p && p.ready && p.signedIn()); }
 
-/* ---------- Choix en cas de conflit ---------- */
+/* ---------- Conflit ---------- */
 function totalOf(state){ const keep=S; S=state; try{ return chfToBase(totals().total); } finally{ S=keep; } }
 function askConflict(remoteS, P){
   return new Promise(res=>{
     const dlg=$("conflictDlg");
-    $("cfRemote").innerHTML=`<b>${esc(P.label)}</b><br>modifié le ${remoteS.savedAt?fmtDT(remoteS.savedAt):"?"}<br>${fmtMoney(totalOf(remoteS),S.base)}`;
-    $("cfLocal").innerHTML=`<b>Cet appareil</b><br>modifié le ${S.savedAt?fmtDT(S.savedAt):"?"}<br>${fmtMoney(chfToBase(totals().total),S.base)}`;
-    $("cfKeepRemote").textContent="Garder la version "+P.label;
+    $("cfRemote").innerHTML=`<b>${esc(P.label)}</b><br>${esc(t("modifiedOn"))} ${remoteS.savedAt?fmtDT(remoteS.savedAt):"?"}<br>${fmtMoney(totalOf(remoteS),S.base)}`;
+    $("cfLocal").innerHTML=`<b>${esc(t("thisDevice"))}</b><br>${esc(t("modifiedOn"))} ${S.savedAt?fmtDT(S.savedAt):"?"}<br>${fmtMoney(chfToBase(totals().total),S.base)}`;
+    $("cfKeepRemote").textContent=t("cfKeepRemote",{p:P.label});
     const done=v=>{ dlg.close(); res(v); };
     $("cfKeepRemote").onclick=()=>done("remote"); $("cfKeepLocal").onclick=()=>done("local");
     dlg.oncancel=e=>{ e.preventDefault(); };
@@ -964,20 +1155,30 @@ function askConflict(remoteS, P){
 function setSync(st,err){ SYNC.state=st; if(err!==undefined) SYNC.err=err; renderSyncUI(); }
 function adopt(remoteS){ S=remoteS; lastKey=dataKey(S); writeLocal(); applyTheme(); fullRender(); }
 async function pushNow(P, etag){
+  // Protection : ne jamais remplacer un fichier cloud qui contient des données par un état vide,
+  // sauf si l'utilisateur l'a demandé explicitement (réinitialisation, suppression du dernier élément) ou le confirme.
+  if(!hasContent(S) && C.remoteHasContent && !C.emptyOk){
+    if(!confirm(t("confirmEmptyCloud",{p:P.label}))){
+      C.etag=null; C.syncedKey=null; C.userDirty=false; saveCloud();   // la prochaine synchro reprend la version du cloud
+      return false;
+    }
+    C.emptyOk=true;
+  }
   const k=dataKey(S), txt=fileText();
   const r=await P.write(REMOTE_NAME, txt, etag);
   if(r.conflict) return false;
-  C.etag=r.etag; C.syncedKey=k; if(dataKey(S)===k) C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud();
+  C.etag=r.etag; C.syncedKey=k; if(dataKey(S)===k) C.userDirty=false; C.lastSync=new Date().toISOString();
+  C.remoteHasContent=hasContent(S); if(C.remoteHasContent) C.emptyOk=false; saveCloud();
   await maybeBackup(P, txt);
   return true;
 }
 async function maybeBackup(P, txt){
+  if(!hasContent(S)) return;                       // pas de copie mensuelle vide
   const m=today().slice(0,7);
   if(C.lastBackupMonth===m && Date.now()-(C.lastBackupAt||0) < 6*3600e3) return;
   try{ await P.write("mywealth-donnees-"+m+".json", txt||fileText(), "*"); C.lastBackupMonth=m; C.lastBackupAt=Date.now(); saveCloud(); }
-  catch(e){ console.warn("Copie mensuelle impossible", e); }
+  catch(e){ console.warn("monthly copy failed", e); }
 }
-// Synchronisation complète : lit le cloud, compare, puis écrit ou charge
 async function syncNow(){
   const P=Prov();
   if(!P || !P.ready || !P.signedIn()){ setSync("off"); return; }
@@ -990,32 +1191,34 @@ async function syncNow(){
     if(!remote && !C.etag){ for(const n of LEGACY_NAMES){ const l=await P.read(n).catch(()=>null); if(l){ remote=l; legacy=n; break; } } }
     const localDirty = C.syncedKey? (C.userDirty && dataKey(S)!==C.syncedKey) : hasUserData(S);
     if(!remote){
-      // rien dans le cloud (première connexion ou fichier supprimé) : on y écrit les données de l'appareil
+      C.remoteHasContent=false;
       if(!(await pushNow(P, C.etag? "*" : null))) SYNC.again=true;
     } else {
       let j=null; try{ j=JSON.parse(remote.text); }catch(e){}
       const name=legacy||REMOTE_NAME;
-      if(!isPatrimoineData(j)) throw new Error("le fichier « "+name+" » du cloud est illisible — il n'a pas été modifié");
-      if(schemaOf(j)>SCHEMA_VERSION){ SYNC.blocked=true; alert(futureMsg(name,schemaOf(j))); throw new Error("fichier créé par une version plus récente de MyWealth"); }
+      if(!isPatrimoineData(j)) throw new Error(t("errUnreadable",{name}));
+      if(schemaOf(j)>SCHEMA_VERSION){ SYNC.blocked=true; alert(futureMsg(name,schemaOf(j))); throw new Error(t("errFuture")); }
       const remoteS=migrate(j);
+      C.remoteHasContent=hasContent(remoteS);
       const remoteChanged = !!legacy || remote.etag!==C.etag;
       let keep = "remote";
       if(dataKey(remoteS)===dataKey(S)) keep="same";
-      else if(!remoteChanged) keep = (C.userDirty || hasUserData(S) || !hasUserData(remoteS)) ? "local" : "remote"; // cache local perdu : ne jamais écraser le cloud avec un état vide
+      else if(!hasContent(S) && hasContent(remoteS) && !C.emptyOk) keep="remote";   // appareil vide (nouvelle installation, cache effacé) : le cloud fait foi
+      else if(!remoteChanged) keep = (C.userDirty || hasUserData(S) || !hasUserData(remoteS)) ? "local" : "remote";
       else if(localDirty) keep = await askConflict(remoteS, P);
       if(keep==="same"){ C.etag=legacy? null : remote.etag; C.syncedKey=dataKey(S); C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud(); if(legacy) await pushNow(P,null); }
       else if(keep==="remote"){
         adopt(remoteS);
-        C.syncedKey=dataKey(S); C.userDirty=false; C.lastSync=new Date().toISOString();
-        if(legacy){ C.etag=null; saveCloud(); await pushNow(P,null); toast("Fichier « "+legacy+" » repris depuis "+P.label); }
-        else { C.etag=remote.etag; saveCloud(); if(schemaOf(j)<SCHEMA_VERSION) await pushNow(P, remote.etag); else await maybeBackup(P); toast("Données chargées depuis "+P.label); }
-      } else { // garder l'appareil
+        C.syncedKey=dataKey(S); C.userDirty=false; C.emptyOk=false; C.lastSync=new Date().toISOString();
+        if(legacy){ C.etag=null; saveCloud(); await pushNow(P,null); toast(t("toastLegacy",{name:legacy,p:P.label})); }
+        else { C.etag=remote.etag; saveCloud(); if(schemaOf(j)<SCHEMA_VERSION) await pushNow(P, remote.etag); else await maybeBackup(P); toast(t("toastLoaded",{p:P.label})); }
+      } else {
         if(!(await pushNow(P, legacy? null : remote.etag))) SYNC.again=true;
       }
     }
     setSync("ok", null);
   }catch(e){
-    console.warn("Synchronisation impossible", e);
+    console.warn("sync failed", e);
     if(e.reauth) setSync("reauth", e);
     else if(!navigator.onLine || e instanceof TypeError) setSync("offline", e);
     else setSync("error", e);
@@ -1024,7 +1227,6 @@ async function syncNow(){
     if(SYNC.again){ SYNC.again=false; setTimeout(syncNow, 300); }
   }
 }
-// Après une modification : écriture rapide (If-Match) ; si le cloud a changé entre-temps -> synchro complète
 async function pushChange(){
   const P=Prov(); SYNC.timer=null;
   if(!cloudOn() || SYNC.blocked) return;
@@ -1048,19 +1250,19 @@ async function Cloud_init(){
   const P=Prov();
   if(!P){ setSync("off"); return; }
   try{ await P.init(); }
-  catch(e){ console.warn("Initialisation du cloud impossible", e); setSync(navigator.onLine? "error":"offline", e); return; }
+  catch(e){ console.warn("cloud init failed", e); setSync(navigator.onLine? "error":"offline", e); return; }
   if(P.signedIn()) await syncNow(); else setSync("off");
 }
 async function Cloud_login(id){
   const P=PROVIDERS[id]; if(!P||!P.configured()) return;
   if(C.provider && C.provider!==id){ C.etag=null; C.syncedKey=null; }
   C.provider=id; saveCloud();
-  try{ await P.login(); }catch(e){ console.warn(e); alert("Connexion impossible : "+(e.errorCode||e.message)); }
+  try{ await P.login(); }catch(e){ console.warn(e); alert(t("loginFailed",{e:(e.errorCode||e.message)})); }
 }
 async function Cloud_logout(){
   const P=Prov(); if(!P) return;
-  if(!confirm("Se déconnecter de "+P.label+" ? Les données restent sur cet appareil et dans "+P.label+".")) return;
-  C=Object.assign(loadCloud(),{provider:null,etag:null,syncedKey:null,account:null}); saveCloud();
+  if(!confirm(t("confirmLogout",{p:P.label}))) return;
+  C=Object.assign(loadCloud(),{provider:null,etag:null,syncedKey:null,account:null,remoteHasContent:false,emptyOk:false}); saveCloud();
   try{ await P.logout(); }catch(e){ console.warn(e); }
   setSync("off"); renderSyncUI();
 }
@@ -1072,54 +1274,57 @@ document.addEventListener("visibilitychange", ()=>{
 });
 
 /* ---------- Affichage de l'état ---------- */
+function loginButtons(long){
+  return (DropboxP.configured()?`<button class="btn primary" data-cl="login-dropbox">${esc(t("loginDropbox"))}</button>`:"")+
+         (OneDrive.configured()?`<button class="btn primary" data-cl="login-onedrive">${esc(t(long?"loginMicrosoftLong":"loginMicrosoft"))}</button>`:"");
+}
 function renderSyncUI(){
+  if(!$("fsStatus")) return;
   const P=Prov(), st=SYNC.state, on=cloudOn(), label=P?P.label:"";
   const anyCfg=OneDrive.configured()||DropboxP.configured();
-  let cls="", t="";
-  if(on && st==="ok") { cls="ok"; t="Synchronisé avec "+label+(C.lastSync?" à "+hm(C.lastSync):""); }
-  else if(on && (st==="pending"||st==="syncing")) { cls="pending"; t= st==="pending"? "Modifications en attente…" : "Synchronisation avec "+label+"…"; }
-  else if(st==="offline") { cls="warn"; t="Hors ligne — données gardées sur l'appareil"+(C.userDirty?" (à synchroniser)":""); }
-  else if(st==="reauth") { cls="warn"; t="Reconnexion à "+label+" nécessaire"; }
-  else if(st==="error") { cls="err"; t="Erreur de synchronisation"; }
-  else if(!anyCfg) { cls="warn"; t="Données sur cet appareil uniquement · dernier export : "+agoTxt(S.meta.lastExport); }
-  else { cls="warn"; t="Non connecté au cloud"; }
-  if(!saveOk){ cls="err"; t+=" · stockage local bloqué"; }
-  $("fsStatus").className="fspill "+cls; $("fsStatusTxt").textContent=t;
+  let cls="", tx="";
+  if(on && st==="ok") { cls="ok"; tx=t("stSynced",{p:label})+(C.lastSync?" "+t("atTime",{t:hm(C.lastSync)}):""); }
+  else if(on && (st==="pending"||st==="syncing")) { cls="pending"; tx= st==="pending"? t("stPending") : t("stSyncing",{p:label}); }
+  else if(st==="offline") { cls="warn"; tx=t("stOffline")+(C.userDirty?" "+t("stToSync"):""); }
+  else if(st==="reauth") { cls="warn"; tx=t("stReauth",{p:label}); }
+  else if(st==="error") { cls="err"; tx=t("stError"); }
+  else if(!anyCfg) { cls="warn"; tx=t("stLocalOnly",{ago:agoTxt(S.meta.lastExport)}); }
+  else { cls="warn"; tx=t("stNotConnected"); }
+  if(!saveOk){ cls="err"; tx+=" · "+t("stStorageBlocked"); }
+  $("fsStatus").className="fspill "+cls; $("fsStatusTxt").textContent=tx;
 
   const B=[];
-  if(st==="reauth") B.push(`<div class="banner warn"><span class="msg">🔑 <b>Reconnectez-vous à ${esc(label)}</b> pour reprendre la synchronisation. Vos modifications sont gardées sur l'appareil en attendant.</span><button class="btn primary" data-cl="reauth">Se reconnecter</button></div>`);
-  if(st==="error") B.push(`<div class="banner err"><span class="msg">⚠ Synchronisation impossible : ${esc((SYNC.err&&SYNC.err.message)||"erreur inconnue")}. Les données restent sur cet appareil.</span>${SYNC.blocked?"":`<button class="btn" data-cl="sync">Réessayer</button>`}</div>`);
+  if(st==="reauth") B.push(`<div class="banner warn"><span class="msg">🔑 ${t("bnReauth",{p:esc(label)})}</span><button class="btn primary" data-cl="reauth">${esc(t("reconnect"))}</button></div>`);
+  if(st==="error") B.push(`<div class="banner err"><span class="msg">⚠ ${esc(t("bnError",{e:(SYNC.err&&SYNC.err.message)||t("unknownError")}))}</span>${SYNC.blocked?"":`<button class="btn" data-cl="sync">${esc(t("retry"))}</button>`}</div>`);
   let snoozed=false; try{ snoozed=Date.now() < +(localStorage.getItem(SNOOZE_CLOUD)||0); }catch(e){}
   const exportDays=daysSince(S.meta.lastExport);
   const needExport = !on && hasUserData(S) && (exportDays==null || exportDays>=30);
-  if(!on && st!=="reauth" && st!=="error" && anyCfg && !snoozed) B.push(`<div class="banner info"><span class="msg">☁️ Connectez-vous pour <b>synchroniser MyWealth</b> entre votre téléphone et votre ordinateur (fichier privé dans votre propre cloud).${needExport?` <b>Dernier export : ${agoTxt(S.meta.lastExport)}.</b>`:""}</span><span class="row">${DropboxP.configured()?`<button class="btn primary" data-cl="login-dropbox">Se connecter à Dropbox</button>`:""}${OneDrive.configured()?`<button class="btn primary" data-cl="login-onedrive">Se connecter avec Microsoft</button>`:""}<button class="btn sm" data-cl="snooze">Plus tard</button></span></div>`);
-  else if(needExport && (!anyCfg || snoozed)) B.push(`<div class="banner warn"><span class="msg">💾 Vos données ne sont enregistrées que sur cet appareil. <b>Dernier export : ${agoTxt(S.meta.lastExport)}</b>${exportDays==null?" — faites une première sauvegarde !":" — plus de 30 jours, il est temps d'exporter."}</span><button class="btn primary" data-cl="export">⤓ Exporter maintenant</button></div>`);
+  if(!on && st!=="reauth" && st!=="error" && anyCfg && !snoozed) B.push(`<div class="banner info"><span class="msg">☁️ ${t("bnConnect")}${needExport?` <b>${esc(t("lastExport",{ago:agoTxt(S.meta.lastExport)}))}.</b>`:""}</span><span class="row">${loginButtons(false)}<button class="btn sm" data-cl="snooze">${esc(t("later"))}</button></span></div>`);
+  else if(needExport && (!anyCfg || snoozed)) B.push(`<div class="banner warn"><span class="msg">💾 ${t("bnExport",{ago:esc(agoTxt(S.meta.lastExport))})}${esc(exportDays==null?t("bnExportFirst"):t("bnExportOld"))}</span><button class="btn primary" data-cl="export">⤓ ${esc(t("exportNow"))}</button></div>`);
   $("banners").innerHTML=B.join("");
 
   const Pn=[];
   if(!anyCfg){
-    Pn.push(`<div class="fsbox"><div class="ttl">Synchronisation cloud</div><p class="small muted" style="margin:0">Pas encore configurée : renseignez <code>DROPBOX_APP_KEY</code> ou <code>ONEDRIVE_CLIENT_ID</code> dans <code>config.js</code> (voir GUIDE.md). En attendant, les données restent sur cet appareil : utilisez Exporter / Importer.</p></div>`);
+    Pn.push(`<div class="fsbox"><div class="ttl">${esc(t("cloudSync"))}</div><p class="small muted" style="margin:0">${t("cloudNotConfigured")}</p></div>`);
   } else {
     let body="";
     if(on){
-      body=`<p class="small muted" style="margin:0 0 8px">Connecté à <b>${esc(label)}</b>${P.accountName()?" ("+esc(P.accountName())+")":""}. Fichier : <code>${esc(P.where)} › ${REMOTE_NAME}</code> + une copie par mois (<code>mywealth-donnees-AAAA-MM.json</code>).<br>Dernière synchronisation : ${C.lastSync?fmtDT(C.lastSync):"—"}.</p>
-        <div class="row"><button class="btn" data-cl="sync">⟳ Synchroniser maintenant</button><button class="btn sm danger" data-cl="logout">Se déconnecter</button></div>`;
+      body=`<p class="small muted" style="margin:0 0 8px">${t("connectedTo",{p:esc(label)})}${P.accountName()?" ("+esc(P.accountName())+")":""}. ${esc(t("fileLbl"))} <code>${esc(t(P.whereKey))} › ${REMOTE_NAME}</code> ${t("plusMonthly")}<br>${esc(t("lastSync"))} ${C.lastSync?fmtDT(C.lastSync):"—"}.</p>
+        <div class="row"><button class="btn" data-cl="sync">⟳ ${esc(t("syncNow"))}</button><button class="btn sm danger" data-cl="logout">${esc(t("logout"))}</button></div>`;
     } else {
-      body=`<p class="small muted" style="margin:0 0 8px">Connectez-vous pour enregistrer automatiquement vos données dans un dossier privé de votre cloud et les retrouver sur tous vos appareils. Rien n'est stocké ailleurs.</p>
-        <div class="row">${DropboxP.configured()?`<button class="btn primary" data-cl="login-dropbox">Se connecter à Dropbox</button>`:""}${OneDrive.configured()?`<button class="btn primary" data-cl="login-onedrive">Se connecter avec Microsoft (OneDrive)</button>`:""}</div>`;
+      body=`<p class="small muted" style="margin:0 0 8px">${esc(t("cloudPitch"))}</p><div class="row">${loginButtons(true)}</div>`;
     }
-    Pn.push(`<div class="fsbox"><div class="ttl">Synchronisation cloud</div>${body}
-      <p class="small muted" style="margin:8px 0 0">Reprendre le fichier de la version ordinateur (<code>patrimoine-donnees.json</code> ou <code>mywealth-donnees.json</code>) : bouton « Importer », ou déposez-le dans le dossier de l'app de votre cloud (<i>Applications › …</i>) avant la première connexion.</p></div>`);
+    Pn.push(`<div class="fsbox"><div class="ttl">${esc(t("cloudSync"))}</div>${body}<p class="small muted" style="margin:8px 0 0">${t("legacyHelp")}</p></div>`);
   }
   $("fsPanel").innerHTML=Pn.join("");
-  $("lastExportTxt").textContent="Dernier export : "+agoTxt(S.meta.lastExport)+(S.meta.lastExport?" ("+fmtDate(S.meta.lastExport.slice(0,10))+")":"")+".";
-  try{ $("storageInfo").textContent = "Format des données : v"+SCHEMA_VERSION+" · "+(fileText().length/1024).toFixed(1)+" Ko · "+S.snapshots.length+" instantané(s) · cache sur l'appareil : "+(saveOk?"actif":"indisponible"); }catch(e){}
+  $("lastExportTxt").textContent=t("lastExport",{ago:agoTxt(S.meta.lastExport)})+(S.meta.lastExport?" ("+fmtDate(S.meta.lastExport.slice(0,10))+")":"")+".";
+  try{ $("storageInfo").textContent = t("storageInfo",{v:SCHEMA_VERSION,kb:fmtNum(fileText().length/1024,1),n:S.snapshots.length,st:t(saveOk?"active":"unavailable")}); }catch(e){}
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-cl]"); if(!b) return;
   const a=b.dataset.cl;
   if(a==="login-dropbox") Cloud_login("dropbox"); else if(a==="login-onedrive") Cloud_login("onedrive");
-  else if(a==="reauth"){ const P=Prov(); if(P) P.reauth().catch(err=>alert("Connexion impossible : "+(err.errorCode||err.message))); }
+  else if(a==="reauth"){ const P=Prov(); if(P) P.reauth().catch(err=>alert(t("loginFailed",{e:(err.errorCode||err.message)}))); }
   else if(a==="sync") syncNow(); else if(a==="logout") Cloud_logout(); else if(a==="export") exportJSON();
   else if(a==="snooze"){ try{ localStorage.setItem(SNOOZE_CLOUD,String(Date.now()+7*864e5)); }catch(err){} renderSyncUI(); }
 });
@@ -1129,92 +1334,109 @@ window.addEventListener("beforeunload",()=>{ if(SYNC.timer){ clearTimeout(SYNC.t
 /* ================= Événements ================= */
 function applyTheme(){ document.documentElement.dataset.theme=S.theme; Object.values(charts).forEach(c=>c.destroy()); for(const k in charts) delete charts[k]; }
 function fullRender(){ $("baseSel").value=S.base; renderAccounts(); renderPositions(); renderFxGrid(true); updateComputed(); }
+function markEmptyIfUserEmptied(){ if(!hasContent(S)){ C.emptyOk=true; saveCloud(); } }
 
 $("accList").addEventListener("change",e=>{
   const card=e.target.closest("[data-acc]"); if(!card) return;
   const a=S.accounts.find(x=>x.id===card.dataset.acc); const f=e.target.dataset.f; const i=+e.target.dataset.i;
-  if(f==="name") a.name=e.target.value.trim()||"Compte";
+  if(f==="name") a.name=e.target.value.trim()||t("defaultAccountName");
   else if(f==="color"){ a.color=e.target.value; card.style.setProperty("--c",a.color); }
   else if(f==="category") a.category=e.target.value;
   else if(f==="note") a.note=e.target.value;
   else if(f==="cur"){ a.balances[i].cur=e.target.value; a.updated=today(); }
-  else if(f==="amount"){ const v=parseNum(e.target.value); if(isNaN(v)){ toast("Montant invalide"); e.target.value=fmtNum(+a.balances[i].amount||0); return; } a.balances[i].amount=v; a.updated=today(); e.target.value=fmtNum(v); e.target.removeAttribute("placeholder"); }
+  else if(f==="amount"){ const v=parseNum(e.target.value); if(isNaN(v)){ toast(t("toastBadAmount")); e.target.value=fmtNum(+a.balances[i].amount||0); return; } a.balances[i].amount=v; a.updated=today(); e.target.value=fmtNum(v); e.target.removeAttribute("placeholder"); }
   save(); if(f==="name"){ renderHistory(); } updateComputed();
 });
 $("accList").addEventListener("focusin",e=>{ if(e.target.dataset.f==="amount"){ const v=parseNum(e.target.value); if(v===0) e.target.value=""; else if(!isNaN(v)) e.target.value=String(v); e.target.select&&e.target.select(); }});
-$("accList").addEventListener("focusout",e=>{ if(e.target.dataset.f==="amount"){ const card=e.target.closest("[data-acc]"); const a=S.accounts.find(x=>x.id===card.dataset.acc); e.target.value=fmtNum(+a.balances[+e.target.dataset.i].amount||0);} });
+$("accList").addEventListener("focusout",e=>{ if(e.target.dataset.f==="amount"){ const card=e.target.closest("[data-acc]"); const a=S.accounts.find(x=>x.id===card.dataset.acc); if(a) e.target.value=fmtNum(+a.balances[+e.target.dataset.i].amount||0);} });
 $("accList").addEventListener("click",e=>{
   const b=e.target.closest("[data-act]"); if(!b) return;
   const card=b.closest("[data-acc]"); const a=S.accounts.find(x=>x.id===card.dataset.acc);
-  if(b.dataset.act==="delAcc"){ if(!confirm("Supprimer le compte « "+a.name+" » ? (les instantanés passés sont conservés)")) return; S.accounts=S.accounts.filter(x=>x!==a); }
+  if(b.dataset.act==="delAcc"){ if(!confirm(t("confirmDelAccount",{name:a.name}))) return; S.accounts=S.accounts.filter(x=>x!==a); markEmptyIfUserEmptied(); }
   if(b.dataset.act==="addBal"){ const used=a.balances.map(x=>x.cur); const c=["CHF","EUR","USD","GBP"].find(x=>!used.includes(x))||"CHF"; a.balances.push({cur:c,amount:0}); }
   if(b.dataset.act==="delBal"){ a.balances.splice(+b.dataset.i,1); }
   save(); renderAccounts(); updateComputed();
 });
-$("addAccBtn").onclick=()=>{
-  S.accounts.push({id:uid(),name:"Nouveau compte",category:"epargne",color:PALETTE[S.accounts.length%PALETTE.length],balances:[{cur:S.base,amount:0}],updated:null,note:""});
-  save(); renderAccounts(); updateComputed();
-  const last=$("accList").lastElementChild.querySelector("input.name"); last.focus(); last.select();
-};
+function newAccount(){
+  addAccount(t("defaultAccountName"), "courant", [{cur:S.base,amount:0}]);
+  location.hash="#comptes";
+  const last=$("accList").lastElementChild.querySelector("input.name"); if(last){ last.focus(); last.select(); }
+}
+function newPosition(){
+  S.positions.push({id:uid(),ticker:"",name:"",qty:0,avg:0,currency:"USD",price:null,priceDate:null,priceSource:null,exchange:null,custody:""});
+  save(); renderPositions(); updateComputed();
+  location.hash="#titres";
+  const el=$("posList").lastElementChild.querySelector("[data-f=ticker]"); if(el) el.focus();
+}
+$("addAccBtn").onclick=newAccount;
+$("addPosBtn").onclick=newPosition;
+document.addEventListener("click",e=>{
+  const tp=e.target.closest("[data-tpl]"); if(tp){ addFromTemplate(+tp.dataset.tpl); return; }
+  const b=e.target.closest("[data-act2]"); if(!b) return;
+  if(b.dataset.act2==="addAcc") newAccount(); else if(b.dataset.act2==="addPos") newPosition(); else if(b.dataset.act2==="import") $("importFile").click();
+});
 
 $("posList").addEventListener("change",e=>{
   const card=e.target.closest("[data-pos]"); if(!card) return;
   const p=S.positions.find(x=>x.id===card.dataset.pos); const f=e.target.dataset.f; const v=e.target.value;
   if(["qty","avg","price"].includes(f)){
     if(f==="price" && v.trim()===""){ p.price=null; p.priceSource=null; p.priceDate=null; }
-    else { const n=parseNum(v); if(isNaN(n)||n<0){ toast("Nombre invalide"); return; } p[f]=n; e.target.value=fmtNum(n, f==="qty"&&n%1?4:(f==="qty"?0:2));
-      if(f==="price"){ p.priceSource="manuel"; p.priceDate=new Date().toISOString(); } }
-  } else if(f==="ticker"){ p.ticker=v.trim().toUpperCase(); p.exchange=null; e.target.value=p.ticker; fetchPrice(p).then(r=>{ if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource="TradingView (différé)"; p.exchange=r.exchange; if(r.currency) p.currency=r.currency; if(!p.name) p.name=r.name||""; save(); renderPositions(); updateComputed(); toast("Cours trouvé : "+p.ticker+" "+fmtMoney(r.price,r.currency)); } }); }
+    else { const n=parseNum(v); if(isNaN(n)||n<0){ toast(t("toastBadNumber")); return; } p[f]=n; e.target.value=fmtNum(n, f==="qty"&&n%1?4:(f==="qty"?0:2));
+      if(f==="price"){ p.priceSource=SRC_MANUAL; p.priceDate=new Date().toISOString(); } }
+  } else if(f==="ticker"){ p.ticker=v.trim().toUpperCase(); p.exchange=null; e.target.value=p.ticker; fetchPrice(p).then(r=>{ if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource=SRC_TV; p.exchange=r.exchange; if(r.currency) p.currency=r.currency; if(!p.name) p.name=r.name||""; save(); renderPositions(); updateComputed(); toast(t("toastPriceFound",{tk:p.ticker,v:fmtMoney(r.price,r.currency)})); } }); }
   else p[f]=v;
   save(); updateComputed();
 });
 $("posList").addEventListener("click",e=>{
   const b=e.target.closest("[data-act=delPos]"); if(!b) return;
   const card=b.closest("[data-pos]"); const p=S.positions.find(x=>x.id===card.dataset.pos);
-  if(!confirm("Supprimer la position « "+p.ticker+" » ?")) return;
-  S.positions=S.positions.filter(x=>x!==p); save(); renderPositions(); updateComputed();
+  if(!confirm(t("confirmDelPosition",{name:p.ticker||p.name||"?"}))) return;
+  S.positions=S.positions.filter(x=>x!==p); markEmptyIfUserEmptied(); save(); renderPositions(); updateComputed();
 });
-$("addPosBtn").onclick=()=>{
-  S.positions.push({id:uid(),ticker:"",name:"",qty:0,avg:0,currency:"USD",price:null,priceDate:null,priceSource:null,exchange:null,custody:""});
-  save(); renderPositions(); updateComputed();
-  $("posList").lastElementChild.querySelector("[data-f=ticker]").focus();
-};
 $("fxGrid").addEventListener("change",e=>{
   const c=e.target.dataset.fx; if(!c) return; const n=parseNum(e.target.value);
-  if(isNaN(n)||n<=0){ toast("Taux invalide"); return; }
-  S.fx.rates[c]=n; S.fx.manual=true; S.fx.source="manuel"; S.fx.date=today(); save(); renderFxGrid(true); updateComputed();
-  toast("Taux manuel enregistré (actualisation auto désactivée)");
+  if(isNaN(n)||n<=0){ toast(t("toastBadRate")); return; }
+  S.fx.rates[c]=n; S.fx.manual=true; S.fx.source=SRC_MANUAL; S.fx.date=today(); save(); renderFxGrid(true); updateComputed();
+  toast(t("toastManualRate"));
 });
 $("fxManual").onchange=e=>{ S.fx.manual=e.target.checked; if(!S.fx.manual){ refreshFx(false).then(updateComputed);} save(); updateComputed(); };
-$("addCurBtn").onclick=()=>{ const c=(prompt("Code de la devise (ex. GBP, JPY, SEK) :")||"").trim().toUpperCase(); if(!/^[A-Z]{3}$/.test(c)) return; if(!(c in S.fx.rates)) S.fx.rates[c]=0; save(); renderFxGrid(true); renderAccounts(); renderPositions(); updateComputed(); refreshFx(true).then(()=>{renderFxGrid(true);updateComputed();}); };
-$("refreshFxBtn").onclick=async()=>{ const ok=await refreshFx(false); if(ok) toast("Taux actualisés"); renderFxGrid(true); updateComputed(); };
+$("addCurBtn").onclick=()=>{ const c=(prompt(t("promptCurrency"))||"").trim().toUpperCase(); if(!/^[A-Z]{3}$/.test(c)) return; if(!(c in S.fx.rates)) S.fx.rates[c]=0; save(); renderFxGrid(true); renderAccounts(); renderPositions(); updateComputed(); refreshFx(true).then(()=>{renderFxGrid(true);updateComputed();}); };
+$("refreshFxBtn").onclick=async()=>{ const ok=await refreshFx(false); if(ok) toast(t("toastFxOk")); renderFxGrid(true); updateComputed(); };
 $("refreshPricesBtn").onclick=async()=>{ await refreshPrices(false); renderPositions(); updateComputed(); };
 $("refreshBtn").onclick=()=>refreshAll(false);
 $("baseSel").onchange=e=>{ S.base=e.target.value; save(); renderAccounts(); updateComputed(); };
 $("themeBtn").onclick=()=>{ S.theme=S.theme==="dark"?"light":"dark"; save(); applyTheme(); updateComputed(); };
+$("langBtn").onclick=()=>setLang(LANG==="fr"?"en":"fr");
+$("langSeg").addEventListener("click",e=>{ const b=e.target.closest("[data-lang]"); if(b) setLang(b.dataset.lang); });
 $("snapBtn").onclick=()=>takeSnapshot(today());
 $("snapBtn2").onclick=()=>takeSnapshot($("snapDate").value||today());
-$("snapTable").addEventListener("click",e=>{ const b=e.target.closest("[data-delsnap]"); if(!b) return; if(!confirm("Supprimer l'instantané du "+fmtDate(b.dataset.delsnap)+" ?")) return; S.snapshots=S.snapshots.filter(s=>s.date!==b.dataset.delsnap); save(); updateComputed(); });
+$("snapTable").addEventListener("click",e=>{ const b=e.target.closest("[data-delsnap]"); if(!b) return; if(!confirm(t("confirmDelSnap",{d:fmtDate(b.dataset.delsnap)}))) return; S.snapshots=S.snapshots.filter(s=>s.date!==b.dataset.delsnap); markEmptyIfUserEmptied(); save(); updateComputed(); });
 [$("exportBtn"),$("exportBtn2")].forEach(b=>b.onclick=exportJSON);
 [$("importBtn"),$("importBtn2")].forEach(b=>b.onclick=()=>$("importFile").click());
 $("importFile").onchange=e=>{ const f=e.target.files[0]; if(f) importJSON(f); e.target.value=""; };
-$("resetBtn").onclick=()=>{ if(!confirm("Effacer toutes les données et revenir à l'état initial ?"+(cloudOn()?"\n\nATTENTION : la copie dans "+Prov().label+" sera elle aussi remise à zéro.":"")+"\n\nExportez d'abord une sauvegarde si besoin.")) return; S=defaultState(); save(); applyTheme(); fullRender(); refreshAll(true); };
+$("resetBtn").onclick=()=>{
+  if(!confirm(t("confirmReset")+(cloudOn()?"\n\n"+t("confirmResetCloud",{p:Prov().label}):"")+"\n\n"+t("confirmResetExport"))) return;
+  const keepTheme=S.theme; S=defaultState(); S.theme=keepTheme; C.emptyOk=true; saveCloud(); save(); applyTheme(); fullRender();
+};
 
 /* ================= Démarrage ================= */
 function maybeRefresh(){
-  // actualisation automatique si les cours/taux ont plus d'une heure
-  const old = !S.fx.fetchedAt || Date.now()-S.fx.fetchedAt>3600e3 || S.positions.some(p=>!p.priceDate || (p.priceSource!=="manuel" && Date.now()-new Date(p.priceDate)>3600e3));
+  const old = !S.fx.fetchedAt || Date.now()-S.fx.fetchedAt>3600e3 || S.positions.some(p=>!p.priceDate || (p.priceSource!==SRC_MANUAL && Date.now()-new Date(p.priceDate)>3600e3));
   if(old) refreshAll(true);
 }
 (async function init(){
+  applyI18n();
   $("snapDate").value=today();
   if(typeof Chart!=="undefined"){ Chart.defaults.font.family=getComputedStyle(document.body).fontFamily; Chart.defaults.color=cssVar("--mut"); }
   let hadLocal=false; try{ hadLocal=!!localStorage.getItem(STORE_KEY); }catch(e){}
   lastKey = hadLocal? dataKey(S) : null;
-  if(!hadLocal) save(true);           // premier lancement : mémorise l'état initial (soldes à 0)
+  if(!hadLocal) save(true);           // premier lancement : état vide mémorisé localement
   applyTheme(); fullRender(); renderSyncUI();
-  if("serviceWorker" in navigator && location.protocol!=="file:") navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service worker non enregistré", e));
-  await Cloud_init();                 // si le cloud est connecté, il fait foi (conflits : on vous demande)
+  if("serviceWorker" in navigator && location.protocol!=="file:") navigator.serviceWorker.register("sw.js").catch(e=>console.warn("SW not registered", e));
+  // config.js chargé à chaque démarrage sans cache (le service worker le sert aussi en « réseau d'abord »)
+  if(!window.MYWEALTH_CONFIG){ try{ await loadScript("config.js?t="+Date.now()); }catch(e){ console.warn("config.js unavailable", e.message); } }
+  renderSyncUI();
+  await Cloud_init();
   maybeRefresh();
 })();
 </script>
