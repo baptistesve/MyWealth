@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyWealth</title>
+<meta name="description" content="MyWealth — suivi personnel de patrimoine">
+<meta name="theme-color" content="#0b1020">
+<meta name="color-scheme" content="dark light">
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MyWealth">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script src="config.js"></script>
+<script src="vendor/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0b1020; --bg2:#111831; --card:#151d38; --card2:#1b2546; --line:#26315a;
+  --txt:#e8ecf8; --mut:#8e9ac0; --acc:#6c8cff; --acc2:#9b6cff;
+  --pos:#2fd08a; --neg:#ff5c7a; --warn:#ffb547; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --inp:#0f1630;
+}
+[data-theme=light]{
+  --bg:#f3f5fb; --bg2:#e9edf7; --card:#ffffff; --card2:#f6f8fd; --line:#dfe4f1;
+  --txt:#18203a; --mut:#66708f; --acc:#4361ee; --acc2:#7b4dff;
+  --pos:#109a5f; --neg:#d93556; --warn:#c77700; --shadow:0 8px 24px rgba(30,40,80,.08);
+  --inp:#f3f5fb;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:radial-gradient(1200px 600px at 10% -10%,rgba(108,140,255,.18),transparent 60%),
+             radial-gradient(900px 500px at 100% 0%,rgba(155,108,255,.14),transparent 60%),var(--bg);
+  color:var(--txt);min-height:100vh;font-size:15px;line-height:1.45}
+a{color:var(--acc)}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 18px 60px}
+header.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-weight:800;color:#fff;font-size:16px;letter-spacing:-.03em;box-shadow:var(--shadow)}
+.brand h1{font-size:20px;margin:0}
+.brand small{color:var(--mut)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 18px;position:sticky;top:0;z-index:5;padding:8px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+nav.tabs a{padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--txt);text-decoration:none;font-size:14px}
+nav.tabs a:hover{border-color:var(--acc)}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--txt);padding:8px 13px;border-radius:10px;cursor:pointer;font-size:14px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--acc)}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff;font-weight:600}
+.btn.danger:hover{border-color:var(--neg);color:var(--neg)}
+.btn.sm{padding:5px 9px;font-size:13px;border-radius:8px}
+.btn.icon{padding:5px 8px}
+select,input{font-family:inherit;font-size:14px;color:var(--txt);background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:-1px}
+input.num{text-align:right;font-variant-numeric:tabular-nums}
+.grid{display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:16px;margin:0 0 12px;display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.card h2 .t{display:flex;gap:8px;align-items:center}
+.section-title{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:28px 0 10px;font-weight:700}
+.hero{display:grid;grid-template-columns:1.3fr 2fr;gap:16px}
+.networth{background:linear-gradient(135deg,rgba(108,140,255,.25),rgba(155,108,255,.18)),var(--card);position:relative;overflow:hidden}
+.networth .lbl{color:var(--mut);font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+.networth .big{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.02em;margin:6px 0;font-variant-numeric:tabular-nums}
+.networth .sub{color:var(--mut);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.kpi .l{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-size:20px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--mut)}
+.pos{color:var(--pos)} .neg{color:var(--neg)}
+.charts3{grid-template-columns:repeat(3,1fr)}
+.charts2{grid-template-columns:1.4fr 1fr}
+.chartbox{position:relative;height:240px}
+.chartbox.tall{height:300px}
+.legend{display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:13px}
+.legend .row{display:flex;align-items:center;gap:8px}
+.legend .dot{width:10px;height:10px;border-radius:3px;flex:none}
+.legend .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend .pc{color:var(--mut);width:52px;text-align:right}
+.legend .am{font-variant-numeric:tabular-nums;text-align:right;min-width:110px}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:2px}
+.bar>i{display:block;height:100%}
+.nochart{display:grid;place-items:center;height:100%;color:var(--mut);font-size:13px;text-align:center;border:1px dashed var(--line);border-radius:12px;padding:10px}
+.accounts{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.acc{display:flex;flex-direction:column;gap:10px;border-left:4px solid var(--c,var(--acc))}
+.acc .head{display:flex;gap:8px;align-items:center}
+.acc .head input.name{flex:1;font-weight:700;font-size:15px;background:transparent;border-color:transparent;padding:5px 6px}
+.acc .head input.name:hover,.acc .head input.name:focus{border-color:var(--line);background:var(--inp)}
+.acc .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.acc .bal{display:grid;grid-template-columns:90px 1fr auto;gap:6px;align-items:center}
+.acc .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:8px}
+.acc .tot b{font-size:18px;font-variant-numeric:tabular-nums}
+.acc textarea{font-family:inherit;font-size:13px;color:var(--txt);background:var(--inp);border:1px solid var(--line);border-radius:8px;padding:6px 8px;resize:vertical;min-height:32px}
+.badge{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.badge.todo{color:var(--warn);border-color:var(--warn);background:rgba(255,181,71,.08)}
+.badge.ok{color:var(--pos);border-color:rgba(47,208,138,.5)}
+.badge.live{color:var(--pos);border-color:rgba(47,208,138,.5)}
+.badge.man{color:var(--warn);border-color:rgba(255,181,71,.6)}
+.positions{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+.poscard .ph{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.tick{font-weight:800;font-size:18px;padding:6px 10px;border-radius:10px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;letter-spacing:.02em}
+.poscard .fields{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 10px}
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld input,.fld select{width:100%}
+.fld label{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:9px 11px}
+.stat .l{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.stat .v{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.stat .s{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+.stat.wide{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}
+.stat.wide .v{font-size:20px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.fxgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--mut)} .small{font-size:12px}
+.status{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--card);border:1px solid var(--line);padding:10px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transition:.25s;z-index:50;font-size:14px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{color:var(--mut);text-align:center;padding:24px;border:1px dashed var(--line);border-radius:14px}
+footer{margin-top:40px;color:var(--mut);font-size:12px;text-align:center}
+.fspill{border:1px solid var(--line);background:var(--card);color:var(--mut);font-size:12px;padding:3px 10px;border-radius:999px;cursor:pointer;font-family:inherit;margin-top:3px;display:inline-flex;gap:6px;align-items:center;max-width:100%;text-align:left}
+.fspill .d{width:8px;height:8px;border-radius:50%;background:var(--mut);flex:none}
+.fspill.ok{color:var(--pos);border-color:rgba(47,208,138,.45)} .fspill.ok .d{background:var(--pos)}
+.fspill.pending .d{background:var(--acc);animation:pulse 1s infinite}
+.fspill.warn{color:var(--warn);border-color:rgba(255,181,71,.6)} .fspill.warn .d{background:var(--warn)}
+.fspill.err{color:var(--neg);border-color:var(--neg)} .fspill.err .d{background:var(--neg)}
+@keyframes pulse{50%{opacity:.3}}
+.banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:12px 16px;border-radius:14px;margin:0 0 12px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);font-size:14px}
+.banner.warn{border-color:rgba(255,181,71,.7);background:linear-gradient(90deg,rgba(255,181,71,.16),transparent 70%),var(--card)}
+.banner.err{border-color:var(--neg);background:linear-gradient(90deg,rgba(255,92,122,.16),transparent 70%),var(--card)}
+.banner.info{border-color:rgba(108,140,255,.6);background:linear-gradient(90deg,rgba(108,140,255,.16),transparent 70%),var(--card)}
+.banner .msg{flex:1;min-width:220px}
+.fsbox{border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:12px;margin:10px 0}
+.fsbox .ttl{font-weight:600;margin-bottom:4px}
+@media (max-width:1000px){.hero{grid-template-columns:1fr}.charts3{grid-template-columns:1fr 1fr}.charts2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.wrap{padding:12px 10px 50px}.charts3{grid-template-columns:1fr}.accounts,.positions{grid-template-columns:1fr}.card{padding:14px;border-radius:14px}.kpi .v{font-size:17px}.legend .am{min-width:90px}.tools .btn .lbl{display:none}}
+/* --- PWA / mobile --- */
+body{padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+nav.tabs a{display:inline-flex;gap:6px;align-items:center}
+nav.tabs a i{font-style:normal}
+dialog.modal{border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:18px;padding:20px;max-width:440px;width:calc(100% - 32px);box-shadow:var(--shadow)}
+dialog.modal::backdrop{background:rgba(5,8,20,.6);backdrop-filter:blur(3px)}
+dialog.modal h3{margin:0 0 8px;font-size:17px}
+.cfgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.cfgrid>div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:13px;line-height:1.5}
+.cfbtns{display:flex;flex-direction:column;gap:8px}
+.cfbtns .btn{justify-content:center;padding:11px}
+@media (max-width:640px){
+  body{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+  nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+    background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+  nav.tabs a{flex-direction:column;gap:2px;border:0;background:transparent;padding:4px 2px;font-size:11px;border-radius:10px;text-align:center}
+  nav.tabs a i{font-size:19px;line-height:1}
+  input,select,textarea{font-size:16px!important}
+  header.top{gap:10px}
+  .tools{width:100%;justify-content:space-between}
+  .tools label{display:none}
+  section{scroll-margin-top:10px}
+}
+@media print{nav.tabs,.tools,.btn{display:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <img class="logo" src="icons/icon-192.png" alt="MW" style="padding:0">
+      <div><h1>MyWealth</h1><button class="fspill" id="fsStatus" title="État de la sauvegarde"><span class="d"></span><span id="fsStatusTxt">Chargement…</span></button></div>
+    </div>
+    <div class="tools">
+      <label class="small muted" for="baseSel">Devise de référence</label>
+      <select id="baseSel"><option>CHF</option><option>EUR</option><option>USD</option></select>
+      <button class="btn" id="refreshBtn" title="Actualiser cours et taux de change">⟳ <span class="lbl">Actualiser</span></button>
+      <button class="btn" id="themeBtn" title="Thème clair / sombre">◐ <span class="lbl">Thème</span></button>
+      <button class="btn" id="exportBtn" title="Exporter une sauvegarde JSON">⤓ <span class="lbl">Exporter</span></button>
+      <button class="btn" id="importBtn" title="Importer une sauvegarde JSON">⤒ <span class="lbl">Importer</span></button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </header>
+  <div id="banners"></div>
+
+  <nav class="tabs">
+    <a href="#vue"><i>◎</i><span>Aperçu</span></a><a href="#comptes"><i>🏦</i><span>Comptes</span></a><a href="#titres"><i>📈</i><span>Titres</span></a><a href="#historique"><i>🕓</i><span>Historique</span></a><a href="#reglages"><i>⚙︎</i><span>Réglages</span></a>
+  </nav>
+
+  <!-- VUE D'ENSEMBLE -->
+  <section id="vue">
+    <div class="hero">
+      <div class="card networth">
+        <div class="lbl">Patrimoine net</div>
+        <div class="big" id="nwTotal">—</div>
+        <div class="sub" id="nwDelta">Aucun instantané enregistré pour l'instant</div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn primary" id="snapBtn">📸 Enregistrer un instantané</button>
+        </div>
+        <div class="status" style="margin-top:12px" id="statusBar"></div>
+        <div class="small" style="margin-top:8px;color:var(--warn)" id="todoNote"></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+    </div>
+
+    <div class="section-title">Répartition</div>
+    <div class="grid charts3">
+      <div class="card"><h2><span class="t">Par compte</span></h2><div class="chartbox"><canvas id="chAcc"></canvas></div><div class="legend" id="lgAcc"></div></div>
+      <div class="card"><h2><span class="t">Par catégorie</span></h2><div class="chartbox"><canvas id="chCat"></canvas></div><div class="legend" id="lgCat"></div></div>
+      <div class="card"><h2><span class="t">Par devise</span></h2><div class="chartbox"><canvas id="chCur"></canvas></div><div class="legend" id="lgCur"></div></div>
+    </div>
+
+    <div class="section-title">Évolution</div>
+    <div class="grid charts2">
+      <div class="card"><h2><span class="t">Historique du patrimoine net</span><span class="small muted" id="histInfo"></span></h2><div class="chartbox tall"><canvas id="chHist"></canvas></div></div>
+      <div class="card"><h2><span class="t">Évolution mensuelle</span></h2><div class="chartbox tall"><canvas id="chMonth"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- COMPTES -->
+  <section id="comptes">
+    <div class="section-title">Comptes</div>
+    <div class="row" style="margin-bottom:12px;justify-content:space-between">
+      <span class="small muted">Cliquez sur un montant pour le modifier. Formats acceptés : 12'345.67 · 12345,67. Les titres Swissquote se gèrent dans « Titres » (saisissez ici uniquement les espèces).</span>
+      <button class="btn primary" id="addAccBtn">＋ Ajouter un compte</button>
+    </div>
+    <div class="grid accounts" id="accList"></div>
+  </section>
+
+  <!-- TITRES -->
+  <section id="titres">
+    <div class="section-title">Titres &amp; positions</div>
+    <div class="row" style="margin-bottom:12px;justify-content:space-between">
+      <span class="small muted" id="priceInfo">Cours récupérés automatiquement (différé ~15 min) lorsque c'est possible ; sinon saisissez le cours manuellement.</span>
+      <div class="row">
+        <button class="btn" id="refreshPricesBtn">⟳ Actualiser les cours</button>
+        <button class="btn primary" id="addPosBtn">＋ Ajouter une position</button>
+      </div>
+    </div>
+    <div class="grid positions" id="posList"></div>
+  </section>
+
+  <!-- HISTORIQUE -->
+  <section id="historique">
+    <div class="section-title">Instantanés</div>
+    <div class="card">
+      <h2><span class="t">Historique des instantanés</span>
+        <span class="row">
+          <label class="small muted" for="snapDate">Date</label><input type="date" id="snapDate">
+          <button class="btn sm primary" id="snapBtn2">📸 Enregistrer</button>
+        </span>
+      </h2>
+      <p class="small muted" style="margin-top:0">Un instantané fige la valeur de chaque compte et position à une date. Enregistrez-en un par mois (par ex. en fin de mois) pour suivre votre évolution. Un instantané existant à la même date est remplacé.</p>
+      <div class="tablewrap"><table id="snapTable"></table></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2><span class="t">Synthèse mensuelle</span></h2>
+      <div class="tablewrap"><table id="monthTable"></table></div>
+    </div>
+  </section>
+
+  <!-- REGLAGES -->
+  <section id="reglages">
+    <div class="section-title">Taux de change &amp; réglages</div>
+    <div class="grid charts2">
+      <div class="card">
+        <h2><span class="t">Taux de change</span><span class="small muted" id="fxInfo"></span></h2>
+        <p class="small muted" style="margin-top:0">Valeur de 1 unité de devise en CHF. Actualisés automatiquement (BCE via Frankfurter, puis ExchangeRate-API en secours). Cochez « taux manuels » pour imposer vos propres taux.</p>
+        <div class="fxgrid" id="fxGrid"></div>
+        <div class="row" style="margin-top:12px">
+          <label class="row small"><input type="checkbox" id="fxManual"> Taux manuels (ne pas actualiser)</label>
+          <button class="btn sm" id="addCurBtn">＋ Devise</button>
+          <button class="btn sm" id="refreshFxBtn">⟳ Actualiser les taux</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2 id="sauvegarde"><span class="t">Sauvegarde &amp; données</span></h2>
+        <div id="fsPanel"></div>
+        <div class="fsbox">
+          <div class="ttl">Export / import manuel</div>
+          <p class="small muted" style="margin:0 0 8px">Copie ponctuelle de vos données (utile pour un autre appareil ou en complément). <b id="lastExportTxt"></b></p>
+        <div class="row">
+          <button class="btn" id="exportBtn2">⤓ Exporter (JSON)</button>
+          <button class="btn" id="importBtn2">⤒ Importer (JSON)</button>
+          <button class="btn danger" id="resetBtn">⟲ Réinitialiser</button>
+        </div>
+        </div>
+        <p class="small muted" id="storageInfo"></p>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="modal" id="conflictDlg">
+    <h3>Deux versions différentes</h3>
+    <p class="small muted" style="margin:0">Vos données ont été modifiées sur cet appareil <b>et</b> dans le cloud (par exemple sur un autre appareil). Laquelle voulez-vous garder ? L'autre sera remplacée.</p>
+    <div class="cfgrid"><div id="cfRemote"></div><div id="cfLocal"></div></div>
+    <div class="cfbtns"><button class="btn primary" id="cfKeepRemote">Garder la version du cloud</button><button class="btn" id="cfKeepLocal">Garder cet appareil</button></div>
+    <p class="small muted" style="margin:10px 0 0">Astuce : exportez d'abord si vous hésitez (la copie mensuelle du cloud est aussi conservée).</p>
+  </dialog>
+  <footer>MyWealth · tableau de bord personnel · gratuit · hors-ligne · aucune statistique, aucun pistage : vos données restent sur l'appareil et dans votre propre cloud (seuls les cours et taux publics sont téléchargés).</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ================= Configuration ================= */
+const STORE_KEY = "patrimoine.v1";          // cache localStorage (nom conservé pour compatibilité)
+const DIRTY_KEY = "patrimoine.nonSynchronise"; // "1" = modifications faites alors que le fichier n'était pas connecté
+const SNOOZE_KEY = "patrimoine.rappelReporte";
+/* ---- Format de données versionné ----
+   schemaVersion est écrit dans chaque fichier. Si une future version de la page change le format,
+   incrémentez SCHEMA_VERSION et ajoutez une fonction dans MIGRATIONS[ancienneVersion]. */
+const SCHEMA_VERSION = 2;
+const MIGRATIONS = {
+  // v1 (première version de la page, champ "version":1) -> v2 : schemaVersion, savedAt, meta
+  1: s => { delete s.version; s.meta = Object.assign({lastExport:null}, s.meta||{}); return s; }
+  // 2: s => { /* transformation v2 -> v3 */ return s; },
+};
+const CATS = {courant:"Compte courant", epargne:"Épargne", investissement:"Investissement", prevoyance:"Prévoyance", titres:"Titres"};
+const CAT_COLORS = {courant:"#6c8cff", epargne:"#2fd08a", investissement:"#9b6cff", prevoyance:"#ffb547", titres:"#ff6cb5"};
+const PALETTE = ["#6c8cff","#2fd08a","#9b6cff","#ffb547","#ff6cb5","#3ccfe0","#ff7f50","#a3e635","#f472b6","#60a5fa","#facc15","#34d399"];
+const CUR_COLORS = {CHF:"#ff5c7a",EUR:"#6c8cff",USD:"#2fd08a",GBP:"#ffb547"};
+
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+
+function defaultState(){
+  return {
+    app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:null,
+    base:"CHF", theme:"dark",
+    meta:{ lastExport:null, created:new Date().toISOString() },
+    fx:{ rates:{CHF:1, EUR:0, USD:0}, date:null, source:null, fetchedAt:null, manual:false },
+    accounts:[
+      {id:uid(), name:"BNP Paribas", category:"courant", color:PALETTE[0], balances:[{cur:"EUR", amount:0}], updated:null, note:""},
+      {id:uid(), name:"PostFinance", category:"courant", color:PALETTE[3], balances:[{cur:"CHF", amount:0}], updated:null, note:""},
+      {id:uid(), name:"Revolut", category:"courant", color:PALETTE[5], balances:[{cur:"CHF", amount:0}], updated:null, note:"Multi-devise : ajoutez une ligne par devise"},
+      {id:uid(), name:"Swissquote (espèces)", category:"investissement", color:PALETTE[2], balances:[{cur:"CHF", amount:0}], updated:null, note:"Liquidités uniquement ; les titres sont dans « Titres »"},
+      {id:uid(), name:"3e pilier A", category:"prevoyance", color:PALETTE[1], balances:[{cur:"CHF", amount:0}], updated:null, note:""}
+    ],
+    positions:[
+      {id:uid(), ticker:"TSLA", name:"Tesla, Inc.", qty:210, avg:369, currency:"USD", price:null, priceDate:null, priceSource:null, exchange:"NASDAQ", custody:"Swissquote"}
+    ],
+    snapshots:[]
+  };
+}
+/* FX fallback used ONLY if no rate has ever been fetched/entered (approx. Oct 2026) – shown as "approx." */
+const FX_FALLBACK = {CHF:1, EUR:0.927, USD:0.824, GBP:1.099};
+
+let S = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ return migrate(JSON.parse(raw)); }
+  }catch(e){ console.warn("Lecture localStorage impossible", e); }
+  return defaultState();
+}
+function schemaOf(s){ return +(s && (s.schemaVersion || s.version)) || 1; }
+function isPatrimoineData(j){ return !!j && typeof j==="object" && Array.isArray(j.accounts) && Array.isArray(j.positions); }
+function migrate(s){
+  let v = schemaOf(s);
+  if(v > SCHEMA_VERSION){ const e=new Error("Format plus récent ("+v+")"); e.future=v; throw e; }
+  s = JSON.parse(JSON.stringify(s));
+  while(v < SCHEMA_VERSION){ s = (MIGRATIONS[v] || (x=>x))(s); v++; }
+  const d = defaultState();
+  s = Object.assign({}, d, s);
+  s.fx = Object.assign({}, d.fx, s.fx||{});
+  s.fx.rates = Object.assign({CHF:1}, s.fx.rates||{});
+  s.accounts = Array.isArray(s.accounts)? s.accounts : [];
+  s.positions = Array.isArray(s.positions)? s.positions : [];
+  s.snapshots = Array.isArray(s.snapshots)? s.snapshots : [];
+  s.accounts.forEach((a,i)=>{ a.id=a.id||uid(); a.balances=Array.isArray(a.balances)&&a.balances.length?a.balances:[{cur:"CHF",amount:0}]; a.color=a.color||PALETTE[i%PALETTE.length]; a.category=a.category||"courant"; });
+  s.positions.forEach(p=>{ p.id=p.id||uid(); });
+  s.meta = Object.assign({lastExport:null}, s.meta||{});
+  s.app = "patrimoine"; s.schemaVersion = SCHEMA_VERSION;
+  return s;
+}
+let saveOk = true, lastKey = null;
+function dataKey(o){ const c=Object.assign({},o); delete c.savedAt; return JSON.stringify(c); }
+function writeLocal(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); saveOk=true; }catch(e){ saveOk=false; }
+}
+/* save() : appelé après chaque modification. Ne fait rien si les données n'ont pas changé.
+   auto=true pour les mises à jour automatiques (cours, taux) qui ne sont pas des saisies de l'utilisateur. */
+function save(auto){
+  const k=dataKey(S);
+  if(k===lastKey) return;
+  lastKey=k; S.savedAt=new Date().toISOString();
+  writeLocal();
+  Cloud_schedule(auto);
+  renderSyncUI();
+}
+
+/* ================= Formatage suisse ================= */
+function fmtNum(n, dec=2){
+  if(n==null || !isFinite(n)) return "—";
+  const neg = n<0; n=Math.abs(n);
+  let [i,f] = n.toFixed(dec).split(".");
+  i = i.replace(/\B(?=(\d{3})+(?!\d))/g,"'");
+  return (neg?"-":"")+i+(f?"."+f:"");
+}
+function fmtMoney(n, cur, dec=2){ return n==null||!isFinite(n) ? "—" : cur+" "+fmtNum(n,dec); }
+function fmtSigned(n, cur, dec=2){ if(n==null||!isFinite(n)) return "—"; return (n>0?"+":"")+ (cur?cur+" ":"") + fmtNum(n,dec); }
+function fmtPct(n){ if(n==null||!isFinite(n)) return "—"; return (n>0?"+":"")+fmtNum(n*100,2)+" %"; }
+function parseNum(str){
+  if(typeof str==="number") return str;
+  if(str==null) return NaN;
+  let s=String(str).trim().replace(/[\s'’`]/g,"").replace(/^(CHF|EUR|USD|GBP)/i,"");
+  if(s.indexOf(",")>=0 && s.indexOf(".")<0) s=s.replace(",",".");
+  else s=s.replace(/,/g,"");
+  if(s==="") return NaN;
+  return Number(s);
+}
+function fmtDate(iso){ if(!iso) return "—"; const d=new Date(iso.length===10?iso+"T12:00:00":iso); if(isNaN(d)) return iso; return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear(); }
+function fmtDT(d){ d=new Date(d); if(isNaN(d)) return "—"; return String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0")+"."+d.getFullYear()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+const MONTHS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+function fmtMonth(ym){ const [y,m]=ym.split("-"); return MONTHS[+m-1]+" "+y; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ================= Calculs ================= */
+function rate(cur){ // CHF par unité
+  const r = S.fx.rates[cur];
+  if(r && r>0) return r;
+  return FX_FALLBACK[cur] || NaN;
+}
+function usingFallbackFx(){ return Object.keys(currenciesInUse()).some(c=>!(S.fx.rates[c]>0)); }
+function toCHF(a,cur){ return a*rate(cur); }
+function toBase(a,cur){ return toCHF(a,cur)/rate(S.base); }
+function chfToBase(x){ return x/rate(S.base); }
+function currenciesInUse(){
+  const set={CHF:1,EUR:1,USD:1}; Object.keys(S.fx.rates).forEach(c=>set[c]=1);
+  S.accounts.forEach(a=>a.balances.forEach(b=>set[b.cur]=1));
+  S.positions.forEach(p=>set[p.currency]=1);
+  return set;
+}
+function accTotalCHF(a){ return a.balances.reduce((s,b)=>s+toCHF(+b.amount||0,b.cur),0); }
+function posCalc(p){
+  const qty=+p.qty||0, avg=+p.avg||0, price = (p.price!=null && isFinite(p.price))? +p.price : null;
+  const cost=qty*avg, value= price==null? null : qty*price;
+  const pl = value==null? null : value-cost;
+  const pct = value==null||cost===0? null : pl/cost;
+  return {qty,avg,price,cost,value,pl,pct,
+    costCHF:toCHF(cost,p.currency), valueCHF: value==null?null:toCHF(value,p.currency), plCHF: pl==null?null:toCHF(pl,p.currency)};
+}
+// valeur prise en compte dans le total : si pas de cours, on utilise le coût d'achat
+function posValueCHF(p){ const c=posCalc(p); return c.valueCHF!=null? c.valueCHF : c.costCHF; }
+function totals(){
+  const byAcc=[], byCat={}, byCur={};
+  let total=0;
+  S.accounts.forEach(a=>{
+    const v=accTotalCHF(a); total+=v;
+    byAcc.push({id:a.id, name:a.name, color:a.color, v});
+    byCat[a.category]=(byCat[a.category]||0)+v;
+    a.balances.forEach(b=>{ byCur[b.cur]=(byCur[b.cur]||0)+toCHF(+b.amount||0,b.cur); });
+  });
+  S.positions.forEach((p,i)=>{
+    const v=posValueCHF(p); total+=v;
+    byAcc.push({id:p.id, name:(p.ticker||"?")+(p.custody?" · "+p.custody:""), color:PALETTE[(i+6)%PALETTE.length], v, pos:true});
+    byCat.titres=(byCat.titres||0)+v;
+    byCur[p.currency]=(byCur[p.currency]||0)+v;
+  });
+  let pl=0, cost=0, anyPrice=false;
+  S.positions.forEach(p=>{ const c=posCalc(p); cost+=c.costCHF; if(c.plCHF!=null){pl+=c.plCHF; anyPrice=true;} });
+  return {total, byAcc, byCat, byCur, pl, cost, anyPrice};
+}
+
+/* ================= Rendu ================= */
+const $ = id=>document.getElementById(id);
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+
+function curOptions(sel){
+  return Object.keys(currenciesInUse()).sort().map(c=>`<option ${c===sel?"selected":""}>${c}</option>`).join("");
+}
+function catOptions(sel){
+  return Object.entries(CATS).filter(([k])=>k!=="titres").map(([k,v])=>`<option value="${k}" ${k===sel?"selected":""}>${v}</option>`).join("");
+}
+
+function renderAccounts(){
+  const el=$("accList");
+  if(!S.accounts.length){ el.innerHTML=`<div class="empty">Aucun compte. Cliquez sur « Ajouter un compte ».</div>`; return; }
+  el.innerHTML = S.accounts.map(a=>`
+    <div class="card acc" style="--c:${a.color}" data-acc="${a.id}">
+      <div class="head">
+        <input type="color" value="${a.color}" data-f="color" title="Couleur" style="width:34px;height:30px;padding:2px">
+        <input class="name" value="${esc(a.name)}" data-f="name" aria-label="Nom du compte">
+        <button class="btn icon sm danger" data-act="delAcc" title="Supprimer ce compte">🗑</button>
+      </div>
+      <div class="meta">
+        <select data-f="category" aria-label="Catégorie">${catOptions(a.category)}</select>
+        <span class="badge ${a.updated?"ok":"todo"}" data-badge>${a.updated?"Mis à jour le "+fmtDate(a.updated):"à compléter"}</span>
+      </div>
+      ${a.balances.map((b,i)=>`
+        <div class="bal">
+          <select data-f="cur" data-i="${i}" aria-label="Devise">${curOptions(b.cur)}</select>
+          <input class="num" inputmode="decimal" data-f="amount" data-i="${i}" value="${fmtNum(+b.amount||0)}" aria-label="Solde" ${a.updated?"":'placeholder="à compléter"'}>
+          ${a.balances.length>1?`<button class="btn icon sm danger" data-act="delBal" data-i="${i}" title="Retirer cette devise">✕</button>`:`<span></span>`}
+        </div>`).join("")}
+      <div class="row"><button class="btn sm" data-act="addBal">＋ Devise</button></div>
+      <textarea data-f="note" rows="1" placeholder="Note (IBAN partiel, taux, etc.)">${esc(a.note||"")}</textarea>
+      <div class="tot"><span class="muted small">Total</span><b data-acctot></b></div>
+    </div>`).join("");
+}
+
+function renderPositions(){
+  const el=$("posList");
+  if(!S.positions.length){ el.innerHTML=`<div class="empty">Aucune position. Cliquez sur « Ajouter une position ».</div>`; return; }
+  el.innerHTML = S.positions.map(p=>`
+    <div class="card poscard" data-pos="${p.id}">
+      <div class="ph">
+        <span class="tick">${esc(p.ticker||"?")}</span>
+        <div style="flex:1;min-width:0"><input value="${esc(p.name||"")}" data-f="name" placeholder="Nom" style="width:100%;font-weight:600"></div>
+        <button class="btn icon sm danger" data-act="delPos" title="Supprimer la position">🗑</button>
+      </div>
+      <div class="fields">
+        <div class="fld"><label>Symbole</label><input data-f="ticker" value="${esc(p.ticker||"")}" placeholder="ex. TSLA, SIX:NESN"></div>
+        <div class="fld"><label>Devise</label><select data-f="currency">${curOptions(p.currency)}</select></div>
+        <div class="fld"><label>Quantité</label><input class="num" inputmode="decimal" data-f="qty" value="${fmtNum(+p.qty||0, (+p.qty%1)?4:0)}"></div>
+        <div class="fld"><label>Prix d'achat moyen</label><input class="num" inputmode="decimal" data-f="avg" value="${fmtNum(+p.avg||0)}"></div>
+        <div class="fld"><label>Cours actuel <span data-srcbadge></span></label><input class="num" inputmode="decimal" data-f="price" value="${p.price!=null?fmtNum(p.price):""}" placeholder="saisir le cours"></div>
+        <div class="fld"><label>Dépositaire</label><input data-f="custody" value="${esc(p.custody||"")}" placeholder="ex. Swissquote"></div>
+      </div>
+      <div class="small muted" style="margin-top:6px" data-pdate></div>
+      <div class="stats" data-stats></div>
+    </div>`).join("");
+}
+
+function updateComputed(){
+  // comptes
+  document.querySelectorAll("[data-acc]").forEach(card=>{
+    const a=S.accounts.find(x=>x.id===card.dataset.acc); if(!a) return;
+    const tCHF=accTotalCHF(a);
+    const single = a.balances.length===1 && a.balances[0].cur===S.base;
+    card.querySelector("[data-acctot]").innerHTML = fmtMoney(chfToBase(tCHF),S.base) + (a.balances.length===1 && !single? ` <span class="small muted">(${fmtMoney(+a.balances[0].amount||0,a.balances[0].cur)})</span>`:"");
+    const bd=card.querySelector("[data-badge]"); bd.className="badge "+(a.updated?"ok":"todo"); bd.textContent=a.updated?"Mis à jour le "+fmtDate(a.updated):"à compléter";
+  });
+  // positions
+  document.querySelectorAll("[data-pos]").forEach(card=>{
+    const p=S.positions.find(x=>x.id===card.dataset.pos); if(!p) return;
+    const c=posCalc(p), cur=p.currency;
+    card.querySelector(".tick").textContent=p.ticker||"?";
+    const sb=card.querySelector("[data-srcbadge]");
+    sb.innerHTML = p.price==null? `<span class="badge todo">à compléter</span>` : (p.priceSource && p.priceSource!=="manuel" ? `<span class="badge live">auto</span>` : `<span class="badge man">manuel</span>`);
+    card.querySelector("[data-pdate]").textContent = p.price==null ? "Cours indisponible : saisissez-le manuellement (la valeur est estimée au prix d'achat en attendant)." :
+      (p.priceSource==="manuel"?"Cours saisi le ":"Cours récupéré le ")+fmtDT(p.priceDate)+" · source : "+(p.priceSource||"manuel");
+    const cls = v=> v==null?"":(v>=0?"pos":"neg");
+    const showChf = cur!=="CHF";
+    card.querySelector("[data-stats]").innerHTML = `
+      <div class="stat"><div class="l">Prix de revient</div><div class="v">${fmtMoney(c.cost,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.costCHF,"CHF")}</div>`:""}</div>
+      <div class="stat"><div class="l">Valeur actuelle</div><div class="v">${fmtMoney(c.value,cur)}</div>${showChf?`<div class="s">${fmtMoney(c.valueCHF,"CHF")}</div>`:""}</div>
+      <div class="stat"><div class="l">Plus/moins-value (${cur})</div><div class="v ${cls(c.pl)}">${fmtSigned(c.pl,cur)}</div></div>
+      <div class="stat"><div class="l">Plus/moins-value (CHF)</div><div class="v ${cls(c.plCHF)}">${fmtSigned(c.plCHF,"CHF")}</div></div>
+      <div class="stat wide"><div><div class="l">Performance</div><div class="s">Taux de change actuel appliqué au coût et à la valeur</div></div><div class="v ${cls(c.pct)}">${fmtPct(c.pct)}</div></div>`;
+  });
+
+  // total / KPI
+  const T=totals(), B=S.base;
+  $("nwTotal").textContent = fmtMoney(chfToBase(T.total),B);
+  const liq=(T.byCat.courant||0)+(T.byCat.epargne||0), inv=(T.byCat.investissement||0)+(T.byCat.titres||0), prev=T.byCat.prevoyance||0;
+  const pct = x=> T.total>0? fmtNum(x/T.total*100,1)+" % du total" : "";
+  $("kpis").innerHTML = `
+    <div class="kpi"><div class="l">Liquidités</div><div class="v">${fmtMoney(chfToBase(liq),B,0)}</div><div class="s">${pct(liq)}</div></div>
+    <div class="kpi"><div class="l">Investissements</div><div class="v">${fmtMoney(chfToBase(inv),B,0)}</div><div class="s">${pct(inv)}</div></div>
+    <div class="kpi"><div class="l">Prévoyance (3a)</div><div class="v">${fmtMoney(chfToBase(prev),B,0)}</div><div class="s">${pct(prev)}</div></div>
+    <div class="kpi"><div class="l">+/- latente titres</div><div class="v ${T.anyPrice?(T.pl>=0?"pos":"neg"):""}">${T.anyPrice?fmtSigned(chfToBase(T.pl),B,0):"—"}</div><div class="s">${T.anyPrice&&T.cost?fmtPct(T.pl/T.cost)+" sur le coût":"cours à compléter"}</div></div>`;
+  const todo=S.accounts.filter(a=>!a.updated).length, todoP=S.positions.filter(p=>p.price==null).length;
+  $("todoNote").textContent = (todo||todoP)? `⚠ ${todo?todo+" compte(s)":""}${todo&&todoP?" et ":""}${todoP?todoP+" cours":""} à compléter` : "";
+  // delta vs dernier instantané
+  const snaps=sortedSnaps();
+  if(snaps.length){
+    // référence : dernier instantané antérieur à aujourd'hui (sinon le dernier)
+    const before=snaps.filter(s=>s.date<today()); const last=before.length? before[before.length-1] : snaps[snaps.length-1];
+    const lastB=snapInBase(last), d=chfToBase(T.total)-lastB;
+    $("nwDelta").innerHTML = `<span class="${d>=0?"pos":"neg"}">${fmtSigned(d,B)}</span> depuis l'instantané du ${fmtDate(last.date)}`+(lastB? ` (${fmtPct(d/lastB)})`:"");
+  } else $("nwDelta").textContent="Aucun instantané enregistré pour l'instant";
+  renderStatus();
+  renderFxGrid(false);
+  renderCharts(T);
+}
+
+function renderStatus(){
+  const fx=S.fx, pos=S.positions;
+  const live=pos.filter(p=>p.priceSource&&p.priceSource!=="manuel"&&p.price!=null);
+  let h="";
+  h += fx.manual ? `<span class="badge man">Taux manuels</span>` : (fx.source? `<span class="badge live">Taux ${esc(fx.source)} · ${fmtDate(fx.date)}</span>` : `<span class="badge man">Taux approximatifs (hors ligne)</span>`);
+  if(pos.length){
+    h += live.length===pos.length ? `<span class="badge live">Cours auto · ${fmtDT(live[0].priceDate)}</span>` :
+         live.length? `<span class="badge man">Cours partiellement manuels</span>` : `<span class="badge man">Cours manuels</span>`;
+  }
+  $("statusBar").innerHTML=h;
+}
+
+function renderFxGrid(force){
+  const g=$("fxGrid");
+  const curs=Object.keys(currenciesInUse()).filter(c=>c!=="CHF").sort();
+  if(!force && g.dataset.k===curs.join()+"|"+S.fx.fetchedAt+"|"+S.fx.manual && document.activeElement && g.contains(document.activeElement)) return;
+  g.dataset.k=curs.join()+"|"+S.fx.fetchedAt+"|"+S.fx.manual;
+  g.innerHTML = curs.map(c=>`<div class="fld"><label>1 ${c} = ? CHF</label><input class="num" inputmode="decimal" data-fx="${c}" value="${S.fx.rates[c]>0?fmtNum(S.fx.rates[c],4):""}" placeholder="≈ ${fmtNum(FX_FALLBACK[c]||0,4)}"></div>`).join("");
+  $("fxManual").checked=!!S.fx.manual;
+  $("fxInfo").textContent = S.fx.manual? "manuels" : (S.fx.source? `${S.fx.source} · ${fmtDate(S.fx.date)}` : "non actualisés");
+}
+
+/* ================= Graphiques ================= */
+const charts={};
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function legendHTML(items,total){
+  return items.map(it=>`<div><div class="row" style="gap:8px"><span class="dot" style="background:${it.color}"></span><span class="nm">${esc(it.name)}</span><span class="am">${fmtMoney(chfToBase(it.v),S.base,0)}</span><span class="pc">${total>0?fmtNum(it.v/total*100,1)+"%":"—"}</span></div><div class="bar"><i style="width:${total>0?Math.max(0,it.v/total*100):0}%;background:${it.color}"></i></div></div>`).join("") || `<div class="muted small">Aucune donnée</div>`;
+}
+function noChart(canvas,msg){
+  const box=canvas.parentElement;
+  if(!box.querySelector(".nochart")){ canvas.style.display="none"; const d=document.createElement("div"); d.className="nochart"; box.appendChild(d); }
+  box.querySelector(".nochart").textContent=msg;
+}
+function clearNoChart(canvas){ const n=canvas.parentElement.querySelector(".nochart"); if(n) n.remove(); canvas.style.display=""; }
+function donut(key, canvasId, items, total){
+  const cv=$(canvasId);
+  const data=items.filter(i=>i.v>0);
+  if(typeof Chart==="undefined"){ noChart(cv,"Graphiques indisponibles hors ligne (Chart.js non chargé). La légende ci-dessous reste exacte."); return; }
+  if(!data.length){ if(charts[key]){charts[key].destroy();delete charts[key];} noChart(cv,"Renseignez vos soldes pour voir la répartition"); return; }
+  clearNoChart(cv);
+  const cfg={labels:data.map(d=>d.name), datasets:[{data:data.map(d=>chfToBase(d.v)), backgroundColor:data.map(d=>d.color), borderColor:cssVar("--card"), borderWidth:3, hoverOffset:8}]};
+  if(charts[key]){ charts[key].data=cfg; charts[key].update(); return; }
+  charts[key]=new Chart(cv,{type:"doughnut",data:cfg,options:{responsive:true,maintainAspectRatio:false,cutout:"68%",
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+c.label+" : "+fmtMoney(c.parsed,S.base)}}}}});
+}
+function renderCharts(T){
+  const total=T.total;
+  const accItems=T.byAcc.slice().sort((a,b)=>b.v-a.v);
+  const catItems=Object.entries(T.byCat).map(([k,v])=>({name:CATS[k]||k,v,color:CAT_COLORS[k]||"#888"})).sort((a,b)=>b.v-a.v);
+  const curItems=Object.entries(T.byCur).map(([k,v],i)=>({name:k,v,color:CUR_COLORS[k]||PALETTE[(i+4)%PALETTE.length]})).sort((a,b)=>b.v-a.v);
+  $("lgAcc").innerHTML=legendHTML(accItems,total);
+  $("lgCat").innerHTML=legendHTML(catItems,total);
+  $("lgCur").innerHTML=legendHTML(curItems,total);
+  donut("acc","chAcc",accItems,total);
+  donut("cat","chCat",catItems,total);
+  donut("cur","chCur",curItems,total);
+  renderHistory();
+}
+function sortedSnaps(){ return S.snapshots.slice().sort((a,b)=>a.date.localeCompare(b.date)); }
+function snapInBase(s){ // valeur d'un instantané dans la devise de référence, au taux de l'époque
+  const r=(s.rates&&s.rates[S.base])||rate(S.base); return s.totalCHF/r;
+}
+function monthly(){
+  const m={}; sortedSnaps().forEach(s=>{ m[s.date.slice(0,7)]=s; });
+  const keys=Object.keys(m).sort();
+  return keys.map((k,i)=>{ const v=snapInBase(m[k]); const prev=i?snapInBase(m[keys[i-1]]):null; return {ym:k, v, d: prev==null?null:v-prev, p: prev? (v-prev)/prev : null, snap:m[k]}; });
+}
+function renderHistory(){
+  const snaps=sortedSnaps(), B=S.base;
+  $("histInfo").textContent = snaps.length? snaps.length+" instantané(s)" : "";
+  // tableau instantanés
+  $("snapTable").innerHTML = snaps.length? `<thead><tr><th>Date</th><th class="r">Total (${B})</th><th class="r">Variation</th>${S.accounts.map(a=>`<th class="r">${esc(a.name)}</th>`).join("")}<th class="r">Titres</th><th></th></tr></thead><tbody>`+
+    snaps.slice().reverse().map((s,i,arr)=>{
+      const prev=arr[i+1]; const v=snapInBase(s); const d=prev? v-snapInBase(prev):null;
+      const r=(s.rates&&s.rates[B])||rate(B);
+      const posSum=Object.entries(s.perItem||{}).filter(([k])=>s.kinds&&s.kinds[k]==="pos").reduce((t,[,x])=>t+x,0);
+      return `<tr><td>${fmtDate(s.date)}</td><td class="r"><b>${fmtNum(v)}</b></td><td class="r ${d==null?"":(d>=0?"pos":"neg")}">${d==null?"—":fmtSigned(d,"")}</td>
+        ${S.accounts.map(a=>`<td class="r">${s.perItem&&s.perItem[a.id]!=null?fmtNum(s.perItem[a.id]/r):"—"}</td>`).join("")}
+        <td class="r">${fmtNum(posSum/r)}</td>
+        <td><button class="btn icon sm danger" data-delsnap="${esc(s.date)}" title="Supprimer">✕</button></td></tr>`;
+    }).join("")+"</tbody>" : `<tbody><tr><td class="muted">Aucun instantané. Cliquez sur « Enregistrer un instantané » après avoir mis vos soldes à jour.</td></tr></tbody>`;
+  const M=monthly();
+  $("monthTable").innerHTML = M.length? `<thead><tr><th>Mois</th><th class="r">Patrimoine (${B})</th><th class="r">Variation</th><th class="r">%</th></tr></thead><tbody>`+
+    M.slice().reverse().map(x=>`<tr><td>${fmtMonth(x.ym)}</td><td class="r"><b>${fmtNum(x.v)}</b></td><td class="r ${x.d==null?"":(x.d>=0?"pos":"neg")}">${x.d==null?"—":fmtSigned(x.d,"")}</td><td class="r ${x.p==null?"":(x.p>=0?"pos":"neg")}">${fmtPct(x.p)}</td></tr>`).join("")+"</tbody>"
+    : `<tbody><tr><td class="muted">La synthèse mensuelle apparaîtra après vos premiers instantanés.</td></tr></tbody>`;
+
+  const cvH=$("chHist"), cvM=$("chMonth");
+  if(typeof Chart==="undefined"){ noChart(cvH,"Graphique indisponible hors ligne — voir le tableau « Historique » ci-dessous."); noChart(cvM,"Graphique indisponible hors ligne — voir la « Synthèse mensuelle »."); return; }
+  const grid=cssVar("--line"), txt=cssVar("--mut"), acc=cssVar("--acc");
+  const axes={x:{grid:{color:grid},ticks:{color:txt}},y:{grid:{color:grid},ticks:{color:txt,callback:v=>fmtNum(v,0)}}};
+  if(!snaps.length){ ["hist","month"].forEach(k=>{if(charts[k]){charts[k].destroy();delete charts[k];}}); noChart(cvH,"Enregistrez des instantanés pour tracer votre courbe de patrimoine"); noChart(cvM,"Évolution mois par mois après au moins un instantané"); return; }
+  clearNoChart(cvH); clearNoChart(cvM);
+  const hData={labels:snaps.map(s=>fmtDate(s.date)),datasets:[{label:"Patrimoine net ("+B+")",data:snaps.map(snapInBase),borderColor:acc,backgroundColor:(ctx)=>{const c=ctx.chart.ctx;const g=c.createLinearGradient(0,0,0,ctx.chart.height||300);g.addColorStop(0,acc+"66");g.addColorStop(1,acc+"00");return g;},fill:true,tension:.3,pointRadius:4,pointBackgroundColor:acc}]};
+  if(charts.hist){charts.hist.data=hData;charts.hist.options.scales=axes;charts.hist.update();}
+  else charts.hist=new Chart(cvH,{type:"line",data:hData,options:{responsive:true,maintainAspectRatio:false,scales:axes,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>" "+fmtMoney(c.parsed.y,B)}}}}});
+  const pos=cssVar("--pos"), neg=cssVar("--neg");
+  const mData={labels:M.map(x=>fmtMonth(x.ym)),datasets:[
+    {type:"bar",label:"Variation",data:M.map(x=>x.d==null?0:x.d),backgroundColor:M.map(x=>(x.d||0)>=0?pos+"cc":neg+"cc"),borderRadius:6,yAxisID:"y"}]};
+  const mAxes={x:axes.x,y:axes.y};
+  if(charts.month){charts.month.data=mData;charts.month.options.scales=mAxes;charts.month.update();}
+  else charts.month=new Chart(cvM,{type:"bar",data:mData,options:{responsive:true,maintainAspectRatio:false,scales:mAxes,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const x=M[c.dataIndex];return x.d==null?" Premier mois : "+fmtMoney(x.v,B):" "+fmtSigned(x.d,B)+" ("+fmtPct(x.p)+") → "+fmtMoney(x.v,B);}}}}}});
+}
+
+/* ================= Données en direct ================= */
+async function fetchJSON(url, ms=8000){
+  const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),ms);
+  try{ const r=await fetch(url,{signal:ctl.signal,cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); return await r.json(); }
+  finally{ clearTimeout(t); }
+}
+async function refreshFx(silent){
+  if(S.fx.manual){ if(!silent) toast("Taux manuels activés : actualisation ignorée"); return false; }
+  const curs=Object.keys(currenciesInUse()).filter(c=>c!=="CHF");
+  // 1) Frankfurter (BCE)
+  try{
+    const j=await fetchJSON("https://api.frankfurter.dev/v1/latest?base=CHF&symbols="+curs.join(","));
+    if(j&&j.rates){ curs.forEach(c=>{ if(j.rates[c]>0) S.fx.rates[c]=1/j.rates[c]; });
+      Object.assign(S.fx,{date:j.date,source:"BCE (Frankfurter)",fetchedAt:Date.now()}); save(true); return true; }
+  }catch(e){ console.warn("Frankfurter indisponible",e.message); }
+  // 2) ExchangeRate-API (open access)
+  try{
+    const j=await fetchJSON("https://open.er-api.com/v6/latest/CHF");
+    if(j&&j.rates){ curs.forEach(c=>{ if(j.rates[c]>0) S.fx.rates[c]=1/j.rates[c]; });
+      Object.assign(S.fx,{date:new Date(j.time_last_update_unix*1000).toISOString().slice(0,10),source:"ExchangeRate-API",fetchedAt:Date.now()}); save(true); return true; }
+  }catch(e){ console.warn("ExchangeRate-API indisponible",e.message); }
+  if(!silent) toast("Taux de change indisponibles : derniers taux connus conservés");
+  return false;
+}
+// Cours via le scanner public TradingView (sans clé, CORS autorisé, différé ~15 min)
+async function fetchPrice(p){
+  const t=(p.ticker||"").trim().toUpperCase(); if(!t) return null;
+  const cands = t.includes(":")? [t] : [p.exchange?p.exchange+":"+t:null,"NASDAQ:"+t,"NYSE:"+t,"AMEX:"+t,"SIX:"+t,"XETR:"+t,"EURONEXT:"+t].filter(Boolean);
+  const seen={};
+  for(const sym of cands){
+    if(seen[sym]) continue; seen[sym]=1;
+    try{
+      const j=await fetchJSON("https://scanner.tradingview.com/symbol?symbol="+encodeURIComponent(sym)+"&fields=close,currency,description",7000);
+      if(j && typeof j.close==="number" && j.close>0){ return {price:j.close,currency:j.currency,name:j.description,exchange:sym.split(":")[0]}; }
+    }catch(e){ /* suivant */ }
+  }
+  return null;
+}
+async function refreshPrices(silent){
+  let ok=0, ko=0;
+  for(const p of S.positions){
+    const r=await fetchPrice(p);
+    if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource="TradingView (différé)"; p.exchange=r.exchange;
+           if(!p.name && r.name) p.name=r.name;
+           if(r.currency && r.currency!==p.currency){ p.currency=r.currency; }
+           ok++; }
+    else ko++;
+  }
+  save(true);
+  if(!silent || ko) toast(ko? `Cours : ${ok} actualisé(s), ${ko} indisponible(s) — saisie manuelle possible` : `Cours actualisés (${ok})`);
+  return ok;
+}
+async function refreshAll(silent){
+  $("refreshBtn").disabled=true;
+  try{ await refreshFx(silent); await refreshPrices(silent); }
+  finally{ $("refreshBtn").disabled=false; renderPositions(); renderAccounts(); updateComputed(); }
+}
+
+/* ================= Instantanés ================= */
+function takeSnapshot(date){
+  date = date || today();
+  const exists=S.snapshots.find(s=>s.date===date);
+  if(exists && !confirm("Un instantané existe déjà le "+fmtDate(date)+". Le remplacer ?")) return;
+  const T=totals(); const perItem={}, kinds={};
+  T.byAcc.forEach(x=>{ perItem[x.id]=x.v; kinds[x.id]=x.pos?"pos":"acc"; });
+  const names={}; S.accounts.forEach(a=>names[a.id]=a.name); S.positions.forEach(p=>names[p.id]=p.ticker);
+  const snap={date,totalCHF:T.total,perItem,kinds,names,perCat:T.byCat,rates:Object.assign({},S.fx.rates,{CHF:1}),takenAt:new Date().toISOString()};
+  // garantir des taux pour la conversion future
+  ["EUR","USD"].forEach(c=>{ if(!(snap.rates[c]>0)) snap.rates[c]=rate(c); });
+  S.snapshots=S.snapshots.filter(s=>s.date!==date); S.snapshots.push(snap);
+  save(); updateComputed(); toast("Instantané du "+fmtDate(date)+" enregistré : "+fmtMoney(chfToBase(T.total),S.base));
+}
+
+/* ================= Import / export ================= */
+function exportJSON(){
+  S.meta.lastExport=new Date().toISOString(); save(true);
+  const blob=new Blob([fileText()],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="mywealth-"+today()+".json";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+  toast("Sauvegarde exportée");
+}
+function importJSON(file){
+  const fr=new FileReader();
+  fr.onload=()=>{
+    try{
+      const j=JSON.parse(fr.result);
+      if(!isPatrimoineData(j)) throw new Error("format");
+      if(schemaOf(j)>SCHEMA_VERSION){ alert(futureMsg(file.name, schemaOf(j))); return; }
+      if(!confirm("Remplacer toutes les données actuelles par celles du fichier « "+file.name+" » ?"+(cloudOn()?"\n\nLa copie dans "+Prov().label+" sera mise à jour.":""))) return;
+      S=migrate(j); save(); applyTheme(); fullRender(); toast("Données importées");
+    }catch(e){ alert("Fichier invalide : ce n'est pas une sauvegarde de ce tableau de bord."); }
+  };
+  fr.readAsText(file);
+}
+
+
+/* ================= Synchronisation cloud (OneDrive ou Dropbox) ================= */
+const CFG = window.MYWEALTH_CONFIG || {};
+const REMOTE_NAME = "mywealth-donnees.json";          // fichier principal dans le dossier de l'app
+const LEGACY_NAMES = ["patrimoine-donnees.json"];      // ancien nom (version ordinateur) : repris s'il est présent
+const CLOUD_KEY = "mywealth.cloud";
+const APP_BASE = new URL("./", location.href).href;     // ex. https://pseudo.github.io/mywealth/
+const SNOOZE_CLOUD = "mywealth.rappelCloud";
+function loadCloud(){ try{ return Object.assign({provider:null,etag:null,syncedKey:null,userDirty:false,lastSync:null,lastBackupMonth:null,lastBackupAt:0,account:null}, JSON.parse(localStorage.getItem(CLOUD_KEY)||"{}")); }catch(e){ return {provider:null}; } }
+let C = loadCloud();
+function saveCloud(){ try{ localStorage.setItem(CLOUD_KEY, JSON.stringify(C)); }catch(e){} }
+const SYNC = { state:"off", err:null, timer:null, busy:false, again:false, blocked:false };
+function futureMsg(name,v){ return "Le fichier « "+name+" » a été créé par une version plus récente de MyWealth (format v"+v+", cette version gère jusqu'à v"+SCHEMA_VERSION+").\n\nMettez l'application à jour (fichiers sur GitHub). Rien n'a été modifié."; }
+function fileText(){
+  const o={app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:S.savedAt||new Date().toISOString(),
+    _info:"Données MyWealth (patrimoine.html / app MyWealth) — fichier JSON lisible, ne pas renommer les champs."};
+  for(const k in S){ if(!(k in o)) o[k]=S[k]; }
+  return JSON.stringify(o,null,2);
+}
+function hasUserData(s){ return s.accounts.some(a=>a.updated) || s.snapshots.length>0 || s.positions.some(p=>p.priceSource==="manuel"); }
+function daysSince(iso){ return iso? Math.floor((Date.now()-new Date(iso))/864e5) : null; }
+function agoTxt(iso){ const d=daysSince(iso); if(d==null) return "jamais"; if(d===0) return "aujourd'hui"; if(d===1) return "hier"; return "il y a "+d+" jours"; }
+function hm(d){ d=new Date(d); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function httpErr(r,extra){ const e=new Error("HTTP "+r.status+(extra?" – "+extra:"")); e.status=r.status; return e; }
+function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=()=>rej(new Error("Impossible de charger "+src)); document.head.appendChild(s); }); }
+function b64url(bytes){ return btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function randStr(n){ const a=new Uint8Array(n); crypto.getRandomValues(a); return b64url(a); }
+
+/* ---------- Fournisseur OneDrive (Microsoft Graph, dossier de l'application) ---------- */
+const GRAPH = "https://graph.microsoft.com/v1.0";
+const MS_SCOPES = ["Files.ReadWrite.AppFolder"];
+const OneDrive = {
+  id:"onedrive", label:"OneDrive", where:"OneDrive › Applications (Apps) › MyWealth",
+  pca:null, account:null, ready:false,
+  configured(){ return !!CFG.ONEDRIVE_CLIENT_ID; },
+  async init(){
+    if(!this.configured() || this.ready) return;
+    if(typeof msal==="undefined") await loadScript("vendor/msal-browser.min.js");
+    this.pca = new msal.PublicClientApplication({
+      auth:{ clientId:CFG.ONEDRIVE_CLIENT_ID, authority:"https://login.microsoftonline.com/consumers",
+             redirectUri:new URL("redirect.html", APP_BASE).href, postLogoutRedirectUri:APP_BASE },
+      cache:{ cacheLocation:"localStorage" }
+    });
+    await this.pca.initialize();
+    const r = await this.pca.handleRedirectPromise();
+    if(r && r.account){ this.pca.setActiveAccount(r.account); C.provider="onedrive"; saveCloud(); }
+    this.account = this.pca.getActiveAccount() || this.pca.getAllAccounts()[0] || null;
+    if(this.account) this.pca.setActiveAccount(this.account);
+    this.ready=true;
+  },
+  signedIn(){ return !!this.account; },
+  accountName(){ return this.account ? (this.account.username || this.account.name || "") : ""; },
+  async login(){ await this.init(); await this.pca.loginRedirect({scopes:MS_SCOPES, prompt:"select_account"}); },
+  async reauth(){ await this.pca.acquireTokenRedirect({scopes:MS_SCOPES, account:this.account}); },
+  async logout(){ const a=this.account; this.account=null; if(this.pca && a) await this.pca.logoutRedirect({account:a}); },
+  async token(){
+    try{ return (await this.pca.acquireTokenSilent({scopes:MS_SCOPES, account:this.account})).accessToken; }
+    catch(e){
+      const code=(e && (e.errorCode||e.name))||"";
+      if(/interaction_required|login_required|consent_required|no_tokens_found|InteractionRequired/i.test(code)){ const x=new Error("reconnexion nécessaire"); x.reauth=true; throw x; }
+      throw e;
+    }
+  },
+  async read(name){
+    const t=await this.token();
+    const r=await fetch(GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name),{headers:{Authorization:"Bearer "+t}});
+    if(r.status===404) return null;
+    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(!r.ok) throw httpErr(r);
+    const meta=await r.json();
+    const d=await fetch(meta["@microsoft.graph.downloadUrl"]);
+    if(!d.ok) throw httpErr(d);
+    return {text:await d.text(), etag:meta.eTag, modified:meta.lastModifiedDateTime};
+  },
+  // etag : chaîne = n'écrit que si le fichier n'a pas changé ; null = création seulement ; "*" = écrase
+  async write(name,text,etag){
+    const t=await this.token();
+    let url=GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name)+":/content";
+    const h={Authorization:"Bearer "+t,"Content-Type":"application/json"};
+    if(etag===null) url+="?@microsoft.graph.conflictBehavior=fail"; else if(etag!=="*") h["If-Match"]=etag;
+    const r=await fetch(url,{method:"PUT",headers:h,body:text});
+    if(r.status===412 || r.status===409) return {conflict:true};
+    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(!r.ok) throw httpErr(r);
+    const j=await r.json(); return {etag:j.eTag};
+  }
+};
+
+/* ---------- Fournisseur Dropbox (OAuth PKCE, dossier « Applications/MyWealth ») ---------- */
+const DBX_KEY="mywealth.dropbox", DBX_PKCE="mywealth.dropbox.pkce";
+const DropboxP = {
+  id:"dropbox", label:"Dropbox", where:"Dropbox › Applications › (nom de votre app Dropbox)",
+  tok:null, ready:false,
+  configured(){ return !!CFG.DROPBOX_APP_KEY; },
+  load(){ try{ this.tok=JSON.parse(localStorage.getItem(DBX_KEY)||"null"); }catch(e){ this.tok=null; } },
+  store(){ try{ this.tok? localStorage.setItem(DBX_KEY,JSON.stringify(this.tok)) : localStorage.removeItem(DBX_KEY); }catch(e){} },
+  async init(){
+    if(!this.configured() || this.ready) return;
+    this.load();
+    const q=new URLSearchParams(location.search);
+    if(q.get("code") && q.get("state")){
+      let p=null; try{ p=JSON.parse(localStorage.getItem(DBX_PKCE)||"null"); }catch(e){}
+      history.replaceState(null,"",APP_BASE+location.hash);
+      if(p && p.state===q.get("state")){
+        localStorage.removeItem(DBX_PKCE);
+        const r=await fetch("https://api.dropboxapi.com/oauth2/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+          body:new URLSearchParams({code:q.get("code"),grant_type:"authorization_code",client_id:CFG.DROPBOX_APP_KEY,redirect_uri:APP_BASE,code_verifier:p.verifier})});
+        if(!r.ok) throw httpErr(r,"connexion Dropbox refusée");
+        const j=await r.json();
+        this.tok={refresh:j.refresh_token, access:j.access_token, exp:Date.now()+(j.expires_in||14400)*1000, account:null};
+        this.store(); C.provider="dropbox"; C.etag=null; C.syncedKey=null; saveCloud();
+        try{ const a=await this.api("users/get_current_account"); this.tok.account=a.email||(a.name&&a.name.display_name)||""; this.store(); }catch(e){}
+      }
+    } else if(q.get("error") && localStorage.getItem(DBX_PKCE)){
+      localStorage.removeItem(DBX_PKCE); history.replaceState(null,"",APP_BASE); toast("Connexion Dropbox annulée");
+    }
+    this.ready=true;
+  },
+  signedIn(){ return !!(this.tok && this.tok.refresh); },
+  accountName(){ return (this.tok && this.tok.account) || ""; },
+  async login(){
+    const verifier=randStr(48), state=randStr(16);
+    const challenge=b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+    localStorage.setItem(DBX_PKCE, JSON.stringify({verifier,state}));
+    C.provider="dropbox"; saveCloud();
+    location.href="https://www.dropbox.com/oauth2/authorize?"+new URLSearchParams({client_id:CFG.DROPBOX_APP_KEY,response_type:"code",
+      code_challenge:challenge,code_challenge_method:"S256",token_access_type:"offline",redirect_uri:APP_BASE,state});
+  },
+  async reauth(){ return this.login(); },
+  async logout(){
+    try{ if(this.tok) await fetch("https://api.dropboxapi.com/2/auth/token/revoke",{method:"POST",headers:{Authorization:"Bearer "+(await this.token())}}); }catch(e){}
+    this.tok=null; this.store();
+  },
+  async token(){
+    if(!this.signedIn()){ const x=new Error("non connecté"); x.reauth=true; throw x; }
+    if(this.tok.access && Date.now() < this.tok.exp-60000) return this.tok.access;
+    const r=await fetch("https://api.dropboxapi.com/oauth2/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:new URLSearchParams({grant_type:"refresh_token",refresh_token:this.tok.refresh,client_id:CFG.DROPBOX_APP_KEY})});
+    if(r.status===400||r.status===401){ const x=new Error("autorisation Dropbox expirée ou révoquée"); x.reauth=true; throw x; }
+    if(!r.ok) throw httpErr(r);
+    const j=await r.json(); this.tok.access=j.access_token; this.tok.exp=Date.now()+(j.expires_in||14400)*1000; this.store();
+    return this.tok.access;
+  },
+  async api(path){ const r=await fetch("https://api.dropboxapi.com/2/"+path,{method:"POST",headers:{Authorization:"Bearer "+await this.token()}}); if(!r.ok) throw httpErr(r); return r.json(); },
+  async read(name){
+    const r=await fetch("https://content.dropboxapi.com/2/files/download",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),"Dropbox-API-Arg":JSON.stringify({path:"/"+name})}});
+    if(r.status===409){ const t=await r.text(); if(/not_found/.test(t)) return null; throw httpErr(r,t.slice(0,120)); }
+    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(!r.ok) throw httpErr(r);
+    let meta={}; try{ meta=JSON.parse(r.headers.get("Dropbox-API-Result")||"{}"); }catch(e){}
+    return {text:await r.text(), etag:meta.rev||null, modified:meta.server_modified};
+  },
+  async write(name,text,etag){
+    const mode = etag===null? "add" : etag==="*"? "overwrite" : {".tag":"update", update:etag};
+    const r=await fetch("https://content.dropboxapi.com/2/files/upload",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),
+      "Content-Type":"application/octet-stream","Dropbox-API-Arg":JSON.stringify({path:"/"+name,mode,autorename:false,mute:true})},body:new Blob([text])});
+    if(r.status===409){ const t=await r.text(); if(/conflict/.test(t)) return {conflict:true}; throw httpErr(r,t.slice(0,120)); }
+    if(r.status===401){ const x=new Error("session expirée"); x.reauth=true; throw x; }
+    if(!r.ok) throw httpErr(r);
+    const j=await r.json(); return {etag:j.rev};
+  }
+};
+const PROVIDERS={onedrive:OneDrive, dropbox:DropboxP};
+function Prov(){ const p=PROVIDERS[C.provider]; return p && p.configured()? p : null; }
+function cloudOn(){ const p=Prov(); return !!(p && p.ready && p.signedIn()); }
+
+/* ---------- Choix en cas de conflit ---------- */
+function totalOf(state){ const keep=S; S=state; try{ return chfToBase(totals().total); } finally{ S=keep; } }
+function askConflict(remoteS, P){
+  return new Promise(res=>{
+    const dlg=$("conflictDlg");
+    $("cfRemote").innerHTML=`<b>${esc(P.label)}</b><br>modifié le ${remoteS.savedAt?fmtDT(remoteS.savedAt):"?"}<br>${fmtMoney(totalOf(remoteS),S.base)}`;
+    $("cfLocal").innerHTML=`<b>Cet appareil</b><br>modifié le ${S.savedAt?fmtDT(S.savedAt):"?"}<br>${fmtMoney(chfToBase(totals().total),S.base)}`;
+    $("cfKeepRemote").textContent="Garder la version "+P.label;
+    const done=v=>{ dlg.close(); res(v); };
+    $("cfKeepRemote").onclick=()=>done("remote"); $("cfKeepLocal").onclick=()=>done("local");
+    dlg.oncancel=e=>{ e.preventDefault(); };
+    dlg.showModal();
+  });
+}
+
+/* ---------- Moteur de synchronisation ---------- */
+function setSync(st,err){ SYNC.state=st; if(err!==undefined) SYNC.err=err; renderSyncUI(); }
+function adopt(remoteS){ S=remoteS; lastKey=dataKey(S); writeLocal(); applyTheme(); fullRender(); }
+async function pushNow(P, etag){
+  const k=dataKey(S), txt=fileText();
+  const r=await P.write(REMOTE_NAME, txt, etag);
+  if(r.conflict) return false;
+  C.etag=r.etag; C.syncedKey=k; if(dataKey(S)===k) C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud();
+  await maybeBackup(P, txt);
+  return true;
+}
+async function maybeBackup(P, txt){
+  const m=today().slice(0,7);
+  if(C.lastBackupMonth===m && Date.now()-(C.lastBackupAt||0) < 6*3600e3) return;
+  try{ await P.write("mywealth-donnees-"+m+".json", txt||fileText(), "*"); C.lastBackupMonth=m; C.lastBackupAt=Date.now(); saveCloud(); }
+  catch(e){ console.warn("Copie mensuelle impossible", e); }
+}
+// Synchronisation complète : lit le cloud, compare, puis écrit ou charge
+async function syncNow(){
+  const P=Prov();
+  if(!P || !P.ready || !P.signedIn()){ setSync("off"); return; }
+  if(SYNC.blocked){ setSync("error"); return; }
+  if(!navigator.onLine){ setSync("offline"); return; }
+  if(SYNC.busy){ SYNC.again=true; return; }
+  SYNC.busy=true; clearTimeout(SYNC.timer); SYNC.timer=null; setSync("syncing");
+  try{
+    let remote=await P.read(REMOTE_NAME), legacy=null;
+    if(!remote && !C.etag){ for(const n of LEGACY_NAMES){ const l=await P.read(n).catch(()=>null); if(l){ remote=l; legacy=n; break; } } }
+    const localDirty = C.syncedKey? (C.userDirty && dataKey(S)!==C.syncedKey) : hasUserData(S);
+    if(!remote){
+      // rien dans le cloud (première connexion ou fichier supprimé) : on y écrit les données de l'appareil
+      if(!(await pushNow(P, C.etag? "*" : null))) SYNC.again=true;
+    } else {
+      let j=null; try{ j=JSON.parse(remote.text); }catch(e){}
+      const name=legacy||REMOTE_NAME;
+      if(!isPatrimoineData(j)) throw new Error("le fichier « "+name+" » du cloud est illisible — il n'a pas été modifié");
+      if(schemaOf(j)>SCHEMA_VERSION){ SYNC.blocked=true; alert(futureMsg(name,schemaOf(j))); throw new Error("fichier créé par une version plus récente de MyWealth"); }
+      const remoteS=migrate(j);
+      const remoteChanged = !!legacy || remote.etag!==C.etag;
+      let keep = "remote";
+      if(dataKey(remoteS)===dataKey(S)) keep="same";
+      else if(!remoteChanged) keep = (C.userDirty || hasUserData(S) || !hasUserData(remoteS)) ? "local" : "remote"; // cache local perdu : ne jamais écraser le cloud avec un état vide
+      else if(localDirty) keep = await askConflict(remoteS, P);
+      if(keep==="same"){ C.etag=legacy? null : remote.etag; C.syncedKey=dataKey(S); C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud(); if(legacy) await pushNow(P,null); }
+      else if(keep==="remote"){
+        adopt(remoteS);
+        C.syncedKey=dataKey(S); C.userDirty=false; C.lastSync=new Date().toISOString();
+        if(legacy){ C.etag=null; saveCloud(); await pushNow(P,null); toast("Fichier « "+legacy+" » repris depuis "+P.label); }
+        else { C.etag=remote.etag; saveCloud(); if(schemaOf(j)<SCHEMA_VERSION) await pushNow(P, remote.etag); else await maybeBackup(P); toast("Données chargées depuis "+P.label); }
+      } else { // garder l'appareil
+        if(!(await pushNow(P, legacy? null : remote.etag))) SYNC.again=true;
+      }
+    }
+    setSync("ok", null);
+  }catch(e){
+    console.warn("Synchronisation impossible", e);
+    if(e.reauth) setSync("reauth", e);
+    else if(!navigator.onLine || e instanceof TypeError) setSync("offline", e);
+    else setSync("error", e);
+  }finally{
+    SYNC.busy=false;
+    if(SYNC.again){ SYNC.again=false; setTimeout(syncNow, 300); }
+  }
+}
+// Après une modification : écriture rapide (If-Match) ; si le cloud a changé entre-temps -> synchro complète
+async function pushChange(){
+  const P=Prov(); SYNC.timer=null;
+  if(!cloudOn() || SYNC.blocked) return;
+  if(!navigator.onLine){ setSync("offline"); return; }
+  if(SYNC.busy || !C.etag){ return syncNow(); }
+  SYNC.busy=true; setSync("syncing");
+  let needFull=false;
+  try{ needFull = !(await pushNow(P, C.etag)); setSync("ok", null); }
+  catch(e){ console.warn(e); if(e.reauth) setSync("reauth", e); else if(!navigator.onLine || e instanceof TypeError) setSync("offline", e); else setSync("error", e); }
+  finally{ SYNC.busy=false; if(needFull || SYNC.again){ SYNC.again=false; syncNow(); } }
+}
+function Cloud_schedule(auto){
+  if(!auto){ C.userDirty=true; saveCloud(); }
+  if(!cloudOn()) return;
+  clearTimeout(SYNC.timer); SYNC.timer=setTimeout(pushChange, 2000);
+  if(!SYNC.busy) setSync("pending");
+}
+async function Cloud_init(){
+  const q=new URLSearchParams(location.search);
+  if(!C.provider && q.get("code") && DropboxP.configured()) C.provider="dropbox";
+  const P=Prov();
+  if(!P){ setSync("off"); return; }
+  try{ await P.init(); }
+  catch(e){ console.warn("Initialisation du cloud impossible", e); setSync(navigator.onLine? "error":"offline", e); return; }
+  if(P.signedIn()) await syncNow(); else setSync("off");
+}
+async function Cloud_login(id){
+  const P=PROVIDERS[id]; if(!P||!P.configured()) return;
+  if(C.provider && C.provider!==id){ C.etag=null; C.syncedKey=null; }
+  C.provider=id; saveCloud();
+  try{ await P.login(); }catch(e){ console.warn(e); alert("Connexion impossible : "+(e.errorCode||e.message)); }
+}
+async function Cloud_logout(){
+  const P=Prov(); if(!P) return;
+  if(!confirm("Se déconnecter de "+P.label+" ? Les données restent sur cet appareil et dans "+P.label+".")) return;
+  C=Object.assign(loadCloud(),{provider:null,etag:null,syncedKey:null,account:null}); saveCloud();
+  try{ await P.logout(); }catch(e){ console.warn(e); }
+  setSync("off"); renderSyncUI();
+}
+window.addEventListener("online", ()=>{ if(cloudOn()) syncNow(); });
+window.addEventListener("offline", ()=>{ if(cloudOn()) setSync("offline"); });
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="visible" && cloudOn() && Date.now()-new Date(C.lastSync||0) > 20000) syncNow();
+  if(document.visibilityState==="hidden" && SYNC.timer){ clearTimeout(SYNC.timer); pushChange(); }
+});
+
+/* ---------- Affichage de l'état ---------- */
+function renderSyncUI(){
+  const P=Prov(), st=SYNC.state, on=cloudOn(), label=P?P.label:"";
+  const anyCfg=OneDrive.configured()||DropboxP.configured();
+  let cls="", t="";
+  if(on && st==="ok") { cls="ok"; t="Synchronisé avec "+label+(C.lastSync?" à "+hm(C.lastSync):""); }
+  else if(on && (st==="pending"||st==="syncing")) { cls="pending"; t= st==="pending"? "Modifications en attente…" : "Synchronisation avec "+label+"…"; }
+  else if(st==="offline") { cls="warn"; t="Hors ligne — données gardées sur l'appareil"+(C.userDirty?" (à synchroniser)":""); }
+  else if(st==="reauth") { cls="warn"; t="Reconnexion à "+label+" nécessaire"; }
+  else if(st==="error") { cls="err"; t="Erreur de synchronisation"; }
+  else if(!anyCfg) { cls="warn"; t="Données sur cet appareil uniquement · dernier export : "+agoTxt(S.meta.lastExport); }
+  else { cls="warn"; t="Non connecté au cloud"; }
+  if(!saveOk){ cls="err"; t+=" · stockage local bloqué"; }
+  $("fsStatus").className="fspill "+cls; $("fsStatusTxt").textContent=t;
+
+  const B=[];
+  if(st==="reauth") B.push(`<div class="banner warn"><span class="msg">🔑 <b>Reconnectez-vous à ${esc(label)}</b> pour reprendre la synchronisation. Vos modifications sont gardées sur l'appareil en attendant.</span><button class="btn primary" data-cl="reauth">Se reconnecter</button></div>`);
+  if(st==="error") B.push(`<div class="banner err"><span class="msg">⚠ Synchronisation impossible : ${esc((SYNC.err&&SYNC.err.message)||"erreur inconnue")}. Les données restent sur cet appareil.</span>${SYNC.blocked?"":`<button class="btn" data-cl="sync">Réessayer</button>`}</div>`);
+  let snoozed=false; try{ snoozed=Date.now() < +(localStorage.getItem(SNOOZE_CLOUD)||0); }catch(e){}
+  const exportDays=daysSince(S.meta.lastExport);
+  const needExport = !on && hasUserData(S) && (exportDays==null || exportDays>=30);
+  if(!on && st!=="reauth" && st!=="error" && anyCfg && !snoozed) B.push(`<div class="banner info"><span class="msg">☁️ Connectez-vous pour <b>synchroniser MyWealth</b> entre votre téléphone et votre ordinateur (fichier privé dans votre propre cloud).${needExport?` <b>Dernier export : ${agoTxt(S.meta.lastExport)}.</b>`:""}</span><span class="row">${DropboxP.configured()?`<button class="btn primary" data-cl="login-dropbox">Se connecter à Dropbox</button>`:""}${OneDrive.configured()?`<button class="btn primary" data-cl="login-onedrive">Se connecter avec Microsoft</button>`:""}<button class="btn sm" data-cl="snooze">Plus tard</button></span></div>`);
+  else if(needExport && (!anyCfg || snoozed)) B.push(`<div class="banner warn"><span class="msg">💾 Vos données ne sont enregistrées que sur cet appareil. <b>Dernier export : ${agoTxt(S.meta.lastExport)}</b>${exportDays==null?" — faites une première sauvegarde !":" — plus de 30 jours, il est temps d'exporter."}</span><button class="btn primary" data-cl="export">⤓ Exporter maintenant</button></div>`);
+  $("banners").innerHTML=B.join("");
+
+  const Pn=[];
+  if(!anyCfg){
+    Pn.push(`<div class="fsbox"><div class="ttl">Synchronisation cloud</div><p class="small muted" style="margin:0">Pas encore configurée : renseignez <code>DROPBOX_APP_KEY</code> ou <code>ONEDRIVE_CLIENT_ID</code> dans <code>config.js</code> (voir GUIDE.md). En attendant, les données restent sur cet appareil : utilisez Exporter / Importer.</p></div>`);
+  } else {
+    let body="";
+    if(on){
+      body=`<p class="small muted" style="margin:0 0 8px">Connecté à <b>${esc(label)}</b>${P.accountName()?" ("+esc(P.accountName())+")":""}. Fichier : <code>${esc(P.where)} › ${REMOTE_NAME}</code> + une copie par mois (<code>mywealth-donnees-AAAA-MM.json</code>).<br>Dernière synchronisation : ${C.lastSync?fmtDT(C.lastSync):"—"}.</p>
+        <div class="row"><button class="btn" data-cl="sync">⟳ Synchroniser maintenant</button><button class="btn sm danger" data-cl="logout">Se déconnecter</button></div>`;
+    } else {
+      body=`<p class="small muted" style="margin:0 0 8px">Connectez-vous pour enregistrer automatiquement vos données dans un dossier privé de votre cloud et les retrouver sur tous vos appareils. Rien n'est stocké ailleurs.</p>
+        <div class="row">${DropboxP.configured()?`<button class="btn primary" data-cl="login-dropbox">Se connecter à Dropbox</button>`:""}${OneDrive.configured()?`<button class="btn primary" data-cl="login-onedrive">Se connecter avec Microsoft (OneDrive)</button>`:""}</div>`;
+    }
+    Pn.push(`<div class="fsbox"><div class="ttl">Synchronisation cloud</div>${body}
+      <p class="small muted" style="margin:8px 0 0">Reprendre le fichier de la version ordinateur (<code>patrimoine-donnees.json</code> ou <code>mywealth-donnees.json</code>) : bouton « Importer », ou déposez-le dans le dossier de l'app de votre cloud (<i>Applications › …</i>) avant la première connexion.</p></div>`);
+  }
+  $("fsPanel").innerHTML=Pn.join("");
+  $("lastExportTxt").textContent="Dernier export : "+agoTxt(S.meta.lastExport)+(S.meta.lastExport?" ("+fmtDate(S.meta.lastExport.slice(0,10))+")":"")+".";
+  try{ $("storageInfo").textContent = "Format des données : v"+SCHEMA_VERSION+" · "+(fileText().length/1024).toFixed(1)+" Ko · "+S.snapshots.length+" instantané(s) · cache sur l'appareil : "+(saveOk?"actif":"indisponible"); }catch(e){}
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-cl]"); if(!b) return;
+  const a=b.dataset.cl;
+  if(a==="login-dropbox") Cloud_login("dropbox"); else if(a==="login-onedrive") Cloud_login("onedrive");
+  else if(a==="reauth"){ const P=Prov(); if(P) P.reauth().catch(err=>alert("Connexion impossible : "+(err.errorCode||err.message))); }
+  else if(a==="sync") syncNow(); else if(a==="logout") Cloud_logout(); else if(a==="export") exportJSON();
+  else if(a==="snooze"){ try{ localStorage.setItem(SNOOZE_CLOUD,String(Date.now()+7*864e5)); }catch(err){} renderSyncUI(); }
+});
+$("fsStatus").onclick=()=>{ if(SYNC.state==="reauth"){ const P=Prov(); if(P) P.reauth(); } else $("sauvegarde").scrollIntoView({behavior:"smooth"}); };
+window.addEventListener("beforeunload",()=>{ if(SYNC.timer){ clearTimeout(SYNC.timer); pushChange(); } });
+
+/* ================= Événements ================= */
+function applyTheme(){ document.documentElement.dataset.theme=S.theme; Object.values(charts).forEach(c=>c.destroy()); for(const k in charts) delete charts[k]; }
+function fullRender(){ $("baseSel").value=S.base; renderAccounts(); renderPositions(); renderFxGrid(true); updateComputed(); }
+
+$("accList").addEventListener("change",e=>{
+  const card=e.target.closest("[data-acc]"); if(!card) return;
+  const a=S.accounts.find(x=>x.id===card.dataset.acc); const f=e.target.dataset.f; const i=+e.target.dataset.i;
+  if(f==="name") a.name=e.target.value.trim()||"Compte";
+  else if(f==="color"){ a.color=e.target.value; card.style.setProperty("--c",a.color); }
+  else if(f==="category") a.category=e.target.value;
+  else if(f==="note") a.note=e.target.value;
+  else if(f==="cur"){ a.balances[i].cur=e.target.value; a.updated=today(); }
+  else if(f==="amount"){ const v=parseNum(e.target.value); if(isNaN(v)){ toast("Montant invalide"); e.target.value=fmtNum(+a.balances[i].amount||0); return; } a.balances[i].amount=v; a.updated=today(); e.target.value=fmtNum(v); e.target.removeAttribute("placeholder"); }
+  save(); if(f==="name"){ renderHistory(); } updateComputed();
+});
+$("accList").addEventListener("focusin",e=>{ if(e.target.dataset.f==="amount"){ const v=parseNum(e.target.value); if(v===0) e.target.value=""; else if(!isNaN(v)) e.target.value=String(v); e.target.select&&e.target.select(); }});
+$("accList").addEventListener("focusout",e=>{ if(e.target.dataset.f==="amount"){ const card=e.target.closest("[data-acc]"); const a=S.accounts.find(x=>x.id===card.dataset.acc); e.target.value=fmtNum(+a.balances[+e.target.dataset.i].amount||0);} });
+$("accList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const card=b.closest("[data-acc]"); const a=S.accounts.find(x=>x.id===card.dataset.acc);
+  if(b.dataset.act==="delAcc"){ if(!confirm("Supprimer le compte « "+a.name+" » ? (les instantanés passés sont conservés)")) return; S.accounts=S.accounts.filter(x=>x!==a); }
+  if(b.dataset.act==="addBal"){ const used=a.balances.map(x=>x.cur); const c=["CHF","EUR","USD","GBP"].find(x=>!used.includes(x))||"CHF"; a.balances.push({cur:c,amount:0}); }
+  if(b.dataset.act==="delBal"){ a.balances.splice(+b.dataset.i,1); }
+  save(); renderAccounts(); updateComputed();
+});
+$("addAccBtn").onclick=()=>{
+  S.accounts.push({id:uid(),name:"Nouveau compte",category:"epargne",color:PALETTE[S.accounts.length%PALETTE.length],balances:[{cur:S.base,amount:0}],updated:null,note:""});
+  save(); renderAccounts(); updateComputed();
+  const last=$("accList").lastElementChild.querySelector("input.name"); last.focus(); last.select();
+};
+
+$("posList").addEventListener("change",e=>{
+  const card=e.target.closest("[data-pos]"); if(!card) return;
+  const p=S.positions.find(x=>x.id===card.dataset.pos); const f=e.target.dataset.f; const v=e.target.value;
+  if(["qty","avg","price"].includes(f)){
+    if(f==="price" && v.trim()===""){ p.price=null; p.priceSource=null; p.priceDate=null; }
+    else { const n=parseNum(v); if(isNaN(n)||n<0){ toast("Nombre invalide"); return; } p[f]=n; e.target.value=fmtNum(n, f==="qty"&&n%1?4:(f==="qty"?0:2));
+      if(f==="price"){ p.priceSource="manuel"; p.priceDate=new Date().toISOString(); } }
+  } else if(f==="ticker"){ p.ticker=v.trim().toUpperCase(); p.exchange=null; e.target.value=p.ticker; fetchPrice(p).then(r=>{ if(r){ p.price=r.price; p.priceDate=new Date().toISOString(); p.priceSource="TradingView (différé)"; p.exchange=r.exchange; if(r.currency) p.currency=r.currency; if(!p.name) p.name=r.name||""; save(); renderPositions(); updateComputed(); toast("Cours trouvé : "+p.ticker+" "+fmtMoney(r.price,r.currency)); } }); }
+  else p[f]=v;
+  save(); updateComputed();
+});
+$("posList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act=delPos]"); if(!b) return;
+  const card=b.closest("[data-pos]"); const p=S.positions.find(x=>x.id===card.dataset.pos);
+  if(!confirm("Supprimer la position « "+p.ticker+" » ?")) return;
+  S.positions=S.positions.filter(x=>x!==p); save(); renderPositions(); updateComputed();
+});
+$("addPosBtn").onclick=()=>{
+  S.positions.push({id:uid(),ticker:"",name:"",qty:0,avg:0,currency:"USD",price:null,priceDate:null,priceSource:null,exchange:null,custody:""});
+  save(); renderPositions(); updateComputed();
+  $("posList").lastElementChild.querySelector("[data-f=ticker]").focus();
+};
+$("fxGrid").addEventListener("change",e=>{
+  const c=e.target.dataset.fx; if(!c) return; const n=parseNum(e.target.value);
+  if(isNaN(n)||n<=0){ toast("Taux invalide"); return; }
+  S.fx.rates[c]=n; S.fx.manual=true; S.fx.source="manuel"; S.fx.date=today(); save(); renderFxGrid(true); updateComputed();
+  toast("Taux manuel enregistré (actualisation auto désactivée)");
+});
+$("fxManual").onchange=e=>{ S.fx.manual=e.target.checked; if(!S.fx.manual){ refreshFx(false).then(updateComputed);} save(); updateComputed(); };
+$("addCurBtn").onclick=()=>{ const c=(prompt("Code de la devise (ex. GBP, JPY, SEK) :")||"").trim().toUpperCase(); if(!/^[A-Z]{3}$/.test(c)) return; if(!(c in S.fx.rates)) S.fx.rates[c]=0; save(); renderFxGrid(true); renderAccounts(); renderPositions(); updateComputed(); refreshFx(true).then(()=>{renderFxGrid(true);updateComputed();}); };
+$("refreshFxBtn").onclick=async()=>{ const ok=await refreshFx(false); if(ok) toast("Taux actualisés"); renderFxGrid(true); updateComputed(); };
+$("refreshPricesBtn").onclick=async()=>{ await refreshPrices(false); renderPositions(); updateComputed(); };
+$("refreshBtn").onclick=()=>refreshAll(false);
+$("baseSel").onchange=e=>{ S.base=e.target.value; save(); renderAccounts(); updateComputed(); };
+$("themeBtn").onclick=()=>{ S.theme=S.theme==="dark"?"light":"dark"; save(); applyTheme(); updateComputed(); };
+$("snapBtn").onclick=()=>takeSnapshot(today());
+$("snapBtn2").onclick=()=>takeSnapshot($("snapDate").value||today());
+$("snapTable").addEventListener("click",e=>{ const b=e.target.closest("[data-delsnap]"); if(!b) return; if(!confirm("Supprimer l'instantané du "+fmtDate(b.dataset.delsnap)+" ?")) return; S.snapshots=S.snapshots.filter(s=>s.date!==b.dataset.delsnap); save(); updateComputed(); });
+[$("exportBtn"),$("exportBtn2")].forEach(b=>b.onclick=exportJSON);
+[$("importBtn"),$("importBtn2")].forEach(b=>b.onclick=()=>$("importFile").click());
+$("importFile").onchange=e=>{ const f=e.target.files[0]; if(f) importJSON(f); e.target.value=""; };
+$("resetBtn").onclick=()=>{ if(!confirm("Effacer toutes les données et revenir à l'état initial ?"+(cloudOn()?"\n\nATTENTION : la copie dans "+Prov().label+" sera elle aussi remise à zéro.":"")+"\n\nExportez d'abord une sauvegarde si besoin.")) return; S=defaultState(); save(); applyTheme(); fullRender(); refreshAll(true); };
+
+/* ================= Démarrage ================= */
+function maybeRefresh(){
+  // actualisation automatique si les cours/taux ont plus d'une heure
+  const old = !S.fx.fetchedAt || Date.now()-S.fx.fetchedAt>3600e3 || S.positions.some(p=>!p.priceDate || (p.priceSource!=="manuel" && Date.now()-new Date(p.priceDate)>3600e3));
+  if(old) refreshAll(true);
+}
+(async function init(){
+  $("snapDate").value=today();
+  if(typeof Chart!=="undefined"){ Chart.defaults.font.family=getComputedStyle(document.body).fontFamily; Chart.defaults.color=cssVar("--mut"); }
+  let hadLocal=false; try{ hadLocal=!!localStorage.getItem(STORE_KEY); }catch(e){}
+  lastKey = hadLocal? dataKey(S) : null;
+  if(!hadLocal) save(true);           // premier lancement : mémorise l'état initial (soldes à 0)
+  applyTheme(); fullRender(); renderSyncUI();
+  if("serviceWorker" in navigator && location.protocol!=="file:") navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service worker non enregistré", e));
+  await Cloud_init();                 // si le cloud est connecté, il fait foi (conflits : on vous demande)
+  maybeRefresh();
+})();
+</script>
+</body>
+</html>

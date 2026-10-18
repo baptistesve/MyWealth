@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MyWealth — connexion…</title>
+<style>body{font-family:system-ui,sans-serif;background:#0b1020;color:#e8ecf8;display:grid;place-items:center;min-height:100vh;margin:0}</style></head>
+<body>
+<p>Connexion à Microsoft en cours…</p>
+<!-- Page « redirect bridge » requise par MSAL Browser v5 : elle renvoie la réponse de connexion à MyWealth. -->
+<script src="vendor/msal-redirect-bridge.min.js"></script>
+<script>
+  msalRedirectBridge.broadcastResponseToMainFrame().catch(function(e){
+    console.error(e);
+    document.body.innerHTML='<p>La connexion n\'a pas abouti. <a style="color:#9bb0ff" href="./">Revenir à MyWealth</a></p>';
+  });
+</script>
+</body>
+</html>
