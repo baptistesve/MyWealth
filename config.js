@@ -6,7 +6,7 @@
    ===================================================================== */
 window.MYWEALTH_CONFIG = {
   // Dropbox (recommandé : gratuit, sans carte bancaire) — « App key » de la Dropbox App Console
-  DROPBOX_APP_KEY: "",
+  DROPBOX_APP_KEY: "ayksf16txaqktp6",
 
   // OneDrive — « ID d'application (client) » de Microsoft Entra
   // (nécessite un compte Azure gratuit, vérifié par carte bancaire — voir GUIDE.md)
