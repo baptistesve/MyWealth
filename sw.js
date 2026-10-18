@@ -1,8 +1,8 @@
-/* MyWealth v4 — service worker : application disponible hors ligne.
+/* MyWealth v5 — service worker : application disponible hors ligne.
    Seuls les fichiers de l'application sont mis en cache ; les données (comptes, montants)
    restent dans le stockage local de l'appareil et dans votre cloud, jamais ici.
    Only app files are cached here — never your data. */
-const VERSION = "mywealth-v4-1";
+const VERSION = "mywealth-v5-1";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest", "./redirect.html", "./privacy.html",
   "Fraunces.woff2", "HankenGrotesk.woff2",

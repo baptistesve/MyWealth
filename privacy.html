@@ -43,6 +43,7 @@
 <ul>
   <li><b>Sur votre appareil</b> : comptes, soldes, titres, cryptos, biens, dettes, objectifs et instantanés sont enregistrés dans le stockage local du navigateur (<code>localStorage</code>) de votre téléphone ou ordinateur.</li>
   <li><b>Dans votre propre cloud, si vous le connectez</b> : un fichier <code>mywealth-donnees.json</code> (et une copie par mois) est écrit dans le dossier réservé à l'application de <b>votre</b> Dropbox (<i>Applications › …</i>) ou de <b>votre</b> OneDrive. L'application n'a accès qu'à ce dossier, pas au reste de votre cloud. Les jetons de connexion restent sur votre appareil.</li>
+  <li><b>Verrouillage (facultatif, Réglages › Sécurité)</b> : vos données sont chiffrées (AES-256-GCM) sur votre appareil, et le fichier du cloud est envoyé chiffré. Il ne s'ouvre qu'avec Face ID (clé d'identification de votre trousseau) ou votre clé de secours ; le code à 6 chiffres ne protège que cet appareil. Personne, y compris l'auteur de l'app, ne peut récupérer vos données sans eux. Si vous activez « Partager l'épargne libre avec MyPension », un petit fichier <code>mywealth-partage.json</code> <b>non chiffré</b> contient uniquement le total, la devise et la date.</li>
   <li>Personne d'autre — ni l'auteur de l'application, ni la personne qui vous l'a partagée — ne peut voir vos données.</li>
 </ul>
 
@@ -81,6 +82,7 @@
 <ul>
   <li><b>On your device</b>: accounts, balances, holdings, crypto, assets, debts, goals and snapshots are stored in the browser's local storage (<code>localStorage</code>) of your phone or computer.</li>
   <li><b>In your own cloud, if you connect it</b>: a file <code>mywealth-donnees.json</code> (plus one copy per month) is written to the app's dedicated folder in <b>your</b> Dropbox (<i>Apps › …</i>) or <b>your</b> OneDrive. The app can only access that folder, not the rest of your cloud. Sign-in tokens stay on your device.</li>
+  <li><b>Lock (optional, Settings › Security)</b>: your data is encrypted (AES-256-GCM) on your device, and the cloud file is uploaded encrypted. It opens only with Face ID (a passkey in your keychain) or your recovery key; the 6-digit passcode protects this device only. Nobody, including the app's author, can recover your data without them. If you turn on “Share free savings with MyPension”, a small <b>unencrypted</b> <code>mywealth-partage.json</code> file holds only the total, currency and date.</li>
   <li>Nobody else — neither the app's author nor the person who shared it with you — can see your data.</li>
 </ul>
 

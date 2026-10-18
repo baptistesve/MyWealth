@@ -211,6 +211,102 @@ button.pill{cursor:pointer}
 .mut2{color:var(--mut2)}
 @media (min-width:960px){ .cols>.card.dark:first-child{margin-top:10px} }
 
+/* ===== v5 : verrouillage ===== */
+html.lk-on,html.lk-on body{overflow:hidden}
+#lk{position:fixed;inset:0;z-index:100;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#lk[hidden]{display:none}
+#lk.dk{background:var(--forest);color:#F6F2EA}
+#lk.lt{background:var(--bg);color:var(--ink)}
+.lkwm{position:fixed;left:50%;top:-40px;margin-left:-335px;pointer-events:none}
+.lkin{position:relative;max-width:430px;margin:0 auto;min-height:100%;padding:calc(var(--safe-t) + 12px) 20px calc(var(--safe-b) + 150px)}
+.lkin.lkmain{padding-bottom:calc(var(--safe-b) + 70px);display:flex;flex-direction:column;align-items:center}
+.lkin.lkcen{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:100dvh;padding-bottom:40px}
+.lkc{display:flex;flex-direction:column;align-items:center;width:100%}
+.lkc2{margin-top:26px}
+.wordm{font-family:var(--disp);font-variation-settings:"opsz" 72;font-weight:600;font-size:50px;letter-spacing:-.025em;margin-top:max(56px,9vh);line-height:1}
+.lkcen .wordm{margin:0 0 14px;color:var(--brass2)}
+.rule{width:34px;height:3px;border-radius:2px;background:var(--brass);margin-top:16px}
+.prompt{font-size:16px;font-weight:550;margin-top:40px}
+#lk .hint{font-size:12.5px;color:#9DBBA9;margin-top:6px;min-height:17px;text-align:center;max-width:330px}
+#lk .hint.err{color:#F0B9A6}
+#lk.lt .hint{color:var(--mut)}
+.dots{display:flex;gap:18px;margin-top:20px}
+.dots i{width:13px;height:13px;border-radius:50%;border:1.6px solid #9DBBA9;display:block;transition:background .1s}
+.dots i.f{background:#F6F2EA;border-color:#F6F2EA}
+.dots.err i{border-color:#E7A48F} .dots.err i.f{background:#E7A48F;border-color:#E7A48F}
+.dots.err{animation:lkshake .35s}
+@keyframes lkshake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.kp{display:grid;grid-template-columns:repeat(3,78px);gap:16px 28px;margin-top:36px;justify-content:center}
+.kp button,.kp span{width:78px;height:78px;border-radius:50%;background:rgba(246,242,234,.09);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:450;color:#F6F2EA;font-variant-numeric:tabular-nums;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.kp button:active{background:rgba(246,242,234,.26)}
+.kp .x{background:none} .kp.off button:not(.x){opacity:.32;pointer-events:none}
+.lkfoot{position:fixed;left:0;right:0;bottom:calc(var(--safe-b) + 18px);display:flex;justify-content:space-between;max-width:430px;margin:0 auto;padding:0 32px}
+.lkfoot button{font-size:14px;font-weight:600;color:#CFE3C9;padding:10px 6px}
+.fidb{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:#F6F2EA;color:var(--forest);border-radius:99px;padding:11px 18px 11px 15px;font-size:14.5px;font-weight:650}
+.lknav{display:flex;align-items:center;height:44px}
+.lknav button{display:flex;align-items:center;gap:4px;font-size:16px;font-weight:600;color:var(--sapin);margin-left:-6px}
+#lk.dk .lknav button{color:#CFE3C9}
+.lkstep{margin-top:2px} #lk.dk .eb{color:#B9C6BE}
+.stx{display:flex;gap:6px;margin-top:6px} .stx i{flex:1;height:4px;border-radius:2px;background:#E2DACB;display:block} .stx i.on{background:var(--sapin)}
+#lk.dk .stx i{background:rgba(246,242,234,.18)} #lk.dk .stx i.on{background:var(--brass2)}
+#lk h1.pt{margin-top:14px}
+.lksub{font-size:13.5px;line-height:1.45;color:var(--mut);margin-top:8px}
+#lk.dk .lksub{color:#B9C6BE}
+#lk .card{margin-top:12px}
+.wrn{background:#F7E7DF;border:1px solid #EDCBBE;border-radius:20px;padding:14px 15px;margin-top:14px;color:#6E3324}
+.wrn h3{font-family:var(--disp);font-weight:470;font-size:18.5px;display:flex;align-items:center;gap:8px;color:#8F3F2B;line-height:1.2}
+.wrn p{font-size:13px;line-height:1.5;margin-top:6px}
+.wrn.soft{background:#F2ECDF;border-color:#E6DCC8;color:var(--mut)} .wrn.soft p{margin:0}
+.bl{margin-top:8px} .bl div{display:flex;gap:10px;font-size:13px;line-height:1.45;padding:5px 0;color:#2B3A33} .bl div svg{flex:none;margin-top:1px;color:var(--sapin)}
+.card.dark .bl div{color:#F6F2EA}
+.ck{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;line-height:1.4;font-weight:550;margin-top:16px;cursor:pointer}
+.ck input{position:absolute;opacity:0;width:1px;height:1px}
+.ck i{width:22px;height:22px;border-radius:7px;border:1.6px solid var(--sapin);display:flex;align-items:center;justify-content:center;color:transparent;flex:none;background:var(--card)}
+.ck input:checked+i{background:var(--sapin);color:#fff}
+.ck.dk i{border-color:var(--brass2);background:transparent} .ck.dk input:checked+i{background:var(--brass2);color:var(--forest)}
+.ck input:focus-visible+i{box-shadow:0 0 0 3px rgba(46,107,85,.3)}
+.tiny{font-size:11.5px;color:var(--mut2);line-height:1.45} .tiny.c,.c{text-align:center} #lk .tiny{margin-top:7px}
+.lkbottom{position:fixed;left:0;right:0;bottom:0;padding:14px 20px calc(var(--safe-b) + 18px);display:flex;flex-direction:column;gap:10px;max-width:430px;margin:0 auto;background:linear-gradient(transparent, var(--bg) 22%)}
+#lk.dk .lkbottom{background:linear-gradient(rgba(15,61,46,0), var(--forest) 22%)}
+.lkb{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:16px;font-size:15.5px;font-weight:650;width:100%}
+.lkb.p{background:var(--forest);color:#F6F2EA} .lkb.s{background:var(--chip);color:var(--forest)} .lkb.dg{background:var(--terra);color:#FFF8F2}
+.lkb.w{background:#F6F2EA;color:var(--forest)} .lkb.g{background:rgba(246,242,234,.12);color:#F6F2EA}
+.lkrow{display:flex;gap:10px;margin-top:12px}
+.rkbox{margin-top:18px;background:rgba(246,242,234,.07);border:1px solid rgba(246,242,234,.16);border-radius:22px;padding:20px 14px}
+.rk{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:19px;letter-spacing:.06em;text-align:center;line-height:1.7;color:#F6F2EA;font-weight:500;user-select:all;-webkit-user-select:all}
+.rkin{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.rkin label{font-size:11.5px;font-weight:650;letter-spacing:.04em;color:#B9C6BE;text-transform:uppercase}
+.rkin input{width:100%;background:rgba(246,242,234,.08);border:1px solid rgba(246,242,234,.22);border-radius:14px;padding:13px 12px;font-size:17px;color:#F6F2EA;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:.04em;outline:none;min-height:50px}
+.rkin input::placeholder{color:rgba(246,242,234,.35)} .rkin input:focus{border-color:var(--brass2)}
+.or{display:flex;align-items:center;gap:10px;color:#9DBBA9;font-size:12px;margin:4px 0} .or::before,.or::after{content:"";flex:1;height:1px;background:rgba(246,242,234,.16)}
+.note{font-size:12.5px;line-height:1.45;border-radius:14px;padding:10px 12px;margin-top:12px;background:#EFE7D6;color:var(--ink)}
+.note.warn{background:#F6EBD6} .note.err{background:#F5E4DE;color:#8F3F2B}
+#lk.dk .note.err{background:rgba(240,185,166,.16);color:#F7D3C6}
+.bioart{height:180px;display:flex;align-items:center;justify-content:center}
+.cl{padding:6px 14px} .clr{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line2);cursor:pointer} .clr:first-child{border-top:0}
+.clr input{width:20px;height:20px;accent-color:var(--terra);flex:none} .clr .t{flex:1;min-width:0} .clr b{display:block;font-size:13.5px;font-weight:600;word-break:break-all} .clr small{font-size:11.5px;color:var(--mut2)}
+/* Réglages › Sécurité */
+.backl{display:flex;align-items:center;gap:4px;color:var(--sapin);font-weight:600;font-size:14px;margin:0 0 4px -4px}
+.sheet .sec{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:var(--mut2);margin:18px 4px 0}
+.sr{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line2);width:100%;text-align:left}
+.card>.sr:first-child{border-top:0;padding-top:2px}
+.si{width:34px;height:34px;border-radius:10px;background:#E6EFE8;color:var(--sapin);display:flex;align-items:center;justify-content:center;flex:none}
+.si.dk{background:rgba(246,242,234,.12);color:#CFE3C9}
+.sr .t{flex:1;min-width:0} .sr .t b{display:block;font-size:14px;font-weight:620} .sr .t small{display:block;font-size:11.8px;color:var(--mut2);line-height:1.35;margin-top:2px}
+.vv{color:var(--mut2);display:flex}
+.swt{position:relative;flex:none;cursor:pointer}
+.swt input{position:absolute;opacity:0;width:1px;height:1px}
+.swt .tg{display:block;width:51px;height:31px;border-radius:16px;background:#E2DACB;position:relative;transition:background .15s}
+.swt .tg::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.18);transition:left .15s}
+.swt input:checked+.tg{background:var(--sapin)} .swt input:checked+.tg::after{left:22px}
+.swt input:disabled+.tg{opacity:.45} .swt input:focus-visible+.tg{box-shadow:0 0 0 3px rgba(46,107,85,.3)}
+.seg.seg2{margin:2px 0 6px 46px}
+.share{background:#F2ECDF;border-radius:14px;padding:10px 12px;margin:2px 0 4px 46px;font-size:12px;color:var(--mut);line-height:1.45} .share b{color:var(--ink);font-weight:650}
+.danger{display:block;width:100%;color:var(--terra);font-weight:620;font-size:14.5px;text-align:center;padding:14px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;margin-top:16px}
+.secst{padding:16px}
+.sec-off .bl{margin-top:12px}
+@media (max-height:700px){ .wordm{font-size:40px;margin-top:30px} .prompt{margin-top:22px} .kp{grid-template-columns:repeat(3,70px);gap:12px 26px;margin-top:22px} .kp button,.kp span{width:70px;height:70px;font-size:28px} }
+@media (min-width:960px){ .lkbottom{position:sticky;margin-top:24px;padding-left:0;padding-right:0} .lkin{padding-bottom:40px} }
 </style>
 </head>
 <body>
@@ -243,6 +339,7 @@ button.pill{cursor:pointer}
 </div></dialog>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="lk" hidden role="dialog" aria-modal="true" aria-label="MyWealth"></div>
 <script>
 "use strict";
 const RELIEF=["M91.4 45.2C92.0 47.4 92.4 49.7 92.4 52.0C92.4 54.3 92.1 56.7 91.4 59.0C90.6 61.3 89.5 63.6 88.1 65.6C86.8 67.7 85.0 69.7 83.1 71.4C81.2 73.1 78.9 74.7 76.7 76.0C74.4 77.3 72.0 78.5 69.6 79.4C67.1 80.4 64.6 81.1 62.1 81.8C59.6 82.4 57.1 82.9 54.5 83.3C52.0 83.6 49.4 83.9 46.8 83.9C44.3 84.0 41.6 83.9 39.1 83.6C36.5 83.3 33.9 82.9 31.4 82.1C28.9 81.4 26.5 80.5 24.2 79.3C22.0 78.1 19.9 76.6 18.1 75.0C16.3 73.4 14.8 71.5 13.5 69.6C12.3 67.6 11.3 65.5 10.6 63.3C10.0 61.2 9.6 58.9 9.5 56.7C9.3 54.5 9.5 52.2 9.8 50.0C10.1 47.8 10.7 45.7 11.4 43.5C12.1 41.4 13.0 39.3 14.1 37.2C15.2 35.2 16.5 33.1 18.0 31.2C19.5 29.3 21.2 27.5 23.1 25.8C25.1 24.2 27.2 22.6 29.6 21.3C31.9 20.0 34.4 18.9 37.0 18.1C39.6 17.3 42.4 16.7 45.2 16.5C47.9 16.2 50.7 16.3 53.3 16.6C56.0 16.9 58.6 17.4 61.0 18.2C63.5 18.9 65.8 19.8 68.0 20.9C70.2 21.9 72.2 23.2 74.2 24.4C76.1 25.7 78.0 27.1 79.7 28.6C81.4 30.1 83.1 31.7 84.6 33.4C86.0 35.1 87.5 37.0 88.6 38.9C89.7 40.9 90.7 43.0 91.4 45.2Z", "M81.0 42.5C81.4 44.0 81.6 45.5 81.4 47.0C81.3 48.5 80.9 50.1 80.3 51.5C79.7 52.9 78.8 54.3 77.8 55.6C76.8 56.9 75.6 58.1 74.4 59.2C73.2 60.3 71.8 61.2 70.5 62.2C69.1 63.1 67.7 63.9 66.3 64.7C64.9 65.4 63.5 66.2 61.9 66.8C60.4 67.5 58.9 68.1 57.3 68.6C55.7 69.2 54.0 69.7 52.2 70.0C50.5 70.3 48.7 70.5 46.9 70.5C45.1 70.5 43.3 70.3 41.6 70.0C39.9 69.6 38.2 69.0 36.7 68.3C35.2 67.5 33.9 66.6 32.7 65.5C31.5 64.5 30.6 63.3 29.8 62.0C29.0 60.8 28.4 59.5 28.0 58.1C27.5 56.8 27.2 55.4 27.1 54.0C26.9 52.6 26.9 51.2 27.0 49.9C27.0 48.5 27.2 47.1 27.5 45.7C27.8 44.3 28.2 42.9 28.8 41.6C29.4 40.2 30.1 38.8 31.0 37.5C31.9 36.2 33.0 35.0 34.2 33.8C35.5 32.7 36.9 31.7 38.4 30.8C39.9 29.9 41.6 29.2 43.3 28.6C45.0 28.1 46.8 27.7 48.5 27.5C50.3 27.3 52.0 27.2 53.8 27.3C55.5 27.3 57.1 27.5 58.7 27.8C60.4 28.0 61.9 28.4 63.5 28.8C65.0 29.3 66.5 29.8 68.0 30.3C69.4 30.9 70.9 31.6 72.2 32.4C73.6 33.2 74.9 34.0 76.1 35.0C77.2 36.1 78.3 37.2 79.1 38.5C80.0 39.7 80.7 41.1 81.0 42.5Z", "M69.2 44.1C69.3 44.8 69.2 45.5 69.0 46.2C68.9 46.9 68.6 47.6 68.2 48.3C67.9 48.9 67.5 49.5 67.0 50.1C66.6 50.7 66.1 51.3 65.6 51.8C65.1 52.4 64.5 52.9 63.9 53.4C63.3 53.9 62.7 54.4 62.0 54.8C61.3 55.3 60.6 55.7 59.8 56.1C59.1 56.5 58.2 56.8 57.4 57.1C56.5 57.3 55.6 57.5 54.7 57.6C53.7 57.7 52.8 57.7 51.9 57.5C51.0 57.4 50.1 57.2 49.3 56.9C48.5 56.6 47.8 56.2 47.1 55.8C46.5 55.3 45.9 54.8 45.4 54.2C44.9 53.7 44.5 53.1 44.1 52.5C43.8 51.9 43.5 51.3 43.3 50.7C43.1 50.0 42.9 49.4 42.8 48.7C42.6 48.1 42.6 47.4 42.5 46.8C42.5 46.1 42.6 45.4 42.7 44.7C42.9 44.1 43.1 43.4 43.4 42.7C43.7 42.0 44.1 41.4 44.6 40.7C45.1 40.1 45.7 39.5 46.4 39.0C47.1 38.5 47.8 38.1 48.6 37.7C49.4 37.3 50.3 37.0 51.1 36.8C51.9 36.5 52.8 36.4 53.7 36.3C54.6 36.2 55.4 36.1 56.3 36.1C57.1 36.1 58.0 36.2 58.8 36.3C59.7 36.4 60.5 36.5 61.3 36.7C62.1 36.9 62.9 37.2 63.7 37.5C64.4 37.8 65.1 38.2 65.8 38.6C66.4 39.1 67.1 39.6 67.5 40.1C68.0 40.7 68.4 41.3 68.7 42.0C69.0 42.7 69.2 43.4 69.2 44.1Z"];
@@ -419,13 +516,13 @@ en:{
 }};
 
 /* =====================================================================
-   MyWealth v4 — suivi de patrimoine personnel (FR / EN) · identité Cairn
+   MyWealth v5 — suivi de patrimoine personnel (FR / EN) · identité Cairn · verrouillage facultatif
    Données : appareil (localStorage) + fichier privé dans le cloud de l'utilisateur.
    Format de données v3 (schemaVersion 3). Migration automatique depuis v2 (copie conservée).
    ===================================================================== */
 function cfg(){ return window.MYWEALTH_CONFIG || {}; }
 const $ = id=>document.getElementById(id);
-const APP_VERSION = "4.0";
+const APP_VERSION = "5.0";
 
 /* ================= Langue ================= */
 const LANG_KEY = "mywealth.lang";
@@ -446,7 +543,7 @@ function setLang(l){
   if(l!=="fr" && l!=="en") return;
   LANG=l; try{ localStorage.setItem(LANG_KEY,l); }catch(e){}
   document.documentElement.lang = LANG==="fr"? "fr-CH" : "en";
-  renderChrome(); render(); renderSyncUI(); if(SHEET.kind==="settings") openSettings();
+  renderChrome(); render(); renderSyncUI(); if(SHEET.kind==="settings") openSettings(); else if(SHEET.kind==="security") openSecurity();
 }
 
 /* ================= Format des données ================= */
@@ -522,9 +619,11 @@ function hasContent(s){ return !!s && LISTS.some(k=>(s[k]||[]).length>0); }
 function hasUserData(s){ return s.accounts.some(a=>a.updated) || s.snapshots.length>0 || s.positions.some(p=>p.priceSource===SRC_MANUAL) || hasContent(s) || (s.goals||[]).length>0; }
 
 /* Chargement local : v3 (nouvelle clé) → sinon migration de la clé v2, avec copie de sauvegarde */
-const BOOT = { migrated:false, localBlocked:false, hadLocal:false, unreadable:false };
+const BOOT = { migrated:false, localBlocked:false, hadLocal:false, unreadable:false, locked:false };
 let S = load();
 function load(){
+  // v5 : données chiffrées sur cet appareil → rien n'est lu avant le déverrouillage
+  try{ const l=JSON.parse(localStorage.getItem("mywealth.lock.v1")||"null"); if(l && l.enabled && localStorage.getItem("mywealth.enc.v1")){ BOOT.locked=true; BOOT.hadLocal=true; return defaultState(); } }catch(e){}
   let raw=null, old=null;
   try{ raw=localStorage.getItem(STORE_KEY); old=localStorage.getItem(OLD_STORE_KEY); }catch(e){}
   if(raw){
@@ -556,11 +655,13 @@ function load(){
 let saveOk = true, lastKey = null;
 function dataKey(o){ const c=Object.assign({},o); delete c.savedAt; delete c._info; return JSON.stringify(c); }
 function writeLocal(){
-  if(BOOT.localBlocked) return;
+  if(BOOT.localBlocked || LOCK.locked) return;
+  if(LOCK.on){ if(LOCK.key){ persistLocal(); writeShareLocal(); } return; }   // v5 : verrouillage actif → uniquement chiffré
   try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); saveOk=true; }catch(e){ saveOk=false; }
+  writeShareLocal();
 }
 function save(auto){
-  if(BOOT.localBlocked) return;
+  if(BOOT.localBlocked || LOCK.locked) return;
   const k=dataKey(S);
   if(k===lastKey) return;
   lastKey=k; S.savedAt=new Date().toISOString();
@@ -713,6 +814,12 @@ const IC = {
  info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.4"/>',
  trash:'<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/>',
  down:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', up:'<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>',
+ faceid:'<path d="M7.5 3.5H6A2.5 2.5 0 0 0 3.5 6v1.5M16.5 3.5H18A2.5 2.5 0 0 1 20.5 6v1.5M20.5 16.5V18a2.5 2.5 0 0 1-2.5 2.5h-1.5M3.5 16.5V18A2.5 2.5 0 0 0 6 20.5h1.5"/><path d="M9 9v1.6M15 9v1.6M12.2 9v3.9h-1"/><path d="M9.2 15.6c1.6 1.3 4 1.3 5.6 0"/>',
+ del:'<path d="M9 5.5h10.5A1.5 1.5 0 0 1 21 7v10a1.5 1.5 0 0 1-1.5 1.5H9L3.5 12z"/><path d="m11.5 9.5 5 5M16.5 9.5l-5 5"/>',
+ back:'<path d="m14.5 5.5-6.5 6.5 6.5 6.5"/>', warn:'<path d="M12 4 21 19.5H3z"/><path d="M12 10v4.5M12 17v.3"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+ timer:'<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M9.5 3h5"/>', eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+ pension:'<path d="M5 19.5h14M7 19.5v-7M12 19.5v-7M17 19.5v-7M4 12.5h16L12 5z"/>', check:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
  coins:'<ellipse cx="9" cy="7.5" rx="5.5" ry="3"/><path d="M3.5 7.5v4c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3v-4"/><path d="M9.5 14.5v2c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3v-4c0-1.6-2.2-2.9-5-3"/>'
 };
 function ico(n, s=20, sw=1.7){ return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||""}</svg>`; }
@@ -1333,7 +1440,7 @@ function takeSnapshot(date){
 /* ================= Import / export ================= */
 function fileText(){
   const o={app:"patrimoine", schemaVersion:SCHEMA_VERSION, savedAt:S.savedAt||new Date().toISOString(),
-    _info:"Données MyWealth (app MyWealth v4, format v3) — fichier JSON lisible, ne pas renommer les champs."};
+    _info:"Données MyWealth (app MyWealth v5, format v3) — fichier JSON lisible, NON chiffré, ne pas renommer les champs."};
   for(const k in S){ if(!(k in o)) o[k]=S[k]; }
   return JSON.stringify(o,null,2);
 }
@@ -1347,9 +1454,13 @@ function exportJSON(){
 function futureMsg(name,v){ return t("futureMsg",{name,v,max:SCHEMA_VERSION}); }
 function importJSON(file){
   const fr=new FileReader();
-  fr.onload=()=>{
+  fr.onload=async()=>{
     try{
-      const j=JSON.parse(fr.result);
+      let j=JSON.parse(fr.result);
+      if(isEnvelope(j)){   // v5 : copie chiffrée (ex. copie mensuelle du cloud) : seulement avec la clé du coffre ouvert
+        if(!(LOCK.on && LOCK.key && j.vault===LOCK.vault)){ alert(t("importEncrypted")); return; }
+        j=await openEnvelope(j);
+      }
       if(!isPatrimoineData(j)) throw new Error("format");
       if(schemaOf(j)>SCHEMA_VERSION){ alert(futureMsg(file.name, schemaOf(j))); return; }
       if(!confirm(t("confirmImport",{name:file.name})+(cloudOn()?"\n\n"+t("importCloudNote",{p:Prov().label}):""))) return;
@@ -1359,14 +1470,19 @@ function importJSON(file){
   fr.readAsText(file);
 }
 
-/* ================= Synchronisation cloud (OneDrive ou Dropbox) — reprise de v3 ================= */
+/* ================= Synchronisation cloud (OneDrive ou Dropbox) — v5 : fichier chiffré si le verrouillage est actif ================= */
 const REMOTE_NAME = "mywealth-donnees.json";          // fichier principal dans le dossier de l'app (nom conservé)
 const LEGACY_NAMES = ["patrimoine-donnees.json"];
 const CLOUD_KEY = "mywealth.cloud";
 const APP_BASE = new URL("./", location.href).href;
 const SNOOZE_CLOUD = "mywealth.rappelCloud";
 const V2_BACKUP_NAME = "mywealth-donnees-v2-sauvegarde.json";   // copie du fichier cloud v2 avant sa mise à niveau
-function loadCloud(){ try{ return Object.assign({provider:null,etag:null,syncedKey:null,userDirty:false,lastSync:null,lastBackupMonth:null,lastBackupAt:0,account:null,remoteHasContent:false,emptyOk:false}, JSON.parse(localStorage.getItem(CLOUD_KEY)||"{}")); }catch(e){ return {provider:null}; } }
+// v5 : l'empreinte de synchro est un hachage (jamais les données elles-mêmes, qui seraient sinon lisibles en clair même chiffrées)
+function hashStr(str){ const h=seed=>{ let h1=0xdeadbeef^seed, h2=0x41c6ce57^seed; for(let i=0;i<str.length;i++){ const c=str.charCodeAt(i); h1=Math.imul(h1^c,2654435761); h2=Math.imul(h2^c,1597334677); }
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909); h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909); return (h2>>>0).toString(16).padStart(8,"0")+(h1>>>0).toString(16).padStart(8,"0"); };
+  return "h:"+h(1)+h(2); }
+function loadCloud(){ const c=loadCloud0(); if(typeof c.syncedKey==="string" && c.syncedKey.charAt(0)==="{") c.syncedKey=hashStr(c.syncedKey); return c; }
+function loadCloud0(){ try{ return Object.assign({provider:null,etag:null,syncedKey:null,userDirty:false,lastSync:null,lastBackupMonth:null,lastBackupAt:0,account:null,remoteHasContent:false,emptyOk:false}, JSON.parse(localStorage.getItem(CLOUD_KEY)||"{}")); }catch(e){ return {provider:null}; } }
 let C = loadCloud();
 function saveCloud(){ try{ localStorage.setItem(CLOUD_KEY, JSON.stringify(C)); }catch(e){} }
 const SYNC = { state:"off", err:null, timer:null, busy:false, again:false, blocked:false };
@@ -1433,6 +1549,16 @@ const OneDrive = {
     if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     const j=await r.json(); return {etag:j.eTag};
+  },
+  async list(){
+    const tk=await this.token(); let url=GRAPH+"/me/drive/special/approot/children?$select=name&$top=200", out=[];
+    while(url){ const r=await fetch(url,{headers:{Authorization:"Bearer "+tk}}); if(!r.ok) throw httpErr(r); const j=await r.json(); (j.value||[]).forEach(x=>out.push(x.name)); url=j["@odata.nextLink"]||null; }
+    return out;
+  },
+  async remove(name){
+    const tk=await this.token();
+    const r=await fetch(GRAPH+"/me/drive/special/approot:/"+encodeURIComponent(name),{method:"DELETE",headers:{Authorization:"Bearer "+tk}});
+    if(r.status===404) return; if(!r.ok) throw httpErr(r);
   }
 };
 
@@ -1508,6 +1634,20 @@ const DropboxP = {
     if(r.status===401) throw reauthErr("errSession");
     if(!r.ok) throw httpErr(r);
     const j=await r.json(); return {etag:j.rev};
+  },
+  // v5 : liste du dossier de l'app (nécessite files.metadata.read ; sinon on teste les noms connus) et suppression
+  async list(){
+    let r=await fetch("https://api.dropboxapi.com/2/files/list_folder",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),"Content-Type":"application/json"},body:JSON.stringify({path:"",limit:500})});
+    if(!r.ok) throw httpErr(r);
+    let j=await r.json(); const out=j.entries.filter(e=>e[".tag"]==="file").map(e=>e.name);
+    while(j.has_more){ r=await fetch("https://api.dropboxapi.com/2/files/list_folder/continue",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),"Content-Type":"application/json"},body:JSON.stringify({cursor:j.cursor})}); if(!r.ok) throw httpErr(r); j=await r.json(); j.entries.filter(e=>e[".tag"]==="file").forEach(e=>out.push(e.name)); }
+    return out;
+  },
+  async remove(name){
+    const r=await fetch("https://api.dropboxapi.com/2/files/delete_v2",{method:"POST",headers:{Authorization:"Bearer "+await this.token(),"Content-Type":"application/json"},body:JSON.stringify({path:"/"+name})});
+    if(r.status===409){ const tx=await r.text(); if(/not_found/.test(tx)) return; throw httpErr(r,tx.slice(0,120)); }
+    if(r.status===401) throw reauthErr("errSession");
+    if(!r.ok) throw httpErr(r);
   }
 };
 const PROVIDERS={onedrive:OneDrive, dropbox:DropboxP};
@@ -1532,7 +1672,7 @@ function askConflict(remoteS, P){
 /* ---------- Moteur de synchronisation ---------- */
 function setSync(st,err){ SYNC.state=st; if(err!==undefined) SYNC.err=err; renderSyncUI(); }
 function adopt(remoteS){ S=remoteS; lastKey=dataKey(S); writeLocal(); renderChrome(); render(); }
-async function pushNow(P, etag){
+async function pushNow(P, etag, textOverride){
   // Protection : ne jamais remplacer un fichier cloud qui contient des données par un état vide,
   // sauf si l'utilisateur l'a demandé explicitement (réinitialisation, suppression du dernier élément) ou le confirme.
   if(!hasContent(S) && C.remoteHasContent && !C.emptyOk){
@@ -1542,38 +1682,51 @@ async function pushNow(P, etag){
     }
     C.emptyOk=true;
   }
-  const k=dataKey(S), txt=fileText();
+  const k=dataKey(S), txt=textOverride || await cloudText(), encd=txt.startsWith('{"app":"'+ENV_APP+'"');
   const r=await P.write(REMOTE_NAME, txt, etag);
   if(r.conflict) return false;
-  C.etag=r.etag; C.syncedKey=k; if(dataKey(S)===k) C.userDirty=false; C.lastSync=new Date().toISOString();
-  C.remoteHasContent=hasContent(S); if(C.remoteHasContent) C.emptyOk=false; saveCloud();
+  C.etag=r.etag; C.syncedKey=hashStr(k); if(dataKey(S)===k) C.userDirty=false; C.lastSync=new Date().toISOString();
+  C.remoteHasContent=hasContent(S); if(C.remoteHasContent) C.emptyOk=false;
+  C.encVault = encd? LOCK.vault : null; saveCloud();
+  if(encd) keysPushed();
   await maybeBackup(P, txt);
+  await writeShareCloud(P);
   return true;
 }
 async function maybeBackup(P, txt){
   if(!hasContent(S)) return;                       // pas de copie mensuelle vide
   const m=today().slice(0,7);
   if(C.lastBackupMonth===m && Date.now()-(C.lastBackupAt||0) < 6*3600e3) return;
-  try{ await P.write("mywealth-donnees-"+m+".json", txt||fileText(), "*"); C.lastBackupMonth=m; C.lastBackupAt=Date.now(); saveCloud(); }
+  try{ await P.write("mywealth-donnees-"+m+".json", txt||await cloudText(), "*"); C.lastBackupMonth=m; C.lastBackupAt=Date.now(); saveCloud(); }
   catch(e){ console.warn("monthly copy failed", e); }
 }
 async function syncNow(){
   const P=Prov();
   if(!P || !P.ready || !P.signedIn()){ setSync("off"); return; }
   if(SYNC.blocked){ setSync("error"); return; }
+  if(LOCK.locked) return;                                   // v5 : rien n'est synchronisé tant que l'app est verrouillée
   if(!navigator.onLine){ setSync("offline"); return; }
   if(SYNC.busy){ SYNC.again=true; return; }
   SYNC.busy=true; clearTimeout(SYNC.timer); SYNC.timer=null; setSync("syncing");
   try{
     let remote=await P.read(REMOTE_NAME), legacy=null;
     if(!remote && !C.etag){ for(const n of LEGACY_NAMES){ const l=await P.read(n).catch(()=>null); if(l){ remote=l; legacy=n; break; } } }
-    const localDirty = C.syncedKey? (C.userDirty && dataKey(S)!==C.syncedKey) : hasUserData(S);
+    const localDirty = C.syncedKey? (C.userDirty && hashStr(dataKey(S))!==C.syncedKey) : hasUserData(S);
     if(!remote){
       C.remoteHasContent=false;
       if(!(await pushNow(P, C.etag? "*" : null))) SYNC.again=true;
     } else {
       let j=null; try{ j=JSON.parse(remote.text); }catch(e){}
       const name=legacy||REMOTE_NAME;
+      // v5 : fichier chiffré / en clair selon l'état du verrouillage
+      let mustPush=false;
+      if(isEnvelope(j)){
+        if(!LOCK.on || !LOCK.key || j.vault!==LOCK.vault){ LOCK.remoteEnv=j; const x=new Error(t("stNeedKey",{p:P.label})); x.needkey=true; throw x; }
+        mustPush=mergeKeys(j.keys);
+        j=await openEnvelope(j);
+      } else if(LOCK.on && j){
+        mustPush = (await remotePlainWhileLocked(P))==="encrypt";
+      }
       if(!isPatrimoineData(j)) throw new Error(t("errUnreadable",{name}));
       if(schemaOf(j)>SCHEMA_VERSION){ SYNC.blocked=true; alert(futureMsg(name,schemaOf(j))); throw new Error(t("errFuture")); }
       const remoteS=migrate(j);
@@ -1590,18 +1743,19 @@ async function syncNow(){
       else if(!hasContent(S) && hasContent(remoteS) && !C.emptyOk) keep="remote";   // appareil vide (nouvelle installation, cache effacé) : le cloud fait foi
       else if(!remoteChanged) keep = (C.userDirty || hasUserData(S) || !hasUserData(remoteS)) ? "local" : "remote";
       else if(localDirty) keep = await askConflict(remoteS, P);
-      if(keep==="same"){ C.etag=legacy? null : remote.etag; C.syncedKey=dataKey(S); C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud(); if(legacy) await pushNow(P,null); else if(schemaOf(j)<SCHEMA_VERSION) await pushNow(P, remote.etag); }
+      if(keep==="same"){ C.etag=legacy? null : remote.etag; C.syncedKey=hashStr(dataKey(S)); C.userDirty=false; C.lastSync=new Date().toISOString(); saveCloud(); if(legacy) await pushNow(P,null); else if(schemaOf(j)<SCHEMA_VERSION || mustPush) await pushNow(P, remote.etag); else await writeShareCloud(P); }
       else if(keep==="remote"){
         adopt(remoteS);
-        C.syncedKey=dataKey(S); C.userDirty=false; C.emptyOk=false; C.lastSync=new Date().toISOString();
+        C.syncedKey=hashStr(dataKey(S)); C.userDirty=false; C.emptyOk=false; C.lastSync=new Date().toISOString();
         if(legacy){ C.etag=null; saveCloud(); await pushNow(P,null); toast(t("toastLegacy",{name:legacy,p:P.label})); }
-        else { C.etag=remote.etag; saveCloud(); if(schemaOf(j)<SCHEMA_VERSION) await pushNow(P, remote.etag); else await maybeBackup(P); toast(t("toastLoaded",{p:P.label})); }
+        else { C.etag=remote.etag; saveCloud(); if(schemaOf(j)<SCHEMA_VERSION || mustPush) await pushNow(P, remote.etag); else { await maybeBackup(P); await writeShareCloud(P); } toast(t("toastLoaded",{p:P.label})); }
       } else {
         if(!(await pushNow(P, legacy? null : remote.etag))) SYNC.again=true;
       }
     }
     setSync("ok", null);
   }catch(e){
+    if(e.needkey){ setSync("needkey", e); if(!LOCK.remoteAsked){ LOCK.remoteAsked=true; setTimeout(flowRemote, 50); } return; }
     console.warn("sync failed", e);
     if(e.reauth) setSync("reauth", e);
     else if(!navigator.onLine || e instanceof TypeError) setSync("offline", e);
@@ -1614,6 +1768,7 @@ async function syncNow(){
 async function pushChange(){
   const P=Prov(); SYNC.timer=null;
   if(!cloudOn() || SYNC.blocked) return;
+  if(SYNC.state==="needkey") return;
   if(!navigator.onLine){ setSync("offline"); return; }
   if(SYNC.busy || !C.etag){ return syncNow(); }
   SYNC.busy=true; setSync("syncing");
@@ -1624,7 +1779,7 @@ async function pushChange(){
 }
 function Cloud_schedule(auto){
   if(!auto){ C.userDirty=true; saveCloud(); }
-  if(!cloudOn()) return;
+  if(!cloudOn() || LOCK.locked || SYNC.state==="needkey") return;
   clearTimeout(SYNC.timer); SYNC.timer=setTimeout(pushChange, 2000);
   if(!SYNC.busy) setSync("pending");
 }
@@ -1658,6 +1813,754 @@ document.addEventListener("visibilitychange", ()=>{
   if(document.visibilityState==="hidden" && SYNC.timer){ clearTimeout(SYNC.timer); pushChange(); }
 });
 
+/* v5 : textes du verrouillage */
+Object.assign(I18N.fr, {
+  security:"Sécurité", secLinkOn:"Verrouillage activé · données chiffrées", secLinkOff:"Verrouillage désactivé · code, Face ID, chiffrement",
+  lkEnter:"Entrez votre code", lkWrong:"Code incorrect", lkAutoHint:"Verrouillage automatique après {n} min", lkChecking:"Vérification…",
+  lkWait:"{n} essais manqués · réessayez dans {t}", lkTryAgain:"Vous pouvez réessayer", lkForgot:"Code oublié ?", lkUseBio:"Utiliser {b}", lkDelete:"Effacer",
+  lkOpenErr:"Impossible d’ouvrir les données : {e}", lkNoData:"aucune donnée chiffrée sur cet appareil", lkStep:"Étape {i} sur {n}", lkBack:"Retour", lkContinue:"Continuer",
+  lkChoose:"Choisissez un code", lkChooseSub:"6 chiffres, à mémoriser. Évitez une date de naissance ou 123456.", lkChooseHint:"Saisissez votre nouveau code",
+  lkConfirm:"Confirmation · saisissez-le une 2e fois", lkWeak:"Code trop simple : choisissez-en un autre", lkMismatch:"Les deux codes ne correspondent pas, recommencez",
+  lkCurrentSub:"Pour confirmer qu’il s’agit bien de vous.", bioGeneric:"Biométrie", pkOther:"Utiliser une clé d’identification (passkey)",
+  prfUnavailable:"{b} ne peut pas fournir de clé de chiffrement sur cet appareil", prfUnavailableLong:"Cet appareil ne permet pas à {b} de déchiffrer vos données (extension PRF des clés d’identification requise ; sur iPhone : iOS 18.4 ou plus récent et le Trousseau iCloud). {b} reste désactivé : le code ouvre l’app, et la clé de secours ouvre le fichier du cloud.",
+  bioCancelled:"{b} annulé ou refusé : utilisez votre code", bioFailed:"{b} n’a pas fonctionné ({e})", pkUnknown:"clé d’identification inconnue",
+  bioTitle:"Activer {b} ?", bioSub:"{b} crée une clé d’identification dans votre trousseau. Elle déverrouille vos données sans taper le code.",
+  bioP1a:"Vrai déverrouillage chiffré :", bioP1b:"la clé vient de la clé d’identification (extension WebAuthn PRF), elle n’est jamais stockée.", bioP2:"Le code reste toujours utilisable, en secours.",
+  bioP3:"Nécessite l’extension PRF des clés d’identification (sur iPhone : iOS 18.4 ou plus récent et le Trousseau iCloud). Sinon, {b} reste désactivé et seul le code ouvre l’app.", bioNoDevice:"Aucune biométrie utilisable ici (Face ID, Touch ID, Windows Hello…) : vous pouvez continuer avec le code seul.",
+  bioEnable:"Activer {b}", bioOnSub:"Déverrouille aussi le chiffrement (clé d’identification)", bioOffSub:"Désactivé sur cet appareil", bioNoSub:"Non disponible ici (iOS 18.4+ et Trousseau iCloud requis)",
+  later:"Plus tard", or:"ou",
+  suTitle1:"Avant d’activer le verrouillage", suSub1:"Vos données seront chiffrées. Personne d’autre ne pourra les lire, pas même {p}.",
+  suWarnT:"Code oublié sans clé de secours = données perdues", suWarnP:"Il n’existe aucune réinitialisation par e-mail. Sans le code, Face ID ou la clé de secours, ni vous ni personne ne pourra ouvrir vos données, sur cet appareil comme dans {p}.",
+  suChanges:"Ce qui va changer", suCh1:"Données de l’app et fichier {p} chiffrés (AES-256)", suCh2:"Anciennes copies non chiffrées retirées de cet appareil (gardées chiffrées)",
+  suCh3:"Un code à 6 chiffres pour ouvrir l’app ici, Face ID en option", suCh4:"MyPension ne lit plus le détail, seulement le total si vous le partagez",
+  suExport:"Exporter une copie non chiffrée (.json)", suExportHint:"Conseillé : gardez cette copie en lieu sûr avant d’activer.", suExported:"{f} · exportée aujourd’hui",
+  suCheck:"J’ai compris qu’un code oublié sans clé de secours rend mes données définitivement illisibles.", suNeedCheck:"Cochez la case pour continuer",
+  rkTitle:"Votre clé de secours", rkSub:"Elle remplace le code s’il est oublié et ouvre vos données sur un nouvel appareil (PC, nouvel iPhone). Notez-la sur papier ou dans un gestionnaire de mots de passe. Elle ne sera plus affichée.",
+  rkCopy:"Copier", rkSave:"Enregistrer (.txt)", rkCopied:"Clé copiée", rkCopyManual:"Copiez la clé :", rkWhy:"Le fichier {p} est protégé uniquement par Face ID et par cette clé, jamais par le seul code.",
+  rkCheck:"J’ai rangé ma clé de secours en lieu sûr.", rkNeedCheck:"Confirmez que la clé est rangée", rkLabel:"Clé de secours", rkUnlock:"Déverrouiller",
+  rkBad:"Format attendu : 24 signes (lettres et chiffres), tirets facultatifs", rkWrong:"Clé de secours incorrecte", rkNone:"aucune clé de secours",
+  rkFile:"MyWealth — clé de secours\n\n{k}\n\nCréée le {d}. Elle ouvre vos données chiffrées (Dropbox et appareils) si le code est oublié.\nGardez-la hors ligne, ne la partagez pas.\n",
+  rkSaveNew:"Enregistrer la nouvelle clé", suEncrypt:"Chiffrer mes données", suWorking:"Chiffrement…", suWorkingSub:"Écriture, puis vérification avant d’effacer quoi que ce soit.",
+  suFailed:"Le chiffrement n’a pas abouti, rien n’a été effacé ({e}).", suDone:"Données chiffrées", suSyncing:"Envoi du fichier chiffré vers {p}…", suDoneLocal:"Vos données sont chiffrées sur cet appareil.",
+  clTitle:"Anciennes copies non chiffrées", clSearching:"Recherche des anciennes copies…", clSearchingSub:"Dans {p} › dossier de l’app.",
+  clSub:"{n} fichier(s) dans {p} contiennent encore vos données en clair (copies mensuelles, sauvegarde v2). Voulez-vous les supprimer ?",
+  clNone:"Aucune copie non chiffrée trouvée dans {p}.", clHistory:"Important : {p} garde l’historique des versions et les fichiers supprimés environ 30 jours (plus selon l’abonnement). Pendant ce délai, les anciennes versions en clair, y compris celles du fichier principal, restent récupérables depuis le site de {p}.",
+  clDelete:"Supprimer la sélection", clKeep:"Garder ces fichiers", clConfirm:"Supprimer définitivement {n} fichier(s) de {p} ?", clFailed:"Non supprimé(s) : {f}", clDone:"{n} fichier(s) supprimé(s)", clNoCloud:"Aucun cloud connecté",
+  rcTitle:"Code oublié", rcSub:"Ouvrez vos données avec votre clé de secours (ou Face ID), puis choisissez un nouveau code.", rcNew:"Nouveau code", rcNewSub:"Choisissez le code qui ouvrira l’app sur cet appareil.",
+  rmTitle:"Données chiffrées dans {p}", rmSub:"Le verrouillage a été activé sur un autre appareil. Déverrouillez le fichier {p} avec Face ID / Touch ID ou votre clé de secours, puis choisissez un code pour cet appareil.",
+  rmSubRekey:"Le fichier {p} a été chiffré avec une nouvelle clé sur un autre appareil. Déverrouillez-le avec Face ID ou la clé de secours actuelle, puis choisissez un code.",
+  rmHelp:"Sur un PC ou un nouvel appareil, la clé de secours est le moyen le plus sûr. Vos données ne sont jamais envoyées en clair.", rmUseRK:"Utilisez la clé de secours.",
+  rmCorrupt:"La clé est correcte mais le fichier n’a pas pu être ouvert (fichier endommagé ?). Rien n’a été modifié.", rmCode:"Un code pour cet appareil", rmCodeSub:"Il ouvrira l’app ici. Il reste sur cet appareil et ne protège pas seul le fichier du cloud.",
+  ccCurrent:"Code actuel", ccNew:"Nouveau code", ccNewSub:"Le nouveau code remplace l’ancien sur cet appareil.", dsTitle:"Désactiver le verrouillage ?",
+  dsSub:"Vos données redeviendront lisibles sans code, sur cet appareil et dans {p}.", dsNote:"Les autres appareils restent verrouillés jusqu’à ce que vous les désactiviez aussi ; ils vous demanderont quoi faire. La clé d’identification reste dans Réglages › Mots de passe, vous pouvez l’y supprimer.",
+  dsGo:"Désactiver", dsCode:"Code pour désactiver", dsWorking:"Retour en clair…", dsOffline:"Connexion à {p} requise pour désactiver", dsSyncFirst:"La synchronisation avec {p} doit réussir d’abord",
+  dsFailed:"Désactivation interrompue, rien n’a changé ({e}).", askRemotePlain:"Le fichier {p} n’est plus chiffré (verrouillage désactivé sur un autre appareil ?).\n\nOK : garder le chiffrement (le fichier sera rechiffré).\nAnnuler : désactiver aussi le verrouillage sur cet appareil.",
+  secOff:"Verrouillage désactivé", secOffSub:"Facultatif. Vos données restent sur cet appareil et dans votre cloud, sans code.",
+  secP1:"Code à 6 chiffres pour ouvrir l’app, essais limités", secP2:"{b} en option (clé d’identification)", secP3:"Clé de secours en cas d’oubli", secP4:"Données chiffrées AES-256, ici et dans {p}",
+  secEnable:"Activer le verrouillage", secOn:"Données chiffrées", secOnSub:"AES-256 · sur cet appareil", secOnSubCloud:"AES-256 · sur cet appareil et dans {p}",
+  secUnlock:"Déverrouillage", secCode:"Code à 6 chiffres", secCodeSub:"Demandé à l’ouverture de l’app", active:"Activé", secChange:"Modifier le code", secLockNow:"Verrouiller maintenant",
+  secAuto:"Verrouillage automatique", secAutoT:"Après une période d’inactivité", secAutoSub:"Délai sans aucune action", secHide:"Verrouiller en arrière-plan", secHideSub:"Dès que vous quittez l’app",
+  secExport:"Exporter une copie non chiffrée", secExportSub:"Fichier JSON lisible, à garder en lieu sûr", secRK:"Nouvelle clé de secours", secRKSub:"Clé actuelle créée le {d}",
+  secClean:"Anciennes copies non chiffrées", secCleanSub:"Rechercher et supprimer dans {p}", secKeys:"{n} clé(s) d’accès au fichier chiffré, dont {pk} clé(s) d’identification.",
+  secDisable:"Désactiver le verrouillage", secDisableSub:"Demande le code, puis réécrit les données en clair sur cet appareil et dans {p}.",
+  shTitle:"Partager l’épargne libre avec MyPension", shSub:"Fichier séparé, non chiffré", shOn:"Seul le total est partagé : <b>{v}</b> · au {d}. Aucun compte, aucune position, aucun détail.",
+  shOff:"Rien n’est partagé.", shWhyOn:"MyPension ne peut pas lire vos données chiffrées : sans ce partage, il garde la dernière valeur connue.", shWhyOff:"Sans verrouillage, MyPension lit déjà vos données sur ce site ; ce partage sert surtout quand elles sont chiffrées.",
+  confirmBioOff:"Désactiver {b} pour MyWealth ? Le code et la clé de secours restent utilisables.", confirmNewRK:"Créer une nouvelle clé de secours ? L’ancienne ne fonctionnera plus pour les prochaines versions du fichier (elle ouvre encore les anciennes versions gardées par le cloud).",
+  confirmPlainExport:"Ce fichier ne sera pas chiffré : toute personne qui l’obtient peut lire vos données. Continuer ?",
+  toastLockOn:"Verrouillage activé", toastLockOff:"Verrouillage désactivé", toastLockOffRemote:"Verrouillage désactivé sur cet appareil", toastCodeChanged:"Code enregistré",
+  toastBioOn:"{b} activé", toastBioOff:"{b} désactivé", toastNewRK:"Nouvelle clé de secours enregistrée", toastRemoteOk:"Données déverrouillées sur cet appareil",
+  stNeedKey:"{p} : données chiffrées, à déverrouiller", bnNeedKey:"Vos données {p} sont chiffrées (verrouillage activé sur un autre appareil). Déverrouillez-les avec Face ID ou la clé de secours.",
+  importEncrypted:"Ce fichier est chiffré avec une autre clé : ouvrez-le depuis l’app qui l’a créé, ou importez une copie non chiffrée.", cloudGeneric:"le cloud"
+});
+Object.assign(I18N.en, {
+  security:"Security", secLinkOn:"Lock on · data encrypted", secLinkOff:"Lock off · passcode, Face ID, encryption",
+  lkEnter:"Enter your passcode", lkWrong:"Wrong passcode", lkAutoHint:"Locks automatically after {n} min", lkChecking:"Checking…",
+  lkWait:"{n} failed attempts · try again in {t}", lkTryAgain:"You can try again", lkForgot:"Forgot passcode?", lkUseBio:"Use {b}", lkDelete:"Delete",
+  lkOpenErr:"Could not open the data: {e}", lkNoData:"no encrypted data on this device", lkStep:"Step {i} of {n}", lkBack:"Back", lkContinue:"Continue",
+  lkChoose:"Choose a passcode", lkChooseSub:"6 digits to remember. Avoid a birth date or 123456.", lkChooseHint:"Enter your new passcode",
+  lkConfirm:"Confirm · enter it a second time", lkWeak:"Too simple: choose another one", lkMismatch:"The passcodes don’t match, start again",
+  lkCurrentSub:"To confirm it’s you.", bioGeneric:"Biometrics", pkOther:"Use a passkey",
+  prfUnavailable:"{b} can’t provide an encryption key on this device", prfUnavailableLong:"This device doesn’t let {b} decrypt your data (the passkey PRF extension is required; on iPhone: iOS 18.4 or later and iCloud Keychain). {b} stays off: the passcode opens the app and the recovery key opens the cloud file.",
+  bioCancelled:"{b} cancelled or refused: use your passcode", bioFailed:"{b} didn’t work ({e})", pkUnknown:"unknown passkey",
+  bioTitle:"Turn on {b}?", bioSub:"{b} creates a passkey in your keychain. It unlocks your data without typing the passcode.",
+  bioP1a:"Real encrypted unlock:", bioP1b:"the key comes from the passkey (WebAuthn PRF extension) and is never stored.", bioP2:"The passcode always works as a fallback.",
+  bioP3:"Requires the passkey PRF extension (on iPhone: iOS 18.4 or later and iCloud Keychain). Otherwise {b} stays off and only the passcode opens the app.", bioNoDevice:"No usable biometrics here (Face ID, Touch ID, Windows Hello…): you can continue with the passcode only.",
+  bioEnable:"Turn on {b}", bioOnSub:"Also unlocks the encryption (passkey)", bioOffSub:"Off on this device", bioNoSub:"Not available here (iOS 18.4+ and iCloud Keychain required)",
+  later:"Later", or:"or",
+  suTitle1:"Before turning on the lock", suSub1:"Your data will be encrypted. Nobody else can read it, not even {p}.",
+  suWarnT:"Forgotten passcode without recovery key = data lost", suWarnP:"There is no reset by e-mail. Without the passcode, Face ID or the recovery key, nobody, including you, can open your data, on this device or in {p}.",
+  suChanges:"What changes", suCh1:"App data and {p} file encrypted (AES-256)", suCh2:"Old unencrypted copies removed from this device (kept encrypted)",
+  suCh3:"A 6-digit passcode to open the app here, Face ID optional", suCh4:"MyPension no longer reads the details, only the total if you share it",
+  suExport:"Export an unencrypted copy (.json)", suExportHint:"Recommended: keep this copy somewhere safe before turning it on.", suExported:"{f} · exported today",
+  suCheck:"I understand that a forgotten passcode without the recovery key makes my data permanently unreadable.", suNeedCheck:"Tick the box to continue",
+  rkTitle:"Your recovery key", rkSub:"It replaces the passcode if you forget it and opens your data on a new device (PC, new iPhone). Write it on paper or in a password manager. It won’t be shown again.",
+  rkCopy:"Copy", rkSave:"Save (.txt)", rkCopied:"Key copied", rkCopyManual:"Copy the key:", rkWhy:"The {p} file is protected only by Face ID and this key, never by the passcode alone.",
+  rkCheck:"I’ve stored my recovery key safely.", rkNeedCheck:"Confirm the key is stored", rkLabel:"Recovery key", rkUnlock:"Unlock",
+  rkBad:"Expected format: 24 characters (letters and digits), dashes optional", rkWrong:"Wrong recovery key", rkNone:"no recovery key",
+  rkFile:"MyWealth — recovery key\n\n{k}\n\nCreated on {d}. It opens your encrypted data (Dropbox and devices) if you forget the passcode.\nKeep it offline, don’t share it.\n",
+  rkSaveNew:"Save the new key", suEncrypt:"Encrypt my data", suWorking:"Encrypting…", suWorkingSub:"Writing, then checking before anything is erased.",
+  suFailed:"Encryption didn’t complete, nothing was erased ({e}).", suDone:"Data encrypted", suSyncing:"Uploading the encrypted file to {p}…", suDoneLocal:"Your data is encrypted on this device.",
+  clTitle:"Old unencrypted copies", clSearching:"Looking for old copies…", clSearchingSub:"In {p} › app folder.",
+  clSub:"{n} file(s) in {p} still contain your data unencrypted (monthly copies, v2 backup). Delete them?",
+  clNone:"No unencrypted copy found in {p}.", clHistory:"Important: {p} keeps version history and deleted files for about 30 days (longer on some plans). During that time, old unencrypted versions, including those of the main file, can still be restored from the {p} website.",
+  clDelete:"Delete selected", clKeep:"Keep these files", clConfirm:"Permanently delete {n} file(s) from {p}?", clFailed:"Not deleted: {f}", clDone:"{n} file(s) deleted", clNoCloud:"No cloud connected",
+  rcTitle:"Forgot passcode", rcSub:"Open your data with your recovery key (or Face ID), then choose a new passcode.", rcNew:"New passcode", rcNewSub:"Choose the passcode that will open the app on this device.",
+  rmTitle:"Encrypted data in {p}", rmSub:"The lock was turned on on another device. Unlock the {p} file with Face ID / Touch ID or your recovery key, then choose a passcode for this device.",
+  rmSubRekey:"The {p} file was encrypted with a new key on another device. Unlock it with Face ID or the current recovery key, then choose a passcode.",
+  rmHelp:"On a PC or a new device, the recovery key is the most reliable way. Your data is never uploaded unencrypted.", rmUseRK:"Use the recovery key.",
+  rmCorrupt:"The key is correct but the file couldn’t be opened (damaged file?). Nothing was changed.", rmCode:"A passcode for this device", rmCodeSub:"It opens the app here. It stays on this device and never protects the cloud file on its own.",
+  ccCurrent:"Current passcode", ccNew:"New passcode", ccNewSub:"The new passcode replaces the old one on this device.", dsTitle:"Turn off the lock?",
+  dsSub:"Your data will be readable without a passcode again, on this device and in {p}.", dsNote:"Other devices stay locked until you turn it off there too; they’ll ask you what to do. The passkey stays in Settings › Passwords, where you can delete it.",
+  dsGo:"Turn off", dsCode:"Passcode to turn off", dsWorking:"Back to unencrypted…", dsOffline:"A connection to {p} is required", dsSyncFirst:"Syncing with {p} must succeed first",
+  dsFailed:"Turning off was interrupted, nothing changed ({e}).", askRemotePlain:"The {p} file is no longer encrypted (lock turned off on another device?).\n\nOK: keep encryption (the file will be encrypted again).\nCancel: turn off the lock on this device too.",
+  secOff:"Lock off", secOffSub:"Optional. Your data stays on this device and in your cloud, without a passcode.",
+  secP1:"6-digit passcode to open the app, limited attempts", secP2:"{b} optional (passkey)", secP3:"Recovery key if you forget it", secP4:"AES-256 encrypted data, here and in {p}",
+  secEnable:"Turn on the lock", secOn:"Data encrypted", secOnSub:"AES-256 · on this device", secOnSubCloud:"AES-256 · on this device and in {p}",
+  secUnlock:"Unlock", secCode:"6-digit passcode", secCodeSub:"Asked when the app opens", active:"On", secChange:"Change passcode", secLockNow:"Lock now",
+  secAuto:"Auto-lock", secAutoT:"After inactivity", secAutoSub:"Time without any action", secHide:"Lock in background", secHideSub:"As soon as you leave the app",
+  secExport:"Export an unencrypted copy", secExportSub:"Readable JSON file, keep it safe", secRK:"New recovery key", secRKSub:"Current key created on {d}",
+  secClean:"Old unencrypted copies", secCleanSub:"Find and delete in {p}", secKeys:"{n} key(s) can open the encrypted file, including {pk} passkey(s).",
+  secDisable:"Turn off the lock", secDisableSub:"Asks for the passcode, then rewrites the data unencrypted on this device and in {p}.",
+  shTitle:"Share free savings with MyPension", shSub:"Separate file, not encrypted", shOn:"Only the total is shared: <b>{v}</b> · as of {d}. No account, no position, no detail.",
+  shOff:"Nothing is shared.", shWhyOn:"MyPension can’t read your encrypted data: without sharing, it keeps the last known value.", shWhyOff:"Without the lock, MyPension already reads your data on this site; sharing matters mostly when it’s encrypted.",
+  confirmBioOff:"Turn off {b} for MyWealth? The passcode and recovery key still work.", confirmNewRK:"Create a new recovery key? The old one won’t work for future versions of the file (it still opens older versions kept by the cloud).",
+  confirmPlainExport:"This file won’t be encrypted: anyone who gets it can read your data. Continue?",
+  toastLockOn:"Lock turned on", toastLockOff:"Lock turned off", toastLockOffRemote:"Lock turned off on this device", toastCodeChanged:"Passcode saved",
+  toastBioOn:"{b} turned on", toastBioOff:"{b} turned off", toastNewRK:"New recovery key saved", toastRemoteOk:"Data unlocked on this device",
+  stNeedKey:"{p}: encrypted data, unlock needed", bnNeedKey:"Your {p} data is encrypted (lock turned on on another device). Unlock it with Face ID or the recovery key.",
+  importEncrypted:"This file is encrypted with another key: open it from the app that created it, or import an unencrypted copy.", cloudGeneric:"the cloud"
+});
+
+/* =====================================================================
+   MyWealth v5 — verrouillage et chiffrement (facultatif, désactivé par défaut)
+   Enveloppe : une clé de données aléatoire (AES-256-GCM) chiffre les données. Elle est elle-même
+   chiffrée (« emballée ») par :
+     · le code à 6 chiffres (PBKDF2-SHA-256, 600 000 itérations) — UNIQUEMENT sur cet appareil ;
+     · la clé de secours (aléatoire, 120 bits) — dans l'enveloppe (appareil + cloud) ;
+     · Face ID / Touch ID : clé d'identification + extension WebAuthn PRF — dans l'enveloppe.
+   Le fichier cloud n'est donc jamais protégé par le seul code.
+   ===================================================================== */
+const LOCK_KEY="mywealth.lock.v1", ENC_KEY="mywealth.enc.v1", ENC_OLD_KEY="mywealth.enc.old.v1";
+const SHARE_KEY="mywealth.share.v1", SHARE_NAME="mywealth-partage.json";
+const ENV_APP="mywealth-chiffre", SHARE_APP="mywealth-partage";
+const CODE_ITER=600000, RK_ITER=100000, CODE_LEN=6;
+const PLAIN_LOCAL=[STORE_KEY, OLD_STORE_KEY, BACKUP_V2_KEY, STORE_KEY+".illisible"];
+const THROTTLE=[30,60,300,900,3600];          // secondes d'attente, à partir du 5e code faux
+const AUTO_CHOICES=[1,5,15,60];               // minutes d'inactivité
+const RK_ALPHA="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // 32 signes (sans I, O, 0, 1)
+const TE=new TextEncoder(), TD=new TextDecoder();
+function b64e(u8){ u8=new Uint8Array(u8); let s=""; for(let i=0;i<u8.length;i+=0x8000) s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000)); return btoa(s); }
+function b64d(s){ const b=atob(s), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+function b64u(u8){ return b64e(u8).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64ud(s){ s=String(s).replace(/-/g,"+").replace(/_/g,"/"); while(s.length%4) s+="="; return b64d(s); }
+function rnd(n){ const a=new Uint8Array(n); crypto.getRandomValues(a); return a; }
+function sameBytes(a,b){ if(!a||!b||a.length!==b.length) return false; let d=0; for(let i=0;i<a.length;i++) d|=a[i]^b[i]; return d===0; }
+const lkSleep=ms=>new Promise(r=>setTimeout(r,ms));
+const AAD=(vault,what)=>TE.encode("mywealth|"+vault+"|"+what);
+async function kdfPBKDF2(secret,salt,iter){ const base=await crypto.subtle.importKey("raw",TE.encode(secret),"PBKDF2",false,["deriveKey"]); return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]); }
+async function kdfHKDF(ikm,info){ const base=await crypto.subtle.importKey("raw",ikm,"HKDF",false,["deriveKey"]); return crypto.subtle.deriveKey({name:"HKDF",hash:"SHA-256",salt:TE.encode("mywealth-prf-v1"),info:TE.encode(info)},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]); }
+async function gcmSeal(key,data,aad){ const iv=rnd(12); const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv,additionalData:aad},key,data); return {iv:b64e(iv),ct:b64e(new Uint8Array(ct))}; }
+async function gcmOpen(key,o,aad){ return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(o.iv),additionalData:aad},key,b64d(o.ct))); }
+
+/* ---------- État ---------- */
+function loadL(){ try{ const l=JSON.parse(localStorage.getItem(LOCK_KEY)||"null"); return l && l.enabled? l : null; }catch(e){ return null; } }
+let L = loadL();      // réglages locaux du verrou (aucune donnée en clair)
+function saveL(){ try{ L? localStorage.setItem(LOCK_KEY, JSON.stringify(L)) : localStorage.removeItem(LOCK_KEY); }catch(e){} }
+const LOCK = { on:!!L, locked:false, closing:null, dek:null, key:null, vault:null, prfSalt:null, keys:[], chain:Promise.resolve(),
+               lastAct:Date.now(), remoteEnv:null, ceremony:false, autoBioDone:false, remoteAsked:false };
+function isEnvelope(j){ return !!j && typeof j==="object" && j.app===ENV_APP && !!j.data && Array.isArray(j.keys); }
+async function setDEK(raw, vault, env){
+  LOCK.dek=new Uint8Array(raw); LOCK.key=await crypto.subtle.importKey("raw",LOCK.dek,{name:"AES-GCM"},false,["encrypt","decrypt"]); LOCK.vault=vault;
+  if(env){ LOCK.prfSalt=env.prfSalt; LOCK.keys=env.keys.slice(); }
+}
+function wipeDEK(){ if(LOCK.dek) LOCK.dek.fill(0); LOCK.dek=null; LOCK.key=null; }
+async function sealEnvelope(){
+  const data=await gcmSeal(LOCK.key, TE.encode(fileText()), AAD(LOCK.vault,"data"));
+  return JSON.stringify({app:ENV_APP, format:1, vault:LOCK.vault, savedAt:S.savedAt||null, alg:"AES-256-GCM", prfSalt:LOCK.prfSalt, keys:LOCK.keys, data,
+    _info:"MyWealth : données chiffrées (AES-256-GCM). Ouvrez-les dans l'app avec Face ID ou la clé de secours. / Encrypted MyWealth data: open them in the app with Face ID or the recovery key."});
+}
+async function openEnvelope(env, key){ return JSON.parse(TD.decode(await gcmOpen(key||LOCK.key, env.data, AAD(env.vault,"data")))); }
+async function cloudText(){ return LOCK.on && LOCK.key? sealEnvelope() : fileText(); }
+function localEnv(){ try{ return JSON.parse(localStorage.getItem(ENC_KEY)||"null"); }catch(e){ return null; } }
+function persistLocal(){
+  if(!LOCK.key) return LOCK.chain;
+  LOCK.chain=LOCK.chain.then(async()=>{ const txt=await sealEnvelope(); localStorage.setItem(ENC_KEY, txt); saveOk=true; })
+                       .catch(e=>{ console.warn("encrypted save failed", e); saveOk=false; });
+  return LOCK.chain;
+}
+/* emballages */
+async function wrapDEK(kek, kind){ return gcmSeal(kek, LOCK.dek, AAD(LOCK.vault,"key:"+kind)); }
+async function unwrapDEK(kek, o, vault, kind){ return gcmOpen(kek, o, AAD(vault,"key:"+kind)); }
+async function codeWrap(code){ const salt=rnd(16); const k=await kdfPBKDF2(code, salt, CODE_ITER); return Object.assign({salt:b64e(salt), iter:CODE_ITER}, await wrapDEK(k,"code")); }
+async function codeUnwrap(code, l){ l=l||L; const k=await kdfPBKDF2(code, b64d(l.code.salt), l.code.iter); return unwrapDEK(k, l.code, l.vault, "code"); }
+function newRecoveryKey(){ const b=rnd(24); let s=""; for(const x of b) s+=RK_ALPHA[x&31]; return s; }
+function fmtRK(s){ return s.match(/.{1,4}/g).join("-"); }
+function normRK(s){ const v=String(s||"").toUpperCase().replace(/[\s\-–—_.]/g,""); return v.length===24 && [...v].every(c=>RK_ALPHA.includes(c))? v : null; }
+async function rkEntry(rk){ const salt=rnd(16); const k=await kdfPBKDF2(rk, salt, RK_ITER);
+  return Object.assign({id:"rk-"+b64u(rnd(6)), type:"recovery", created:new Date().toISOString(), salt:b64e(salt), iter:RK_ITER}, await wrapDEK(k,"recovery")); }
+async function rkUnwrap(env, rk){ const e=env.keys.find(k=>k.type==="recovery"); if(!e) throw new Error(t("rkNone"));
+  const k=await kdfPBKDF2(rk, b64d(e.salt), e.iter); return unwrapDEK(k, e, env.vault, "recovery"); }
+/* clés d'identification (WebAuthn + PRF) */
+function waOK(){ return !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext); }
+async function bioAvailable(){ if(!waOK()) return false; try{ return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(); }catch(e){ return false; } }
+function isApple(){ const u=navigator.userAgent; return /iPhone|iPad|iPod|Macintosh/.test(u); }
+function bioName(){ const u=navigator.userAgent; if(/iPhone|iPad|iPod/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints>1)) return "Face ID"; if(/Macintosh/.test(u)) return "Touch ID"; if(/Windows/.test(u)) return "Windows Hello"; return t("bioGeneric"); }
+function deviceLabel(){ const u=navigator.userAgent; return /iPhone/.test(u)?"iPhone": /iPad/.test(u)?"iPad": /Macintosh/.test(u)?"Mac": /Windows/.test(u)?"Windows": /Android/.test(u)?"Android": /Linux/.test(u)?"Linux":"web"; }
+function prfErr(){ const e=new Error(t("prfUnavailable",{b:bioName()})); e.prf=true; return e; }
+function signalUnknown(cred){ try{ if(PublicKeyCredential.signalUnknownCredential) PublicKeyCredential.signalUnknownCredential({rpId:location.hostname, credentialId:cred}).catch(()=>{}); }catch(e){} }
+async function passkeyGet(creds, saltB64){
+  LOCK.ceremony=true;
+  try{
+    const cr=await navigator.credentials.get({publicKey:{challenge:rnd(32), rpId:location.hostname, userVerification:"required", timeout:120000,
+      allowCredentials:creds.map(c=>({type:"public-key", id:b64ud(c)})), extensions:{prf:{eval:{first:b64d(saltB64)}}}}});
+    const x=(cr.getClientExtensionResults&&cr.getClientExtensionResults())||{};
+    const out=x.prf && x.prf.results && x.prf.results.first;
+    if(!out) throw prfErr();
+    return {cred:b64u(new Uint8Array(cr.rawId)), out:new Uint8Array(out)};
+  } finally { LOCK.ceremony=false; LOCK.lastAct=Date.now(); }
+}
+async function passkeyCreate(){
+  LOCK.ceremony=true; let cred=null;
+  try{
+    const cr=await navigator.credentials.create({publicKey:{challenge:rnd(32), rp:{name:"MyWealth", id:location.hostname},
+      user:{id:rnd(16), name:"MyWealth · "+deviceLabel(), displayName:"MyWealth"},
+      pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],
+      authenticatorSelection:{authenticatorAttachment:"platform", residentKey:"required", requireResidentKey:true, userVerification:"required"},
+      timeout:120000, attestation:"none", extensions:{prf:{eval:{first:b64d(LOCK.prfSalt)}}}}});
+    cred=b64u(new Uint8Array(cr.rawId));
+    const x=(cr.getClientExtensionResults&&cr.getClientExtensionResults())||{};
+    if(!x.prf || x.prf.enabled===false){ signalUnknown(cred); throw prfErr(); }
+    let out=x.prf.results && x.prf.results.first;
+    LOCK.ceremony=false;
+    if(!out){ try{ out=(await passkeyGet([cred], LOCK.prfSalt)).out; }catch(e){ if(e.prf) signalUnknown(cred); throw e; } }   // Safari : le secret PRF arrive à la 1re authentification
+    return {cred, out:new Uint8Array(out)};
+  } finally { LOCK.ceremony=false; LOCK.lastAct=Date.now(); }
+}
+async function pkEntry(cred, out){ const k=await kdfHKDF(out,"kek");
+  return Object.assign({id:"pk-"+cred.slice(0,22), type:"passkey", cred, label:deviceLabel(), created:new Date().toISOString()}, await wrapDEK(k,"passkey")); }
+async function pkUnwrap(env){
+  const list=env.keys.filter(k=>k.type==="passkey"); if(!list.length) throw prfErr();
+  const g=await passkeyGet(list.map(k=>k.cred), env.prfSalt);
+  const e=list.find(k=>k.cred===g.cred); if(!e) throw new Error(t("pkUnknown"));
+  const k=await kdfHKDF(g.out,"kek");
+  return {raw:await unwrapDEK(k, e, env.vault, "passkey"), cred:g.cred};
+}
+/* liste des clés : fusion entre appareils (ajouts et retraits en attente d'envoi) */
+function keyAdd(e){ LOCK.keys.push(e); L.pendingKeys=(L.pendingKeys||[]).concat(e.id); }
+function keyRemove(id){ LOCK.keys=LOCK.keys.filter(k=>k.id!==id); L.removedKeys=(L.removedKeys||[]).concat(id); L.pendingKeys=(L.pendingKeys||[]).filter(x=>x!==id); }
+function mergeKeys(remote){
+  const rem=new Set(L.removedKeys||[]), pend=new Set(L.pendingKeys||[]);
+  const out=remote.filter(k=>!rem.has(k.id));
+  LOCK.keys.forEach(k=>{ if(pend.has(k.id) && !out.some(x=>x.id===k.id)) out.push(k); });
+  const changed = out.length!==remote.length || out.some((k,i)=>k.id!==remote[i].id);
+  LOCK.keys=out;
+  if(L.bio && !out.some(k=>k.cred===L.bio)){ L.bio=null; saveL(); }
+  return changed;
+}
+function keysPushed(){ if(L && ((L.pendingKeys||[]).length || (L.removedKeys||[]).length)){ L.pendingKeys=[]; L.removedKeys=[]; saveL(); } }
+/* essais limités */
+function waitLeft(){ return L? Math.max(0,(L.until||0)-Date.now()) : 0; }
+function noteFail(){ L.fails=(L.fails||0)+1; if(L.fails>=5) L.until=Date.now()+THROTTLE[Math.min(L.fails-5, THROTTLE.length-1)]*1000; saveL(); }
+function noteOk(){ if(L.fails||L.until){ L.fails=0; L.until=0; saveL(); } }
+function mmss(ms){ const s=Math.ceil(ms/1000); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+
+/* ---------- Partage du total avec MyPension (fichier séparé, NON chiffré) ---------- */
+function shareOn(){ return !!(S.settings && S.settings.shareMP); }
+function freeSavingsCHF(){ const T=totals(); return T.groups.liq+T.groups.titres+T.groups.crypto; }
+function shareObj(){ return {app:SHARE_APP, format:1, total:Math.round(freeSavingsCHF()*100)/100, currency:"CHF", date:S.savedAt||new Date().toISOString(),
+  _info:"MyWealth → MyPension : uniquement le total de l'épargne libre (comptes hors prévoyance + titres + crypto). Aucun détail. / Free-savings total only."}; }
+function writeShareLocal(){ try{ if(shareOn()){ if(hasContent(S)) localStorage.setItem(SHARE_KEY, JSON.stringify(shareObj())); } else localStorage.removeItem(SHARE_KEY); }catch(e){} }
+async function writeShareCloud(P){
+  try{
+    if(!shareOn()){ if(C.shareKey){ await P.remove(SHARE_NAME); C.shareKey=null; saveCloud(); } return; }
+    if(!hasContent(S)) return;
+    const o=shareObj(), k=o.total+"|"+o.date; if(C.shareKey===k) return;
+    await P.write(SHARE_NAME, JSON.stringify(o,null,1), "*"); C.shareKey=k; saveCloud();
+  }catch(e){ console.warn("share file", e); }
+}
+
+/* ---------- Écran plein (verrou et assistants) ---------- */
+let LKR=null; const PAD={val:"", on:false, busy:false};
+function lkWM(){ return reliefSVG(["#1B4A38"],.55,null,680,"lkwm",""); }
+function lkShow(html, dark){
+  const el=$("lk"); el.className=dark?"dk":"lt"; el.innerHTML=html; el.hidden=false;
+  document.documentElement.classList.add("lk-on"); el.scrollTop=0;
+  const m=document.querySelector('meta[name=theme-color]'); if(m) m.content=dark?"#0F3D2E":"#F6F2EA";
+}
+function lkHide(){ const el=$("lk"); el.hidden=true; el.innerHTML=""; PAD.on=false; LKR=null; document.documentElement.classList.remove("lk-on"); clearInterval(lkHide._t);
+  const m=document.querySelector('meta[name=theme-color]'); if(m) m.content="#F6F2EA"; }
+function lkWait(){ return new Promise(r=>{ LKR=r; }); }
+function lkResolve(v){ if(LKR){ const r=LKR; LKR=null; r(v); } }
+function dotsHTML(n, err){ return `<div class="dots${err?" err":""}" id="lkDots" aria-hidden="true">${Array.from({length:CODE_LEN},(_,i)=>`<i class="${i<n?"f":""}"></i>`).join("")}</div>`; }
+function padHTML(o){
+  const keys=["1","2","3","4","5","6","7","8","9", o.bio?"bio":"", "0","del"];
+  return `<div class="kp${o.off?" off":""}" id="lkPad">`+keys.map(k=> k==="bio"? `<button type="button" class="x" data-k="bio" aria-label="${esc(bioName())}">${ico("faceid",34,1.5)}</button>`
+    : k==="del"? `<button type="button" class="x" data-k="del" aria-label="${esc(t("lkDelete"))}">${ico("del",30,1.5)}</button>`
+    : k===""? `<span class="x"></span>` : `<button type="button" data-k="${k}">${k}</button>`).join("")+`</div>`;
+}
+function steps(i,n){ return `<div class="eb lkstep">${esc(t("lkStep",{i:i+1,n}))}</div><div class="stx">${Array.from({length:n},(_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div>`; }
+function flowHead(o){
+  return `<div class="lknav">${o.back!==false?`<button type="button" data-lk="back">${ico("back",22,2)}${esc(o.backLabel||t("lkBack"))}</button>`:"<span></span>"}</div>`+
+    (o.step!=null? steps(o.step,o.of) : "")+`<h1 class="pt">${esc(o.title)}</h1>${o.sub?`<p class="lksub">${o.subHTML?o.sub:esc(o.sub)}</p>`:""}`;
+}
+function setDots(n, err){ const d=$("lkDots"); if(!d) return; d.className="dots"+(err?" err":""); [...d.children].forEach((x,i)=>x.className=i<n?"f":""); }
+function setHint(s, cls){ const h=$("lkHint"); if(h){ h.textContent=s||""; h.className="hint"+(cls?" "+cls:""); } }
+function padKey(k){
+  if(!PAD.on || PAD.busy) return;
+  if(k==="bio"){ lkResolve({act:"bio"}); return; }
+  if($("lkPad") && $("lkPad").classList.contains("off")) return;
+  if(k==="del"){ PAD.val=PAD.val.slice(0,-1); setDots(PAD.val.length); return; }
+  if(!/^\d$/.test(k) || PAD.val.length>=CODE_LEN) return;
+  PAD.val+=k; setDots(PAD.val.length);
+  if(PAD.val.length===CODE_LEN){ const v=PAD.val; PAD.busy=true; setTimeout(()=>{ PAD.busy=false; lkResolve({act:"code", code:v}); }, 120); }
+}
+/* écran de saisie du code. o.mode : "lock" (écran verrouillé) ou "flow" (assistant) */
+function askCode(o){
+  PAD.val=""; PAD.on=true; PAD.busy=false;
+  const lock=o.mode==="lock";
+  const head = lock? `<div class="lkc"><div class="wordm">MyWealth</div><div class="rule"></div><div class="prompt" id="lkPrompt">${esc(o.title)}</div><div class="hint${o.err?" err":""}" id="lkHint">${esc(o.hint||"")}</div>`
+                   : `<div class="lkhd">${flowHead(o)}</div><div class="lkc lkc2"><div class="hint${o.err?" err":""}" id="lkHint">${esc(o.hint||"")}</div>`;
+  const off = lock && waitLeft()>0;
+  lkShow(`${lkWM()}<div class="lkin${lock?" lkmain":""}">${head}${dotsHTML(o.err?CODE_LEN:0,o.err)}${padHTML({bio:o.bio, off})}${o.extra||""}</div>`+
+    (lock? `<div class="lkfoot"><button type="button" data-lk="forgot">${esc(t("lkForgot"))}</button><span></span></div>` : "")+`</div>`, true);
+  clearInterval(lkHide._t);
+  if(off){ const tick=()=>{ const w=waitLeft(); if(w>0) setHint(t("lkWait",{n:L.fails, t:mmss(w)}),"err"); else { clearInterval(lkHide._t); setHint(t("lkTryAgain")); setDots(0); const p=$("lkPad"); if(p) p.classList.remove("off"); } }; tick(); lkHide._t=setInterval(tick, 500); }
+  return lkWait();
+}
+/* écran générique : renvoie {act} au clic d'un bouton [data-lk] */
+function askScreen(html, dark){ PAD.on=false; lkShow(html, dark); return lkWait(); }
+document.addEventListener("keydown", e=>{
+  if($("lk").hidden || !PAD.on || e.target.matches("input,textarea")) return;
+  if(/^\d$/.test(e.key)){ e.preventDefault(); padKey(e.key); } else if(e.key==="Backspace"){ e.preventDefault(); padKey("del"); }
+});
+
+/* ---------- Verrouiller / déverrouiller ---------- */
+let unlockResolve=null;
+function Lock_boot(){ return new Promise(res=>{ unlockResolve=res; LOCK.locked=true; runLock(); }); }
+function clearPages(){ document.querySelectorAll(".page").forEach(s=>s.innerHTML=""); if($("banners")) $("banners").innerHTML=""; }
+async function lockNow(){
+  if(!LOCK.on || LOCK.locked || LOCK.closing || !LOCK.key) return;
+  if($("conflictDlg").open) return;                     // une question de synchro attend une réponse
+  let done; LOCK.closing=new Promise(r=>done=r);
+  LOCK.autoBioDone=true;                                // verrouillage manuel / inactivité : pas de Face ID immédiat (au retour dans l'app ou au démarrage : oui)
+  closeSheet(); clearPages(); runLock();
+  try{
+    await LOCK.chain;
+    if(SYNC.timer){ clearTimeout(SYNC.timer); SYNC.timer=null; await Promise.race([pushChange(), lkSleep(6000)]); }
+    else if(SYNC.busy){ for(let i=0;i<60 && SYNC.busy;i++) await lkSleep(100); }
+    await LOCK.chain;
+  }catch(e){ console.warn(e); }
+  wipeDEK(); S=defaultState(); LOCK.locked=true; LOCK.closing=null; done();
+}
+async function openLocalWith(raw){
+  const env=localEnv(); if(!env) throw new Error(t("lkNoData"));
+  await setDEK(raw, env.vault, env);
+  S=migrate(await openEnvelope(env));
+  if(L.bio && !LOCK.keys.some(k=>k.cred===L.bio)){ L.bio=null; saveL(); }
+}
+function afterUnlock(){
+  LOCK.locked=false; LOCK.lastAct=Date.now(); LOCK.autoBioDone=false; lkHide();
+  if(unlockResolve){ const r=unlockResolve; unlockResolve=null; r(); return; }
+  lastKey=dataKey(S); renderChrome(); route(); renderSyncUI(); if(cloudOn()) syncNow();
+}
+function bioErrText(e){ return e && e.prf? t("prfUnavailable",{b:bioName()}) : e && e.name==="NotAllowedError"? t("bioCancelled",{b:bioName()}) : t("bioFailed",{b:bioName(), e:(e&&e.message)||"?"}); }
+async function runLock(){
+  let err=false, hint="";
+  const canBio = ()=> !!(L && L.bio && waOK());
+  while(true){
+    const r = await askCode({mode:"lock", title:t(err?"lkWrong":"lkEnter"), hint: hint || (err? "" : t("lkAutoHint",{n:L.autoMin||5})), err, bio:canBio(),
+                             extra: canBio() && waitLeft()>0? `<button type="button" class="fidb" data-lk="bio">${ico("faceid",20,1.7)}${esc(t("lkUseBio",{b:bioName()}))}</button>` : ""});
+    err=false; hint="";
+    if(LOCK.closing) await LOCK.closing;              // verrouillage en cours de finalisation (envoi au cloud)
+    if(r.act==="code"){
+      if(waitLeft()>0) continue;
+      setHint(t("lkChecking")); PAD.busy=true;
+      let raw=null; try{ raw=await codeUnwrap(r.code); }catch(e){ noteFail(); err=true; continue; }
+      try{ noteOk(); await openLocalWith(raw); return afterUnlock(); }catch(e){ console.error(e); hint=t("lkOpenErr",{e:e.message}); continue; }
+    }
+    if(r.act==="bio"){
+      LOCK.autoBioDone=true;
+      try{ const g=await pkUnwrap(localEnv()); noteOk(); await openLocalWith(g.raw); return afterUnlock(); }
+      catch(e){ console.warn("bio unlock", e); hint=bioErrText(e); continue; }
+    }
+    if(r.act==="forgot"){ if(await flowRecover()) return afterUnlock(); }
+  }
+}
+/* déclenche Face ID automatiquement à l'affichage de l'écran verrouillé (iOS 17.4+ : sans geste) */
+const lkObs=new MutationObserver(()=>{
+  if(!LOCK.locked || LOCK.autoBioDone || !L || !L.bio || !waOK() || waitLeft()>0 || !$("lkPad") || document.visibilityState!=="visible" || !$("lk").classList.contains("dk")) return;
+  if(!document.querySelector("#lk .lkmain")) return;
+  LOCK.autoBioDone=true; setTimeout(()=>{ if(document.querySelector("#lk .lkmain")) lkResolve({act:"bio"}); }, 350);
+});
+
+/* ---------- Saisie d'un nouveau code (avec confirmation) ---------- */
+function weakCode(c){ return /^(\d)\1{5}$/.test(c) || "0123456789".includes(c) || "9876543210".includes(c) || c==="121212" || c==="112233"; }
+async function askNewCode(o){
+  let hint="", err=false;
+  while(true){
+    const a=await askCode(Object.assign({mode:"flow", title:o.title||t("lkChoose"), sub:o.sub||t("lkChooseSub"), hint:hint||t("lkChooseHint"), err}, o));
+    if(a.act!=="code") return null;
+    if(weakCode(a.code)){ hint=t("lkWeak"); err=true; continue; }
+    const b=await askCode(Object.assign({mode:"flow", title:o.title||t("lkChoose"), sub:o.sub||t("lkChooseSub"), hint:t("lkConfirm")}, o));
+    if(b.act!=="code") { hint=""; err=false; continue; }
+    if(a.code!==b.code){ hint=t("lkMismatch"); err=true; continue; }
+    return a.code;
+  }
+}
+/* ---------- Écrans d'information ---------- */
+function bl(items){ return `<div class="bl">${items.map(([ic,h])=>`<div>${ico(ic,17,ic==="check"?2:1.9)}<span>${h}</span></div>`).join("")}</div>`; }
+function bottom(btns){ return `<div class="lkbottom">${btns}</div>`; }
+function lkBtn(act, label, cls, icon){ return `<button type="button" class="lkb ${cls||"p"}" data-lk="${act}">${icon?ico(icon,19,1.9):""}${esc(label)}</button>`; }
+function cloudName(){ const P=Prov(); return P? P.label : t("cloudGeneric"); }
+
+/* ---------- Activation (assistant en 4 étapes, + nettoyage du cloud) ---------- */
+async function flowSetup(){
+  if(LOCK.on) return;
+  closeSheet(); let checked=false, exported=!!(S.meta.lastExport && daysSince(S.meta.lastExport)===0);
+  // 1. avertissement
+  while(true){
+    const r=await askScreen(`<div class="lkin">${flowHead({title:t("suTitle1"), sub:t("suSub1",{p:cloudName()}), step:0, of:4, backLabel:t("security")})}
+      <div class="wrn"><h3>${ico("warn",20,1.8)}${esc(t("suWarnT"))}</h3><p>${esc(t("suWarnP",{p:cloudName()}))}</p></div>
+      <div class="card"><div class="eb">${esc(t("suChanges"))}</div>${bl([["check",esc(t("suCh1",{p:cloudName()}))],["check",esc(t("suCh2"))],["check",esc(t("suCh3"))],["check",esc(t("suCh4"))]])}</div>
+      <button type="button" class="lkb s" data-lk="export" style="margin-top:12px">${ico("down",19,1.9)}${esc(t("suExport"))}</button>
+      <p class="tiny c">${esc(exported? t("suExported",{f:"mywealth-"+today()+".json"}) : t("suExportHint"))}</p>
+      <label class="ck"><input type="checkbox" id="suOk" ${checked?"checked":""}><i>${ico("check",15,2.4)}</i><span>${esc(t("suCheck"))}</span></label>
+      ${bottom(lkBtn("next",t("lkContinue"),"p"))}</div>`, false);
+    if(r.act==="back"){ lkHide(); openSecurity(); return; }
+    checked=$("suOk")&&$("suOk").checked;
+    if(r.act==="export"){ exportJSON(); exported=true; continue; }
+    if(r.act==="next"){ if(!checked){ toast(t("suNeedCheck")); continue; } break; }
+  }
+  // 2. code — une nouvelle clé de données est créée en mémoire
+  const vault=b64u(rnd(12)); await setDEK(rnd(32), vault); LOCK.prfSalt=b64e(rnd(32)); LOCK.keys=[];
+  const abort=()=>{ wipeDEK(); LOCK.keys=[]; LOCK.vault=null; lkHide(); openSecurity(); };
+  const code=await askNewCode({step:1, of:4}); if(!code) return abort();
+  // 3. Face ID
+  const pk=await stepBio(2, 4); if(pk===false) return abort();
+  // 4. clé de secours
+  const rk=newRecoveryKey(); const ok=await stepRK(rk, 3, 4, t("suEncrypt")); if(!ok) return abort();
+  const done = await commitLocal({code, rk, pk, vault, keys:pk? [pk.entry] : []});
+  if(!done) return abort();
+  lkShow(`${lkWM()}<div class="lkin lkcen"><div class="wordm">${ico("shield",44,1.4)}</div><h1 class="pt">${esc(t("suDone"))}</h1><p class="lksub">${esc(cloudOn()? t("suSyncing",{p:cloudName()}) : t("suDoneLocal"))}</p></div>`, true);
+  if(cloudOn()){ await syncNow(); await flowCleanup(true); }
+  lkHide(); renderChrome(); render(); renderSyncUI(); openSecurity(); toast(t("toastLockOn"));
+}
+async function stepBio(i, n, already){
+  if(already) return null;
+  const avail=await bioAvailable(); let msg="", cls="";
+  while(true){
+    const r=await askScreen(`<div class="lkin">${flowHead({title:t("bioTitle",{b:bioName()}), sub:t("bioSub",{b:bioName()}), step:i, of:n})}
+      <div class="card dark bioart">${wm(220,-60,-60,"#1E4E3D",.9)}<div>${ico("faceid",88,1.15)}</div></div>
+      <div class="card">${bl([["check",`<b>${esc(t("bioP1a"))}</b> ${esc(t("bioP1b"))}`],["check",esc(t("bioP2"))],["info",esc(t("bioP3",{b:bioName()}))]])}</div>
+      ${!avail?`<p class="note warn">${esc(t("bioNoDevice"))}</p>`:""}${msg?`<p class="note ${cls}">${esc(msg)}</p>`:""}
+      ${bottom((avail?lkBtn("bio",t("bioEnable",{b:bioName()}),"p","faceid"):"")+lkBtn("skip",t(avail?"later":"lkContinue"),avail?"s":"p"))}</div>`, false);
+    if(r.act==="back") return false;
+    if(r.act==="skip") return null;
+    if(r.act==="bio"){
+      try{ const c=await passkeyCreate(); const entry=await pkEntry(c.cred, c.out); return {cred:c.cred, entry}; }
+      catch(e){ console.warn("passkey", e); msg = e.prf? t("prfUnavailableLong",{b:bioName()}) : bioErrText(e); cls = e.prf? "warn" : "err"; }
+    }
+  }
+}
+async function stepRK(rk, i, n, cta){
+  while(true){
+    const r=await askScreen(`${lkWM()}<div class="lkin">${flowHead({title:t("rkTitle"), sub:t("rkSub"), step:i, of:n})}
+      <div class="rkbox"><div class="rk" id="rkTxt">${fmtRK(rk).replace(/^(.{14})-/,"$1<br>")}</div></div>
+      <div class="lkrow"><button type="button" class="lkb g" data-lkx="copy" data-v="${fmtRK(rk)}">${ico("file",18,1.8)}${esc(t("rkCopy"))}</button><button type="button" class="lkb g" data-lkx="dlrk" data-v="${fmtRK(rk)}">${ico("down",18,1.8)}${esc(t("rkSave"))}</button></div>
+      <p class="lksub" style="margin-top:12px">${esc(t("rkWhy",{p:cloudName()}))}</p>
+      <label class="ck dk"><input type="checkbox" id="rkOk"><i>${ico("check",15,2.4)}</i><span>${esc(t("rkCheck"))}</span></label>
+      ${bottom(lkBtn("next",cta,"w","lock"))}</div>`, true);
+    if(r.act==="back") return false;
+    if(r.act==="next"){ if(!$("rkOk").checked){ toast(t("rkNeedCheck")); continue; } return true; }
+  }
+}
+/* écriture chiffrée locale + vérification avant d'effacer les copies en clair */
+async function commitLocal(o){
+  lkShow(`${lkWM()}<div class="lkin lkcen"><div class="wordm">${ico("lock",44,1.4)}</div><h1 class="pt">${esc(t("suWorking"))}</h1><p class="lksub">${esc(t("suWorkingSub"))}</p></div>`, true);
+  const prevL=L, prevEnc=localStorage.getItem(ENC_KEY), prevOld=localStorage.getItem(ENC_OLD_KEY);
+  try{
+    const keys=o.keys.slice();
+    if(o.rk) keys.unshift(await rkEntry(o.rk));
+    const newL={v:1, enabled:true, vault:o.vault, code:await codeWrap(o.code), bio:o.pk? o.pk.cred : (o.bioCred||null), autoMin:(prevL&&prevL.autoMin)||5, onHide:prevL? prevL.onHide!==false : true,
+                fails:0, until:0, pendingKeys:keys.filter(k=>o.newKeyIds? o.newKeyIds.includes(k.id) : true).map(k=>k.id), removedKeys:[], since:new Date().toISOString()};
+    if(o.keepKeys) LOCK.keys=o.keepKeys.concat(keys.filter(k=>!o.keepKeys.some(x=>x.id===k.id))); else LOCK.keys=keys;
+    // 1) chiffrer et écrire
+    const txt=await sealEnvelope(); localStorage.setItem(ENC_KEY, txt);
+    // 2) vérifier : relire, ouvrir avec le code (et la clé de secours), comparer
+    const env=JSON.parse(localStorage.getItem(ENC_KEY));
+    const viaCode=await codeUnwrap(o.code, newL); if(!sameBytes(viaCode, LOCK.dek)) throw new Error("code check");
+    if(o.rk){ const viaRK=await rkUnwrap(env, o.rk); if(!sameBytes(viaRK, LOCK.dek)) throw new Error("recovery check"); }
+    const back=migrate(await openEnvelope(env)); if(dataKey(back)!==dataKey(S)) throw new Error("data check");
+    // 3) anciennes copies en clair de cet appareil : chiffrées à part (restaurées si vous désactivez)
+    const old={vault:o.vault, items:{}};
+    if(prevOld && prevL && prevL.vault){ /* coffre précédent : copies déjà chiffrées avec l'ancienne clé, non récupérables ici → conservées telles quelles */ }
+    for(const k of PLAIN_LOCAL){ const v=localStorage.getItem(k); if(v!=null) old.items[k]=await gcmSeal(LOCK.key, TE.encode(v), AAD(o.vault,"old:"+k)); }
+    if(Object.keys(old.items).length){ localStorage.setItem(ENC_OLD_KEY, JSON.stringify(old));
+      const chk=JSON.parse(localStorage.getItem(ENC_OLD_KEY)); for(const k in chk.items){ const v=TD.decode(await gcmOpen(LOCK.key, chk.items[k], AAD(o.vault,"old:"+k))); if(v!==localStorage.getItem(k)) throw new Error("old copy check "+k); } }
+    // 4) activer, puis seulement effacer le clair
+    L=newL; saveL(); LOCK.on=true; LOCK.locked=false;
+    if(loadL()===null) throw new Error("lock settings not saved");
+    PLAIN_LOCAL.forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} });
+    C.lastBackupMonth=null; C.encVault=null; saveCloud();
+    writeShareLocal();
+    return true;
+  }catch(e){
+    console.error("lock setup failed", e);
+    L=prevL; saveL(); LOCK.on=!!prevL;
+    try{ prevEnc? localStorage.setItem(ENC_KEY, prevEnc) : localStorage.removeItem(ENC_KEY); prevOld? localStorage.setItem(ENC_OLD_KEY, prevOld) : localStorage.removeItem(ENC_OLD_KEY); }catch(_){}
+    alert(t("suFailed",{e:e.message}));
+    return false;
+  }
+}
+/* ---------- Anciennes copies non chiffrées dans le cloud ---------- */
+async function findPlainCopies(P){
+  let names=null;
+  try{ names=await P.list(); }catch(e){ console.warn("list folder unavailable, probing known names", e.message); }
+  if(!names){ names=[V2_BACKUP_NAME].concat(LEGACY_NAMES); const d=new Date(); for(let y=2023;y<=d.getFullYear();y++) for(let m=1;m<=12;m++){ if(y===d.getFullYear() && m>d.getMonth()+1) break; names.push(`mywealth-donnees-${y}-${String(m).padStart(2,"0")}.json`); } }
+  const cand=names.filter(n=> n!==REMOTE_NAME && n!==SHARE_NAME && (/^mywealth-donnees-\d{4}-\d{2}\.json$/.test(n) || n===V2_BACKUP_NAME || LEGACY_NAMES.includes(n)));
+  const out=[];
+  for(let i=0;i<cand.length;i+=6) await Promise.all(cand.slice(i,i+6).map(async n=>{
+    const r=await P.read(n).catch(()=>null); if(!r) return;
+    let j=null; try{ j=JSON.parse(r.text); }catch(e){}
+    if(j && !isEnvelope(j)) out.push({name:n, modified:r.modified||null});
+  }));
+  return out.sort((a,b)=>a.name.localeCompare(b.name));
+}
+async function flowCleanup(inSetup){
+  const P=Prov(); if(!cloudOn() || !P.list){ if(!inSetup) toast(t("clNoCloud")); return; }
+  lkShow(`<div class="lkin lkcen"><h1 class="pt">${esc(t("clSearching"))}</h1><p class="lksub">${esc(t("clSearchingSub",{p:P.label}))}</p></div>`, false);
+  let list=[]; try{ list=await findPlainCopies(P); }catch(e){ console.warn(e); }
+  if(!list.length){ if(!inSetup){ await askScreen(`<div class="lkin">${flowHead({title:t("clTitle"), sub:t("clNone",{p:P.label})})}<p class="note">${esc(t("clHistory",{p:P.label}))}</p>${bottom(lkBtn("ok","OK","p"))}</div>`, false); } return; }
+  let msg="";
+  while(true){
+    const r=await askScreen(`<div class="lkin">${flowHead({title:t("clTitle"), sub:t("clSub",{n:list.length, p:P.label}), back:!inSetup, ...(inSetup?{}:{})})}
+      <div class="card cl">${list.map((f,i)=>`<label class="clr"><input type="checkbox" data-i="${i}" checked><span class="t"><b>${esc(f.name)}</b><small>${f.modified?esc(fmtDT(f.modified)):""}</small></span></label>`).join("")}</div>
+      <div class="wrn soft"><p>${esc(t("clHistory",{p:P.label}))}</p></div>${msg?`<p class="note err">${esc(msg)}</p>`:""}
+      ${bottom(lkBtn("del",t("clDelete"),"dg","trash")+lkBtn("keep",t("clKeep"),"s"))}</div>`, false);
+    if(r.act==="back"||r.act==="keep") return;
+    if(r.act==="del"){
+      const sel=[...document.querySelectorAll("#lk .clr input:checked")].map(x=>list[+x.dataset.i]);
+      if(!sel.length) return;
+      if(!confirm(t("clConfirm",{n:sel.length, p:P.label}))) continue;
+      const failed=[];
+      for(const f of sel){ try{ await P.remove(f.name); }catch(e){ console.warn(e); failed.push(f.name); } }
+      if(failed.length){ msg=t("clFailed",{f:failed.join(", ")}); list=list.filter(f=>failed.includes(f.name)); continue; }
+      toast(t("clDone",{n:sel.length})); return;
+    }
+  }
+}
+/* ---------- Code oublié : clé de secours (ou Face ID) puis nouveau code ---------- */
+function rkInputScreen(o){
+  const bio = o.bio? `<button type="button" class="lkb w" data-lk="bio">${ico("faceid",20,1.7)}${esc(o.bioLabel||t("lkUseBio",{b:bioName()}))}</button><div class="or"><span>${esc(t("or"))}</span></div>` : "";
+  return askScreen(`${lkWM()}<div class="lkin">${flowHead({title:o.title, sub:o.sub, back:o.back!==false, backLabel:o.backLabel})}
+    <div class="rkin">${bio}<label for="rkIn">${esc(t("rkLabel"))}</label><input id="rkIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" value="${esc(o.value||"")}">
+    ${o.msg?`<p class="note err">${esc(o.msg)}</p>`:""}<button type="button" class="lkb w" data-lk="rk">${ico("key",19,1.9)}${esc(t("rkUnlock"))}</button></div>
+    ${o.foot||""}</div>`, true);
+}
+async function flowRecover(){
+  let msg="", value="";
+  while(true){
+    const env=localEnv();
+    const r=await rkInputScreen({title:t("rcTitle"), sub:t("rcSub"), msg, value, bio:!!(L.bio && waOK())});
+    value=$("rkIn")? $("rkIn").value : value;
+    if(r.act==="back") return false;
+    let raw=null;
+    try{
+      if(r.act==="bio") raw=(await pkUnwrap(env)).raw;
+      else if(r.act==="rk"){ const v=normRK(value); if(!v){ msg=t("rkBad"); continue; } raw=await rkUnwrap(env, v); }
+      else continue;
+    }catch(e){ msg = r.act==="bio"? bioErrText(e) : t("rkWrong"); continue; }
+    await openLocalWith(raw);
+    const code=await askNewCode({title:t("rcNew"), sub:t("rcNewSub"), back:false});
+    if(!code){ wipeDEK(); S=defaultState(); return false; }
+    L.code=await codeWrap(code); L.fails=0; L.until=0; saveL(); toast(t("toastCodeChanged"));
+    return true;
+  }
+}
+/* ---------- Autre appareil : le fichier cloud est chiffré ---------- */
+async function flowRemote(){
+  const env=LOCK.remoteEnv; if(!env) return;
+  closeSheet(); let msg="", value="", raw=null, viaBio=null;
+  const hasPK=env.keys.some(k=>k.type==="passkey") && waOK();
+  const sameDev = LOCK.on;   // cet appareil est déjà verrouillé, mais avec un autre coffre
+  while(!raw){
+    const r=await rkInputScreen({title:t("rmTitle",{p:cloudName()}), sub:t(sameDev?"rmSubRekey":"rmSub",{p:cloudName()}), msg, value, bio:hasPK, bioLabel: isApple()? t("lkUseBio",{b:bioName()}) : t("pkOther"), backLabel:t("later"),
+      foot:`<p class="lksub" style="margin-top:14px">${esc(t("rmHelp"))}</p>`});
+    value=$("rkIn")? $("rkIn").value : value;
+    if(r.act==="back"){ lkHide(); return; }
+    try{
+      if(r.act==="bio"){ const g=await pkUnwrap(env); raw=g.raw; viaBio=g.cred; }
+      else if(r.act==="rk"){ const v=normRK(value); if(!v){ msg=t("rkBad"); continue; } raw=await rkUnwrap(env, v); }
+    }catch(e){ msg = r.act==="bio"? bioErrText(e)+" "+t("rmUseRK") : t("rkWrong"); raw=null; }
+  }
+  // vérifier que la clé ouvre bien les données, sans encore les adopter
+  try{ await openEnvelope(env, await crypto.subtle.importKey("raw", raw, {name:"AES-GCM"}, false, ["decrypt"])); }
+  catch(e){ alert(t("rmCorrupt")); lkHide(); return; }
+  const prevDek = LOCK.dek? new Uint8Array(LOCK.dek) : null, prevVault=LOCK.vault, prevKeys=LOCK.keys, prevSalt=LOCK.prfSalt;
+  await setDEK(raw, env.vault, env);
+  const restore=async()=>{ if(prevDek) await setDEK(prevDek, prevVault); else wipeDEK(); LOCK.keys=prevKeys; LOCK.prfSalt=prevSalt; LOCK.vault=prevVault; lkHide(); renderSyncUI(); };
+  const code=await askNewCode({title:t("rmCode"), sub:t("rmCodeSub"), step:0, of:2, backLabel:t("cancel")}); if(!code) return restore();
+  let pk=null;
+  if(!viaBio){ pk=await stepBio(1, 2); if(pk===false) return restore(); }
+  const ok=await commitLocal({code, pk, vault:env.vault, keys:pk? [pk.entry] : [], keepKeys:env.keys, bioCred:viaBio, newKeyIds:pk? [pk.entry.id] : []});
+  if(!ok) return restore();
+  C.encVault=env.vault; saveCloud(); LOCK.remoteEnv=null;
+  lkHide(); setSync("pending"); await syncNow(); renderChrome(); render(); renderSyncUI(); toast(t("toastRemoteOk"));
+}
+/* ---------- Réglages : changer le code, Face ID, clé de secours, désactiver ---------- */
+async function verifyCode(title){
+  let err=false, hint="";
+  while(true){
+    if(waitLeft()>0){ alert(t("lkWait",{n:L.fails, t:mmss(waitLeft())})); return false; }
+    const r=await askCode({mode:"flow", title, sub:t("lkCurrentSub"), hint, err, backLabel:t("security")});
+    if(r.act!=="code") return false;
+    setHint(t("lkChecking"));
+    try{ const raw=await codeUnwrap(r.code); if(!sameBytes(raw, LOCK.dek)) throw new Error("mismatch"); noteOk(); return true; }
+    catch(e){ noteFail(); err=true; hint=t("lkWrong"); }
+  }
+}
+async function flowChangeCode(){
+  closeSheet();
+  if(!(await verifyCode(t("ccCurrent")))){ lkHide(); openSecurity(); return; }
+  const code=await askNewCode({title:t("ccNew"), sub:t("ccNewSub"), backLabel:t("security")});
+  if(code){ L.code=await codeWrap(code); saveL(); toast(t("toastCodeChanged")); }
+  lkHide(); openSecurity();
+}
+function lockChanged(){ persistLocal(); if(cloudOn()) Cloud_schedule(true); }
+async function bioOn(){
+  closeSheet();
+  const pk=await stepBio(null, null);
+  if(pk && pk.entry){ keyAdd(pk.entry); L.bio=pk.cred; saveL(); lockChanged(); toast(t("toastBioOn",{b:bioName()})); }
+  lkHide(); openSecurity();
+}
+function bioOff(){
+  if(!confirm(t("confirmBioOff",{b:bioName()}))){ openSecurity(); return; }
+  const e=LOCK.keys.find(k=>k.cred===L.bio); if(e) keyRemove(e.id);
+  L.bio=null; saveL(); lockChanged(); openSecurity(); toast(t("toastBioOff",{b:bioName()}));
+}
+async function flowNewRK(){
+  if(!confirm(t("confirmNewRK"))) return;
+  closeSheet();
+  const rk=newRecoveryKey(); const ok=await stepRK(rk, null, null, t("rkSaveNew"));
+  if(ok){ const e=await rkEntry(rk); LOCK.keys.filter(k=>k.type==="recovery").forEach(k=>keyRemove(k.id)); keyAdd(e); saveL(); lockChanged(); toast(t("toastNewRK")); }
+  lkHide(); openSecurity();
+}
+async function flowDisable(){
+  closeSheet();
+  const r=await askScreen(`<div class="lkin">${flowHead({title:t("dsTitle"), sub:t("dsSub",{p:cloudName()}), backLabel:t("security")})}
+    <div class="wrn soft"><p>${esc(t("dsNote"))}</p></div>${bottom(lkBtn("go",t("dsGo"),"dg")+lkBtn("back",t("cancel"),"s"))}</div>`, false);
+  if(r.act!=="go" || !(await verifyCode(t("dsCode")))){ lkHide(); openSecurity(); return; }
+  lkShow(`<div class="lkin lkcen"><h1 class="pt">${esc(t("dsWorking"))}</h1></div>`, false);
+  const P=Prov();
+  try{
+    if(cloudOn()){
+      if(!navigator.onLine) throw new Error(t("dsOffline",{p:P.label}));
+      await syncNow(); if(SYNC.state!=="ok") throw new Error(t("dsSyncFirst",{p:P.label}));
+      let okPush=false;
+      for(let i=0;i<2 && !okPush;i++){ okPush=await pushNow(P, C.etag||"*", fileText()); if(!okPush) await syncNow(); }
+      if(!okPush) throw new Error(t("dsSyncFirst",{p:P.label}));
+    }
+    await disableLocal();
+    lkHide(); renderChrome(); render(); renderSyncUI(); openSecurity(); toast(t("toastLockOff"));
+  }catch(e){ console.warn(e); alert(t("dsFailed",{e:e.message})); lkHide(); openSecurity(); }
+}
+/* repasse cet appareil en clair (vérifié), restaure les anciennes copies locales */
+async function disableLocal(){
+  const txt=JSON.stringify(S); localStorage.setItem(STORE_KEY, txt);
+  if(dataKey(migrate(JSON.parse(localStorage.getItem(STORE_KEY))))!==dataKey(S)) throw new Error("plain write check");
+  try{ const old=JSON.parse(localStorage.getItem(ENC_OLD_KEY)||"null");
+    if(old && old.vault===LOCK.vault) for(const k in old.items){ if(k===STORE_KEY) continue; localStorage.setItem(k, TD.decode(await gcmOpen(LOCK.key, old.items[k], AAD(old.vault,"old:"+k)))); } }
+  catch(e){ console.warn("old copies not restored", e); }
+  localStorage.removeItem(ENC_KEY); localStorage.removeItem(ENC_OLD_KEY);
+  L=null; saveL(); LOCK.on=false; wipeDEK(); LOCK.keys=[]; LOCK.vault=null; LOCK.prfSalt=null; C.encVault=null; saveCloud();
+}
+/* le fichier cloud est revenu en clair alors que cet appareil est chiffré */
+async function remotePlainWhileLocked(P){
+  if(C.encVault!==LOCK.vault) return "encrypt";          // pas encore envoyé chiffré depuis l'activation : on chiffre
+  if(confirm(t("askRemotePlain",{p:P.label}))) return "encrypt";
+  await disableLocal(); toast(t("toastLockOffRemote")); return "plain";
+}
+
+/* ---------- Réglages › Sécurité ---------- */
+function swHTML(id, on, dis){ return `<label class="swt"><input type="checkbox" id="${id}" ${on?"checked":""} ${dis?"disabled":""}><span class="tg"></span></label>`; }
+function srow(ic, title, sub, right, act){ const tag=act?"button":"div"; return `<${tag} ${act?`type="button" data-a="${act}"`:""} class="sr"><span class="si">${ico(ic,19,1.7)}</span><span class="t"><b>${esc(title)}</b>${sub?`<small>${esc(sub)}</small>`:""}</span>${right||""}</${tag}>`; }
+const chevR=()=>`<span class="vv">${ico("chev",16,1.8)}</span>`;
+let BIO_AVAIL=null;
+async function openSecurity(){
+  if(BIO_AVAIL===null){ BIO_AVAIL=await bioAvailable(); }
+  const P=Prov(), cl=cloudOn();
+  const fs=freeSavingsCHF();
+  const share=`<div class="sec">MyPension</div><div class="card">${srow("pension", t("shTitle"), t("shSub"), swHTML("lkShare", shareOn()))}
+    <div class="share">${shareOn()? t("shOn",{v:esc(fmtMoney(fs,"CHF",0)), d:esc(fmtDate(today()))}) : esc(t("shOff"))}<br>${esc(t(LOCK.on?"shWhyOn":"shWhyOff"))}</div></div>`;
+  let body="";
+  if(!LOCK.on){
+    body=`<div class="card sec-off"><div class="row" style="justify-content:flex-start;gap:12px"><span class="si">${ico("shield",20,1.7)}</span><div><b style="font-size:15.5px">${esc(t("secOff"))}</b><div class="sub" style="margin-top:2px">${esc(t("secOffSub"))}</div></div></div>
+      ${bl([["lock",esc(t("secP1"))],["faceid",esc(t("secP2",{b:bioName()}))],["key",esc(t("secP3"))],["shield",esc(t("secP4",{p:cloudName()}))]])}
+      <button type="button" class="btn pri full" data-a="lkSetup" style="margin-top:12px">${ico("lock",17,1.9)}${esc(t("secEnable"))}</button></div>${share}`;
+  } else {
+    const rk=LOCK.keys.find(k=>k.type==="recovery"), pkN=LOCK.keys.filter(k=>k.type==="passkey").length;
+    const bioSub = L.bio? t("bioOnSub") : BIO_AVAIL? t("bioOffSub") : t("bioNoSub");
+    body=`<div class="card dark secst">${wm(220,-60,-70,"#1E4E3D",.9)}<div class="row" style="justify-content:flex-start;gap:12px"><span class="si dk">${ico("shield",20,1.7)}</span><div><b style="font-size:15.5px;font-weight:650">${esc(t("secOn"))}</b><div style="font-size:12px;color:#B9C6BE;margin-top:2px">${esc(t(cl?"secOnSubCloud":"secOnSub",{p:P?P.label:""}))}</div></div></div></div>
+      <div class="sec">${esc(t("secUnlock"))}</div><div class="card">
+        ${srow("lock", t("secCode"), t("secCodeSub"), `<span class="pill l">${esc(t("active"))}</span>`)}
+        ${srow("faceid", bioName(), bioSub, swHTML("lkBio", !!L.bio, !BIO_AVAIL && !L.bio))}
+        ${srow("key", t("secChange"), "", chevR(), "lkChangeCode")}
+        ${srow("lock", t("secLockNow"), "", chevR(), "lkNow")}</div>
+      <div class="sec">${esc(t("secAuto"))}</div><div class="card">
+        ${srow("timer", t("secAutoT"), t("secAutoSub"), "")}
+        <div class="seg seg2">${AUTO_CHOICES.map(m=>`<button type="button" data-a="lkAuto" data-v="${m}" class="${(L.autoMin||5)===m?"on":""}">${m<60? m+" min" : "1 h"}</button>`).join("")}</div>
+        ${srow("eye", t("secHide"), t("secHideSub"), swHTML("lkHide", L.onHide!==false))}</div>
+      ${share}
+      <div class="sec">${esc(t("backupTitle"))}</div><div class="card">
+        ${srow("down", t("secExport"), t("secExportSub"), chevR(), "lkExport")}
+        ${srow("key", t("secRK"), rk? t("secRKSub",{d:fmtDate(rk.created.slice(0,10))}) : t("rkNone"), chevR(), "lkNewRK")}
+        ${cl? srow("cloud", t("secClean"), t("secCleanSub",{p:P.label}), chevR(), "lkCleanup") : ""}
+        <p class="tiny" style="margin-top:6px">${esc(t("secKeys",{n:LOCK.keys.length, pk:pkN}))}</p></div>
+      <button type="button" class="danger" data-a="lkDisable">${esc(t("secDisable"))}</button><p class="tiny c" style="margin-top:8px">${esc(t("secDisableSub",{p:cloudName()}))}</p>`;
+  }
+  openSheet("security", t("security"), `<button type="button" class="backl" data-a="openSettings">${ico("back",18,2)}${esc(t("settings"))}</button>`+body);
+}
+document.addEventListener("click", e=>{
+  const x=e.target.closest("[data-lkx]");
+  if(x){ const a=x.dataset.lkx;
+    if(a==="copy"){ const v=x.dataset.v; (navigator.clipboard? navigator.clipboard.writeText(v) : Promise.reject()).then(()=>toast(t("rkCopied"))).catch(()=>{ prompt(t("rkCopyManual"), v); }); }
+    if(a==="dlrk"){ const blob=new Blob([t("rkFile",{k:x.dataset.v, d:fmtDate(today())})],{type:"text/plain"}); const l=document.createElement("a"); l.href=URL.createObjectURL(blob); l.download="mywealth-cle-de-secours.txt"; document.body.appendChild(l); l.click(); setTimeout(()=>{URL.revokeObjectURL(l.href); l.remove();},500); }
+    return;
+  }
+  const k=e.target.closest("#lk [data-k]"); if(k){ padKey(k.dataset.k); return; }
+  const b=e.target.closest("#lk [data-lk]"); if(b){ lkResolve({act:b.dataset.lk}); return; }
+  const a=e.target.closest("[data-a]"); if(!a) return;
+  switch(a.dataset.a){
+    case "openSecurity": openSecurity(); break;
+    case "lkSetup": flowSetup(); break;
+    case "lkChangeCode": flowChangeCode(); break;
+    case "lkNow": lockNow(); break;
+    case "lkDisable": flowDisable(); break;
+    case "lkNewRK": flowNewRK(); break;
+    case "lkCleanup": closeSheet(); flowCleanup(false).then(()=>{ lkHide(); openSecurity(); }); break;
+    case "lkRemote": flowRemote(); break;
+    case "lkExport": if(confirm(t("confirmPlainExport"))){ exportJSON(); } break;
+    case "lkAuto": L.autoMin=+a.dataset.v; saveL(); openSecurity(); break;
+  }
+});
+document.addEventListener("change", e=>{
+  const el=e.target;
+  if(el.id==="lkShare"){ S.settings.shareMP=el.checked; if(!el.checked){ try{ localStorage.removeItem(SHARE_KEY); }catch(_){} } save(); writeShareLocal(); if(cloudOn()){ const P=Prov(); writeShareCloud(P); } openSecurity(); }
+  else if(el.id==="lkHide"){ L.onHide=el.checked; saveL(); }
+  else if(el.id==="lkBio"){ if(el.checked) bioOn(); else bioOff(); }
+});
+/* ---------- Verrouillage automatique ---------- */
+["pointerdown","keydown","touchstart","wheel"].forEach(ev=>addEventListener(ev, ()=>{ LOCK.lastAct=Date.now(); }, {passive:true, capture:true}));
+function idleTooLong(){ return Date.now()-LOCK.lastAct > (L&&L.autoMin||5)*60000; }
+setInterval(()=>{ if(LOCK.on && !LOCK.locked && !LOCK.ceremony && $("lk").hidden && idleTooLong()) lockNow(); }, 10000);
+document.addEventListener("visibilitychange", ()=>{
+  if(!LOCK.on || !L || LOCK.ceremony) return;
+  if(document.visibilityState==="hidden"){ if(L.onHide!==false && !LOCK.locked && $("lk").hidden) lockNow(); }
+  else if(!LOCK.locked && $("lk").hidden && idleTooLong()) lockNow();
+  else if(LOCK.locked){ LOCK.autoBioDone=false; if(document.querySelector("#lk .lkmain") && L.bio && waOK() && waitLeft()===0){ LOCK.autoBioDone=true; setTimeout(()=>lkResolve({act:"bio"}), 350); } }
+});
+function Lock_initUI(){ lkObs.observe($("lk"), {childList:true}); }
+
 /* ---------- Affichage de l'état de synchronisation ---------- */
 function loginButtons(long){
   return (DropboxP.configured()?`<button class="btn pri sm" data-cl="login-dropbox">${esc(t("loginDropbox"))}</button>`:"")+
@@ -1671,6 +2574,7 @@ function syncStatus(){
   else if(on && (st==="pending"||st==="syncing")) { cls="pending"; tx= st==="pending"? t("stPending") : t("stSyncing",{p:label}); }
   else if(st==="offline") { cls="warn"; tx=t("stOffline")+(C.userDirty?" "+t("stToSync"):""); }
   else if(st==="reauth") { cls="warn"; tx=t("stReauth",{p:label}); }
+  else if(st==="needkey") { cls="warn"; tx=t("stNeedKey",{p:label}); }
   else if(st==="error") { cls="err"; tx=t("stError"); }
   else if(!anyCfg) { cls=""; tx=t("stLocalOnly",{ago:agoTxt(S.meta.lastExport)}); }
   else { cls=""; tx=t("stNotConnected"); }
@@ -1683,6 +2587,7 @@ function renderSyncUI(){
   $("syncDot").className="st "+X.cls; $("syncBtn").title=X.tx; $("syncBtn").setAttribute("aria-label",X.tx);
   const Bn=[];
   if(BOOT.localBlocked) Bn.push(`<div class="banner err"><span class="msg">${esc(t("futureLocal"))}</span><button class="btn sm" onclick="location.reload()">${ico("refresh",15)}</button></div>`);
+  if(st==="needkey") Bn.push(`<div class="banner warn"><span class="msg">${esc(t("bnNeedKey",{p:label}))}</span><button class="btn sm pri" data-a="lkRemote">${ico("lock",15)}${esc(t("rkUnlock"))}</button></div>`);
   if(st==="reauth") Bn.push(`<div class="banner warn"><span class="msg">${t("bnReauth",{p:esc(label)})}</span><button class="btn sm pri" data-cl="reauth">${esc(t("reconnect"))}</button></div>`);
   if(st==="error" && !BOOT.localBlocked) Bn.push(`<div class="banner err"><span class="msg">${esc(t("bnError",{e:(SYNC.err&&SYNC.err.message)||t("unknownError")}))}</span>${SYNC.blocked?"":`<button class="btn sm" data-cl="sync">${esc(t("retry"))}</button>`}</div>`);
   let snoozed=false; try{ snoozed=Date.now() < +(localStorage.getItem(SNOOZE_CLOUD)||0); }catch(e){}
@@ -1724,6 +2629,7 @@ function openSettings(sec){
   const body=`
   <div class="set"><h4>${esc(t("language"))}</h4><div class="seg" style="margin-top:0"><button type="button" data-a="lang" data-v="fr" class="${LANG==="fr"?"on":""}">Français</button><button type="button" data-a="lang" data-v="en" class="${LANG==="en"?"on":""}">English</button></div></div>
   <div class="set"><h4>${esc(t("baseCurrency"))}</h4><div class="seg" style="margin-top:0">${["CHF","EUR","USD"].concat(Object.keys(currenciesInUse()).filter(c=>!["CHF","EUR","USD"].includes(c)).sort()).map(c=>`<button type="button" data-a="base" data-cur="${c}" class="${S.base===c?"on":""}">${c}</button>`).join("")}</div><p class="sub">${esc(t("baseHint"))}</p></div>
+  <div class="set"><button type="button" class="lnk" data-a="openSecurity" style="width:100%;text-align:left">${ico("lock",18)}<div class="t"><b>${esc(t("security"))}</b><small>${esc(LOCK.on? t("secLinkOn") : t("secLinkOff"))}</small></div>${ico("chev",15)}</button></div>
   <div class="set card" id="cloudSec"><h4>${esc(t("cloudSync"))}</h4><span class="pill s" id="fsStatus"></span><div id="fsPanel" style="margin-top:8px"></div></div>
   <div class="set card"><h4>${esc(t("fxTitle"))}</h4><p class="sub" style="margin-top:0">${esc(t("fxHelp"))} · <b>${esc(fxInfo)}</b></p><div class="fxg" style="margin-top:10px" id="fxGrid">${fxGridHTML()}</div>
     <label class="row" style="justify-content:flex-start;margin-top:10px;font-size:13px"><input type="checkbox" id="fxManual" ${S.fx.manual?"checked":""} style="width:18px;height:18px;accent-color:#0F3D2E"> ${esc(t("fxManual"))}</label>
@@ -1813,11 +2719,14 @@ function maybeRefresh(){
 }
 function fillConflictTexts(){ $("cfTitle").textContent=t("cfTitle"); $("cfText").innerHTML=t("cfText"); $("cfKeepLocal").textContent=t("cfKeepLocal"); $("cfTip").textContent=t("cfTip"); }
 (async function init(){
+  if("serviceWorker" in navigator && location.protocol!=="file:") navigator.serviceWorker.register("sw.js").catch(e=>console.warn("SW not registered", e));
+  Lock_initUI();
+  const cfgP = window.MYWEALTH_CONFIG? Promise.resolve() : loadScript("config.js?t="+Date.now()).catch(e=>console.warn("config.js unavailable", e.message));
+  if(BOOT.locked) await Lock_boot();          // v5 : écran verrouillé → données déchiffrées seulement après le code / Face ID
   lastKey = BOOT.hadLocal? dataKey(S) : null;
   if(!BOOT.hadLocal && !BOOT.localBlocked) save(true);
   renderChrome(); fillConflictTexts(); route(); renderSyncUI();
-  if("serviceWorker" in navigator && location.protocol!=="file:") navigator.serviceWorker.register("sw.js").catch(e=>console.warn("SW not registered", e));
-  if(!window.MYWEALTH_CONFIG){ try{ await loadScript("config.js?t="+Date.now()); }catch(e){ console.warn("config.js unavailable", e.message); } }
+  await cfgP;
   renderSyncUI();
   await Cloud_init();
   if(!BOOT.localBlocked) maybeRefresh();
