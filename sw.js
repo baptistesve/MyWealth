@@ -1,12 +1,12 @@
 /* MyWealth — service worker : application disponible hors ligne.
    Seuls les fichiers de l'application sont mis en cache ; les données (comptes, montants)
    restent dans le stockage local de l'appareil et dans votre cloud, jamais ici. */
-const VERSION = "mywealth-v1";
+const VERSION = "mywealth-v2";
 const ASSETS = [
   "./", "./index.html", "./config.js", "./manifest.webmanifest", "./redirect.html",
-  "./vendor/chart.umd.min.js", "./vendor/msal-browser.min.js", "./vendor/msal-redirect-bridge.min.js",
-  "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png",
-  "./icons/apple-touch-icon.png", "./icons/favicon-32.png"
+  "chart.umd.min.js", "msal-browser.min.js", "msal-redirect-bridge.min.js",
+  "icon-192.png", "icon-512.png", "maskable-512.png",
+  "apple-touch-icon.png", "favicon-32.png"
 ];
 // Fichiers susceptibles de changer (page, configuration) : réseau d'abord, cache si hors ligne
 const NETWORK_FIRST = /\/(index\.html|config\.js|manifest\.webmanifest|redirect\.html)?$/;

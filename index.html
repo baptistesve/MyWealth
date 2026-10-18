@@ -9,14 +9,14 @@
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="no-referrer">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MyWealth">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script src="config.js"></script>
-<script src="vendor/chart.umd.min.js"></script>
+<script src="chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#0b1020; --bg2:#111831; --card:#151d38; --card2:#1b2546; --line:#26315a;
@@ -173,7 +173,7 @@ dialog.modal h3{margin:0 0 8px;font-size:17px}
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <img class="logo" src="icons/icon-192.png" alt="MW" style="padding:0">
+      <img class="logo" src="icon-192.png" alt="MW" style="padding:0">
       <div><h1>MyWealth</h1><button class="fspill" id="fsStatus" title="État de la sauvegarde"><span class="d"></span><span id="fsStatusTxt">Chargement…</span></button></div>
     </div>
     <div class="tools">
@@ -816,7 +816,7 @@ const OneDrive = {
   configured(){ return !!CFG.ONEDRIVE_CLIENT_ID; },
   async init(){
     if(!this.configured() || this.ready) return;
-    if(typeof msal==="undefined") await loadScript("vendor/msal-browser.min.js");
+    if(typeof msal==="undefined") await loadScript("msal-browser.min.js");
     this.pca = new msal.PublicClientApplication({
       auth:{ clientId:CFG.ONEDRIVE_CLIENT_ID, authority:"https://login.microsoftonline.com/consumers",
              redirectUri:new URL("redirect.html", APP_BASE).href, postLogoutRedirectUri:APP_BASE },

@@ -5,7 +5,7 @@
 <body>
 <p>Connexion à Microsoft en cours…</p>
 <!-- Page « redirect bridge » requise par MSAL Browser v5 : elle renvoie la réponse de connexion à MyWealth. -->
-<script src="vendor/msal-redirect-bridge.min.js"></script>
+<script src="msal-redirect-bridge.min.js"></script>
 <script>
   msalRedirectBridge.broadcastResponseToMainFrame().catch(function(e){
     console.error(e);
